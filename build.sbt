@@ -1,4 +1,4 @@
-name := "-sn-template"
+name := "composior"
 
 version := "0.0.1"
 
@@ -39,8 +39,9 @@ homepage := Some(url("https://github.com/edadma/" + name.value))
 
 //libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.13" % "test"
 
-//libraryDependencies ++= Seq(
-//)
+libraryDependencies ++= Seq(
+  "io.github.edadma" %%% "libcairo" % "0.1.6",
+)
 
 publishMavenStyle := true
 
