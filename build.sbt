@@ -37,7 +37,7 @@ licenses := Seq("ISC" -> url("https://opensource.org/licenses/ISC"))
 
 homepage := Some(url("https://github.com/edadma/" + name.value))
 
-//libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.13" % "test"
+libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.15" % "test"
 
 libraryDependencies ++= Seq(
   "io.github.edadma" %%% "libcairo" % "0.1.6",
