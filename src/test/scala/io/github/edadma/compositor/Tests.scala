@@ -1,4 +1,4 @@
-package io.github.edadma.composior
+package io.github.edadma.compositor
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
