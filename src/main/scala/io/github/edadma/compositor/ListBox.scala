@@ -9,4 +9,6 @@ abstract class ListBox extends Box:
 
   protected def max(measure: Box => Double): Double = boxes map measure max
 
-  def +=(box: Box): Unit = boxes += box
+  def add(box: Box): Unit = boxes += box
+
+  def +=(box: Box): Unit = add(box)

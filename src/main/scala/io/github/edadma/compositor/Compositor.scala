@@ -26,6 +26,9 @@ class Compositor private (surface: Surface, context: Context):
 
     boxes foreach (b => hbox += b)
 
+    new VBox:
+      add(hbox)
+  end paragraph
 end Compositor
 
 object Compositor:
