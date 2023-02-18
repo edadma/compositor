@@ -29,6 +29,15 @@ class Compositor private (surface: Surface, context: Context):
     new VBox:
       add(hbox)
   end paragraph
+
+  def textBox(text: String, font: Font): TextBox =
+    val extents: TextExtents
+
+    new TextBox(text):
+      val height: Double = font.extents.height
+      val descent: Double = font.extents.descent
+      val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
+
 end Compositor
 
 object Compositor:

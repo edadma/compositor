@@ -2,7 +2,7 @@ package io.github.edadma.compositor
 
 import io.github.edadma.libcairo.TextExtents
 
-class CharBox(s: String, font: Font) extends Box:
+case class CharBox(text: String, font: Font) extends Box:
   val extents: TextExtents
   val height: Double = extents.height
   val descent: Double = 0
