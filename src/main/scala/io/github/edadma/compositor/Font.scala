@@ -1,3 +1,5 @@
 package io.github.edadma.compositor
 
-class Font
+import io.github.edadma.libcairo.FontExtents
+
+class Font(val extents: FontExtents)

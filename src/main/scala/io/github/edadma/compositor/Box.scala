@@ -1,7 +1,6 @@
 package io.github.edadma.compositor
 
-trait Box:
-  def ascent: Double
+abstract class Box:
   def height: Double
-  def baseline: Double
+  def descent: Double
   def width: Double
