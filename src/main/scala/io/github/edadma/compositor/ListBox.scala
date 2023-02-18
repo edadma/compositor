@@ -1,10 +1,12 @@
 package io.github.edadma.compositor
 
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.ArrayBuffer
 
 abstract class ListBox extends Box:
-  protected val boxes = new ListBuffer[Box]
+  protected val boxes = new ArrayBuffer[Box]
 
-  protected def measure(b: Box): Double
+  protected def sum(measure: Box => Double): Double = boxes map measure sum
+
+  protected def max(measure: Box => Double): Double = boxes map measure max
 
   def +=(box: Box): Unit = boxes += box

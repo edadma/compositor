@@ -1,4 +1,6 @@
 package io.github.edadma.compositor
 
-abstract class HBox extends ListBox:
-  protected def measure(b: Box): Double = b.width
+class HBox extends ListBox:
+  def height: Double = max(_.height)
+  def descent: Double = max(_.descent)
+  def width: Double = sum(_.width)

@@ -24,7 +24,7 @@ class Compositor private (surface: Surface, context: Context):
   def paragraph(width: Double): VBox =
     val hbox = new HBox
 
-    hbox ++= boxes
+    boxes foreach (b => hbox += b)
 
 end Compositor
 
