@@ -4,3 +4,5 @@ package io.github.edadma.compositor
   val pdf = Compositor.pdf("test.pdf", 612, 792)
 
   pdf += "testing 1 - 2 - 3"
+  pdf.paragraph(500)
+  pdf.destroy()

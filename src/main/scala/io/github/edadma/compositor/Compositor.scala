@@ -53,21 +53,15 @@ class Compositor private (surface: Surface, context: Context):
       val descent: Double = 0
       val width: Double = extents.width
 
+  def destroy(): Unit =
+    context.destroy()
+    surface.destroy()
 end Compositor
 
 object Compositor:
-  private val surfaces = new ArrayBuffer[Surface]
-  private val contexts = new ArrayBuffer[Context]
-
   def pdf(path: String, width: Double, height: Double): Compositor =
     val surface = pdfSurfaceCreate(path, width, height)
     val context = surface.create
 
-    surfaces += surface
-    contexts += context
     new Compositor(surface, context)
-
-  def destroy(): Unit =
-    contexts foreach (_.destroy())
-    surfaces foreach (_.destroy())
 end Compositor
