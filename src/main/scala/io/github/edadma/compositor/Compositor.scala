@@ -1,13 +1,13 @@
 package io.github.edadma.compositor
 
 import io.github.edadma.compositor
-import io.github.edadma.libcairo.{Context, Surface, TextExtents, pdfSurfaceCreate}
+import io.github.edadma.libcairo.{Context, FontSlant, FontWeight, Surface, TextExtents, pdfSurfaceCreate}
 
 import scala.collection.mutable.ArrayBuffer
 
 class Compositor private (surface: Surface, context: Context):
   val boxes = new ArrayBuffer[Box]
-  var currentFont: Font = null
+  var currentFont: Font = new Font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10, context.fontExtents)
 
   def +=(box: Box): Unit =
     if boxes.nonEmpty then
