@@ -30,8 +30,8 @@ class Compositor private (surface: Surface, ctx: Context):
   def paragraph(width: Double): Unit =
     val hbox = new HBox
 
-    boxes foreach (b => hbox += b)
-    page.add(hbox)
+    boxes foreach hbox.add
+    page add hbox
   end paragraph
 
   def textBox(text: String): TextBox =
