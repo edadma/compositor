@@ -5,10 +5,11 @@ import io.github.edadma.libcairo.{Context, FontSlant, FontWeight, Surface, TextE
 
 import scala.collection.mutable.ArrayBuffer
 
-class Compositor private (surface: Surface, context: Context):
+class Compositor private (surface: Surface, ctx: Context):
   private val boxes = new ArrayBuffer[Box]
-  private var currentFont: Font = new Font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10, context.fontExtents)
+  private var currentFont: Font = new Font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10, ctx.fontExtents)
   private var currentColor: Color = new Color(0, 0, 0)
+  private var page = new VBox
 
   def +=(text: String): Unit = add(textBox(text))
 
@@ -26,19 +27,15 @@ class Compositor private (surface: Surface, context: Context):
           boxes += box
     else boxes += box
 
-  def paragraph(width: Double): VBox =
+  def paragraph(width: Double): Unit =
     val hbox = new HBox
 
     boxes foreach (b => hbox += b)
-
-    val vbox = new VBox
-
-    vbox.add(hbox)
-    vbox
+    page.add(hbox)
   end paragraph
 
   def textBox(text: String): TextBox =
-    val extents = context textExtents text
+    val extents = ctx textExtents text
 
     new TextBox(text, currentFont, currentColor):
       val height: Double = currentFont.extents.height
@@ -46,15 +43,20 @@ class Compositor private (surface: Surface, context: Context):
       val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
 
   def charBox(text: String): CharBox =
-    val extents = context textExtents text
+    val extents = ctx textExtents text
 
     new CharBox(text, currentFont, currentColor):
       val height: Double = extents.height
       val descent: Double = 0
       val width: Double = extents.width
 
+  def emit(): Unit =
+    ctx.moveTo(0, 0)
+    page.draw(ctx)
+    ctx.showPage()
+
   def destroy(): Unit =
-    context.destroy()
+    ctx.destroy()
     surface.destroy()
 end Compositor
 

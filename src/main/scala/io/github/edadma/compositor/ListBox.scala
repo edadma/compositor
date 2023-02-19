@@ -12,3 +12,5 @@ abstract class ListBox extends Box:
   def add(box: Box): Unit = boxes += box
 
   def +=(box: Box): Unit = add(box)
+
+  def clear(): Unit = boxes.clear()
