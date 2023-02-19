@@ -11,9 +11,10 @@ class HBox extends ListBox:
 
   def draw(ctx: Context): Unit =
     if boxes.nonEmpty then
+      println("hbox")
       ctx.save()
       boxes foreach { b =>
-        ctx.relMoveTo(b.width, 0)
         b.draw(ctx)
+        ctx.relMoveTo(b.width, 0)
       }
       ctx.restore()

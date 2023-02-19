@@ -10,8 +10,10 @@ class VBox extends ListBox:
 
   def draw(ctx: Context): Unit =
     if boxes.nonEmpty then
+      println("vbox")
       ctx.save()
       boxes foreach { b =>
+        println(b.height)
         ctx.relMoveTo(0, b.height)
         b.draw(ctx)
       }

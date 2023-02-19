@@ -32,15 +32,18 @@ class Compositor private (surface: Surface, ctx: Context):
 
     boxes foreach hbox.add
     page add hbox
+    boxes.clear()
   end paragraph
 
-  def textBox(text: String): TextBox =
-    val extents = ctx textExtents text
+  def textBox(s: String): TextBox =
+    val extents = ctx textExtents s
 
-    new TextBox(text, currentFont, currentColor):
+    new TextBox(s, currentFont, currentColor):
       val height: Double = currentFont.extents.height
       val descent: Double = currentFont.extents.descent
       val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
+
+      println(s"new TextBox ['$text', $height, $width]")
 
 //  def charBox(text: String): CharBox =
 //    val extents = ctx textExtents text
@@ -51,7 +54,7 @@ class Compositor private (surface: Surface, ctx: Context):
 //      val width: Double = extents.width
 
   def draw(): Unit =
-    ctx.moveTo(50, 50)
+    ctx.moveTo(0, 0)
     page.draw(ctx)
     ctx.showPage()
 

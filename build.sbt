@@ -40,7 +40,7 @@ homepage := Some(url("https://github.com/edadma/" + name.value))
 libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.15" % "test"
 
 libraryDependencies ++= Seq(
-  "io.github.edadma" %%% "libcairo" % "0.1.7",
+  "io.github.edadma" %%% "libcairo" % "0.1.8",
 )
 
 publishMavenStyle := true
