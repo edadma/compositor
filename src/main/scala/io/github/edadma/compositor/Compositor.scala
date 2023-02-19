@@ -6,8 +6,8 @@ import io.github.edadma.libcairo.{Context, FontSlant, FontWeight, Surface, TextE
 import scala.collection.mutable.ArrayBuffer
 
 class Compositor private (surface: Surface, context: Context):
-  val boxes = new ArrayBuffer[Box]
-  var currentFont: Font = new Font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10, context.fontExtents)
+  private val boxes = new ArrayBuffer[Box]
+  private var currentFont: Font = new Font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10, context.fontExtents)
 
   def +=(box: Box): Unit =
     if boxes.nonEmpty then
