@@ -8,8 +8,13 @@ import scala.collection.mutable.ArrayBuffer
 class Compositor private (surface: Surface, context: Context):
   private val boxes = new ArrayBuffer[Box]
   private var currentFont: Font = new Font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10, context.fontExtents)
+  private var currentColor: Color = new Color(0, 0, 0)
 
-  def +=(box: Box): Unit =
+  def +=(text: String): Unit = add(textBox(text))
+
+  def +=(box: Box): Unit = add(box)
+
+  def add(box: Box): Unit =
     if boxes.nonEmpty then
       boxes.last match
         case b: TextBox =>
@@ -26,14 +31,16 @@ class Compositor private (surface: Surface, context: Context):
 
     boxes foreach (b => hbox += b)
 
-    new VBox:
-      add(hbox)
+    val vbox = new VBox
+
+    vbox.add(hbox)
+    vbox
   end paragraph
 
   def textBox(text: String): TextBox =
     val extents = context textExtents text
 
-    new TextBox(text, currentFont):
+    new TextBox(text, currentFont, currentColor):
       val height: Double = currentFont.extents.height
       val descent: Double = currentFont.extents.descent
       val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
@@ -41,7 +48,7 @@ class Compositor private (surface: Surface, context: Context):
   def charBox(text: String): CharBox =
     val extents = context textExtents text
 
-    new CharBox(text, currentFont):
+    new CharBox(text, currentFont, currentColor):
       val height: Double = extents.height
       val descent: Double = 0
       val width: Double = extents.width
