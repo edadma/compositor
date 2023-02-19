@@ -14,7 +14,7 @@ class Compositor private (surface: Surface, context: Context):
       boxes.last match
         case b: TextBox =>
           if b.text.nonEmpty then
-            boxes += new SpaceBox(if ".!?:" contains text.last then 5 else 10) // todo: use font info for spaces
+            boxes += new SpaceBox(if ".!?:" contains b.text.last then 5 else 10) // todo: use font info for spaces
 
           boxes += box
         case _ =>
@@ -38,10 +38,10 @@ class Compositor private (surface: Surface, context: Context):
       val descent: Double = currentFont.extents.descent
       val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
 
-  def charBox(text: String, font: Font): CharBox =
+  def charBox(text: String): CharBox =
     val extents = context textExtents text
 
-    new CharBox(text):
+    new CharBox(text, currentFont):
       val height: Double = extents.height
       val descent: Double = 0
       val width: Double = extents.width
