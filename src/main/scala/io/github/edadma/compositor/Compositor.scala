@@ -51,7 +51,7 @@ class Compositor private (surface: Surface, ctx: Context):
 //      val width: Double = extents.width
 
   def draw(): Unit =
-    ctx.moveTo(0, 0)
+    ctx.moveTo(50, 50)
     page.draw(ctx)
     ctx.showPage()
 

@@ -5,4 +5,5 @@ package io.github.edadma.compositor
 
   pdf += "testing 1 - 2 - 3"
   pdf.paragraph(500)
+  pdf.draw()
   pdf.destroy()
