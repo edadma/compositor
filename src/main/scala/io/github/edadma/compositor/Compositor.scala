@@ -49,8 +49,8 @@ class Compositor private (surface: Surface, context: Context):
 end Compositor
 
 object Compositor:
-  val surfaces = new ArrayBuffer[Surface]
-  val contexts = new ArrayBuffer[Context]
+  private val surfaces = new ArrayBuffer[Surface]
+  private val contexts = new ArrayBuffer[Context]
 
   def pdf(path: String, width: Double, height: Double): Compositor =
     val surface = pdfSurfaceCreate(path, width, height)
