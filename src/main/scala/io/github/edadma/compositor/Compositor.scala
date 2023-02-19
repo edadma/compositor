@@ -42,15 +42,15 @@ class Compositor private (surface: Surface, ctx: Context):
       val descent: Double = currentFont.extents.descent
       val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
 
-  def charBox(text: String): CharBox =
-    val extents = ctx textExtents text
+//  def charBox(text: String): CharBox =
+//    val extents = ctx textExtents text
+//
+//    new CharBox(text, currentFont, currentColor):
+//      val height: Double = extents.height
+//      val descent: Double = 0
+//      val width: Double = extents.width
 
-    new CharBox(text, currentFont, currentColor):
-      val height: Double = extents.height
-      val descent: Double = 0
-      val width: Double = extents.width
-
-  def emit(): Unit =
+  def draw(): Unit =
     ctx.moveTo(0, 0)
     page.draw(ctx)
     ctx.showPage()

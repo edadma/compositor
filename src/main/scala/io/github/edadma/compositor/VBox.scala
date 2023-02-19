@@ -9,4 +9,10 @@ class VBox extends ListBox:
   def width: Double = max(_.width)
 
   def draw(ctx: Context): Unit =
-    ctx.moveTo(0, font.extents.height)
+    if boxes.nonEmpty then
+      ctx.save()
+      boxes foreach { b =>
+        ctx.relMoveTo(0, b.height)
+        b.draw(ctx)
+      }
+      ctx.restore()
