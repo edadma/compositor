@@ -7,13 +7,13 @@ import scala.collection.mutable.ArrayBuffer
 
 class Compositor private (surface: Surface, context: Context):
   val boxes = new ArrayBuffer[Box]
-  var font: Font = null
+  var currentFont: Font = null
 
   def +=(box: Box): Unit =
     if boxes.nonEmpty then
       boxes.last match
-        case TextBox(text) =>
-          if text.nonEmpty then
+        case b: TextBox =>
+          if b.text.nonEmpty then
             boxes += new SpaceBox(if ".!?:" contains text.last then 5 else 10) // todo: use font info for spaces
 
           boxes += box
@@ -30,12 +30,12 @@ class Compositor private (surface: Surface, context: Context):
       add(hbox)
   end paragraph
 
-  def textBox(text: String, font: Font): TextBox =
+  def textBox(text: String): TextBox =
     val extents = context textExtents text
 
-    new TextBox(text):
-      val height: Double = font.extents.height
-      val descent: Double = font.extents.descent
+    new TextBox(text, currentFont):
+      val height: Double = currentFont.extents.height
+      val descent: Double = currentFont.extents.descent
       val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
 
   def charBox(text: String, font: Font): CharBox =

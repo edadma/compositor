@@ -1,3 +1,3 @@
 package io.github.edadma.compositor
 
-abstract case class TextBox(text: String) extends Box
+abstract class TextBox private[compositor] (val text: String, val font: Font) extends Box
