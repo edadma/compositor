@@ -43,8 +43,6 @@ class Compositor private (surface: Surface, ctx: Context):
       val descent: Double = currentFont.extents.descent
       val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
 
-      println(s"new TextBox ['$text', $height, $width]")
-
 //  def charBox(text: String): CharBox =
 //    val extents = ctx textExtents text
 //
@@ -54,8 +52,7 @@ class Compositor private (surface: Surface, ctx: Context):
 //      val width: Double = extents.width
 
   def draw(): Unit =
-    ctx.moveTo(0, 0)
-    page.draw(ctx)
+    page.draw(ctx, 0, 0)
     ctx.showPage()
 
   def destroy(): Unit =

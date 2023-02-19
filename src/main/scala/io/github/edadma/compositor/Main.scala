@@ -7,7 +7,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 
   pdf += "[]|Testing 1 - 2 - 3"
   pdf.paragraph(500)
-  pdf += "asdf"
+  pdf += "[]|asdf"
   pdf.paragraph(500)
   pdf.draw()
   pdf.destroy()

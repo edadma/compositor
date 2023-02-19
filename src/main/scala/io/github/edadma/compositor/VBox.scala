@@ -8,13 +8,11 @@ class VBox extends ListBox:
 
   def width: Double = max(_.width)
 
-  def draw(ctx: Context): Unit =
+  def draw(ctx: Context, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
-      println("vbox")
-      ctx.save()
+      var cy = y
+
       boxes foreach { b =>
-        println(b.height)
-        ctx.relMoveTo(0, b.height)
-        b.draw(ctx)
+        cy += b.height
+        b.draw(ctx, x, cy)
       }
-      ctx.restore()

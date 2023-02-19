@@ -6,4 +6,4 @@ abstract class Box:
   def height: Double
   def descent: Double
   def width: Double
-  def draw(ctx: Context): Unit
+  def draw(ctx: Context, x: Double, y: Double): Unit

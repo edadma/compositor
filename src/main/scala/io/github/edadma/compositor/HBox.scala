@@ -9,12 +9,11 @@ class HBox extends ListBox:
 
   def width: Double = sum(_.width)
 
-  def draw(ctx: Context): Unit =
+  def draw(ctx: Context, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
-      println("hbox")
-      ctx.save()
+      var cx = x
+
       boxes foreach { b =>
-        b.draw(ctx)
-        ctx.relMoveTo(b.width, 0)
+        b.draw(ctx, cx, y)
+        cx += b.width
       }
-      ctx.restore()
