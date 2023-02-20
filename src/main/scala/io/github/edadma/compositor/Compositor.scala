@@ -26,11 +26,10 @@ class Compositor private (surface: Surface, ctx: Context):
             boxes += new SpaceBox(
               if ".!?:" contains b.text.last then b.font.space * 1.5 else b.font.space,
             ) // todo: use font info for spaces
-
-          boxes += box
         case _ =>
-          boxes += box
-    else boxes += box
+    else boxes += new RigidBox(width = 36)
+
+    boxes += box
 
   def font(f: Font): Unit =
     ctx.selectFontFace(f.family, f.slant, f.weight)
