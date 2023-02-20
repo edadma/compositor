@@ -40,8 +40,8 @@ class Compositor private (surface: Surface, ctx: Context):
     ctx.selectFontFace(family, slant, weight)
     ctx.setFontSize(size)
 
-    val TextExtents(_, _, _Width, _, _, _) = ctx.textExtents("_")
-    val TextExtents(_, _, _sWithSpaceWidth, _, _, _) = ctx.textExtents("_ _")
+    val TextExtents(_, _, _, _, _Width, _) = ctx.textExtents("_")
+    val TextExtents(_, _, _, _, _sWithSpaceWidth, _) = ctx.textExtents("_ _")
     val extents = ctx.fontExtents
 
     new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
@@ -60,7 +60,7 @@ class Compositor private (surface: Surface, ctx: Context):
       val height: Double = currentFont.extents.height
       val ascent: Double = currentFont.extents.ascent
       val descent: Double = currentFont.extents.descent
-      val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
+      val width: Double = extents.xAdvance
 
 //  def charBox(text: String): CharBox =
 //    val extents = ctx textExtents text
