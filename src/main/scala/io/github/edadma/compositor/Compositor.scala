@@ -53,14 +53,7 @@ class Compositor private (surface: Surface, ctx: Context):
     boxes.clear()
   end paragraph
 
-  def textBox(s: String): TextBox =
-    val extents = ctx textExtents s
-
-    new TextBox(s, currentFont, currentColor):
-      val height: Double = currentFont.extents.height
-      val ascent: Double = currentFont.extents.ascent
-      val descent: Double = currentFont.extents.descent
-      val width: Double = extents.xAdvance
+  def textBox(s: String): TextBox = new TextBox(s, currentFont, currentColor, ctx.textExtents(s).xAdvance)
 
 //  def charBox(text: String): CharBox =
 //    val extents = ctx textExtents text
