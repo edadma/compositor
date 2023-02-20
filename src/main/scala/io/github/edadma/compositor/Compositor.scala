@@ -16,7 +16,7 @@ class Compositor private (surface: Surface, ctx: Context):
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
 
-    words foreach (w => addWord(w))
+    words foreach addWord
 
   def addBox(box: Box): Unit =
     if boxes.nonEmpty then
