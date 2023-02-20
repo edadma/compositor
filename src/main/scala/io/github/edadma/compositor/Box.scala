@@ -8,3 +8,4 @@ abstract class Box:
   def descent: Double
   def width: Double
   def draw(ctx: Context, x: Double, y: Double): Unit
+  def isSpace: Boolean = this.isInstanceOf[SpaceBox]

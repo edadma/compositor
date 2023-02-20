@@ -46,11 +46,21 @@ class Compositor private (surface: Surface, ctx: Context):
 
     new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
   def paragraph(width: Double): Unit =
-    val hbox = new HBox
+    while boxes.nonEmpty do
+      val hbox = new HBox
 
-    boxes foreach hbox.add
-    page add hbox
-    boxes.clear()
+      while boxes.nonEmpty && hbox.width + boxes.head.width <= width do hbox add boxes.remove(0)
+      if hbox.boxes.last.isSpace then hbox.boxes.remove(hbox.boxes.length - 1)
+      if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
+
+      if boxes.nonEmpty then
+        val diff = width - hbox.width
+        val spaces = hbox.boxes.filter(_.isSpace).asInstanceOf[ArrayBuffer[SpaceBox]]
+        val stretch = diff / spaces.length
+
+        spaces foreach (_.stretch = stretch)
+
+      page add hbox
   end paragraph
 
   def textBox(s: String): TextBox = new TextBox(s, currentFont, currentColor, ctx.textExtents(s).xAdvance)
