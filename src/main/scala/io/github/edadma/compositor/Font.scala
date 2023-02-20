@@ -8,4 +8,5 @@ class Font private[compositor] (
     val weight: FontWeight,
     val size: Double,
     val extents: FontExtents,
+    val space: Double,
 )

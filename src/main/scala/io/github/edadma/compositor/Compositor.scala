@@ -7,26 +7,44 @@ import scala.collection.mutable.ArrayBuffer
 
 class Compositor private (surface: Surface, ctx: Context):
   private val boxes = new ArrayBuffer[Box]
-  private var currentFont: Font = new Font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10, ctx.fontExtents)
+  private var currentFont: Font = font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10)
   private var currentColor: Color = new Color(0, 0, 0)
   private var page = new VBox
 
-  def +=(text: String): Unit = add(textBox(text))
+  def addWord(text: String): Unit = addBox(textBox(text))
 
-  def +=(box: Box): Unit = add(box)
+  def addText(text: String): Unit =
+    val words = text.split(' ').filterNot(_ == "")
 
-  def add(box: Box): Unit =
+    words foreach (w => addWord(w))
+
+  def addBox(box: Box): Unit =
     if boxes.nonEmpty then
       boxes.last match
         case b: TextBox =>
           if b.text.nonEmpty then
-            boxes += new SpaceBox(if ".!?:" contains b.text.last then 5 else 10) // todo: use font info for spaces
+            boxes += new SpaceBox(
+              if ".!?:" contains b.text.last then b.font.space * 1.5 else b.font.space,
+            ) // todo: use font info for spaces
 
           boxes += box
         case _ =>
           boxes += box
     else boxes += box
 
+  def font(f: Font): Unit =
+    ctx.selectFontFace(f.family, f.slant, f.weight)
+    ctx.setFontSize(f.size)
+
+  def font(family: String, slant: FontSlant, weight: FontWeight, size: Double): Font =
+    ctx.selectFontFace(family, slant, weight)
+    ctx.setFontSize(size)
+
+    val TextExtents(_, _, _Width, _, _, _) = ctx.textExtents("_")
+    val TextExtents(_, _, _sWithSpaceWidth, _, _, _) = ctx.textExtents("_ _")
+    val extents = ctx.fontExtents
+
+    new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
   def paragraph(width: Double): Unit =
     val hbox = new HBox
 
@@ -40,6 +58,7 @@ class Compositor private (surface: Surface, ctx: Context):
 
     new TextBox(s, currentFont, currentColor):
       val height: Double = currentFont.extents.height
+      val ascent: Double = currentFont.extents.ascent
       val descent: Double = currentFont.extents.descent
       val width: Double = extents.width // todo: may also include xBearing and/or xAdvance. not sure
 

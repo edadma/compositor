@@ -5,9 +5,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 @main def run(): Unit =
   val pdf = Compositor.pdf("test.pdf", 612, 792)
 
-  pdf += "[]|Testing 1 - 2 - 3"
-  pdf.paragraph(500)
-  pdf += "[]|asdf"
+  pdf addWord "This is just a test. Boring"
   pdf.paragraph(500)
   pdf.draw()
   pdf.destroy()

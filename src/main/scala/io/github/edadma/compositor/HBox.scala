@@ -5,6 +5,8 @@ import io.github.edadma.libcairo.Context
 class HBox extends ListBox:
   def height: Double = max(_.height)
 
+  def ascent: Double = max(_.ascent)
+
   def descent: Double = max(_.descent)
 
   def width: Double = sum(_.width)

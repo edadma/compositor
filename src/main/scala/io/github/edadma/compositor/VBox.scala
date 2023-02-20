@@ -4,6 +4,8 @@ import io.github.edadma.libcairo.Context
 class VBox extends ListBox:
   def height: Double = sum(_.height)
 
+  def ascent: Double = height // todo: not really correct
+
   def descent: Double = if boxes.nonEmpty then boxes.last.descent else 0
 
   def width: Double = max(_.width)
@@ -11,8 +13,13 @@ class VBox extends ListBox:
   def draw(ctx: Context, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
       var cy = y
+      var first = true
 
       boxes foreach { b =>
-        cy += b.height
+        if first then
+          first = false
+          cy += b.ascent
+        else cy += b.height
+
         b.draw(ctx, x, cy)
       }
