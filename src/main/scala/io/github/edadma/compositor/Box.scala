@@ -9,3 +9,4 @@ abstract class Box:
   def width: Double
   def draw(ctx: Context, x: Double, y: Double): Unit
   def isSpace: Boolean = this.isInstanceOf[SpaceBox]
+  def isText: Boolean = this.isInstanceOf[TextBox]

@@ -3,6 +3,7 @@ package io.github.edadma.compositor
 import io.github.edadma.compositor
 import io.github.edadma.libcairo.{Context, FontSlant, FontWeight, Surface, TextExtents, pdfSurfaceCreate}
 
+import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
 class Compositor private (surface: Surface, ctx: Context):
@@ -54,7 +55,28 @@ class Compositor private (surface: Surface, ctx: Context):
     while boxes.nonEmpty do
       val hbox = new HBox
 
-      while boxes.nonEmpty && hbox.width + boxes.head.width <= width do hbox add boxes.remove(0)
+      @tailrec
+      def line(): Unit =
+        if boxes.nonEmpty then
+          if hbox.width + boxes.head.width <= width then
+            hbox add boxes.remove(0)
+            line()
+          else
+            boxes.head match
+              case b: TextBox =>
+                b.text indexOf '-' match
+                  case -1 =>
+                  case idx =>
+                    val beforeHyphen = b.newTextBox(b.text.substring(0, idx + 1))
+
+                    if hbox.width + beforeHyphen.width <= width then
+                      hbox add beforeHyphen
+                      boxes.remove(0)
+                      boxes.insert(0, b.newTextBox(b.text.substring(idx + 1)))
+              case _ =>
+
+      line()
+
       if hbox.boxes.last.isSpace then hbox.boxes.remove(hbox.boxes.length - 1)
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
 
