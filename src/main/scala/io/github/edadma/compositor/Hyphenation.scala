@@ -11,6 +11,11 @@ object Hyphenation:
       "car-diato-my",
       "bud-get",
       "wilder-ness",
+      "lam-en-ta-ble",
+      "there-in",
+      "light-ed",
+      "stand-ing",
+      "trem-bled",
     ) map (w => w.filterNot(_ == '-') -> w.split('-').toSeq) toMap
 
   def apply(word: String): Option[Iterator[(String, String)]] =
