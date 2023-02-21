@@ -66,6 +66,30 @@ class Compositor private (surface: Surface, ctx: Context):
               case b: TextBox =>
                 b.text indexOf '-' match
                   case -1 =>
+                    Hyphenation(b.text) match
+                      case None =>
+                      case Some(hyphenation) =>
+                        var lastBefore: TextBox = null
+                        var lastAfter: String = null
+
+                        @tailrec
+                        def longest(): Unit =
+                          if hyphenation.hasNext then
+                            val (before, after) = hyphenation.next
+                            val beforeHyphen = b.newTextBox(before)
+
+                            if hbox.width + beforeHyphen.width <= width then
+                              lastBefore = beforeHyphen
+                              lastAfter = after
+                              longest()
+
+                        longest()
+
+                        if lastBefore ne null then
+                          hbox add lastBefore
+                          boxes.remove(0)
+                          boxes.insert(0, b.newTextBox(lastAfter))
+                    end match
                   case idx =>
                     val beforeHyphen = b.newTextBox(b.text.substring(0, idx + 1))
 
