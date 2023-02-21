@@ -31,11 +31,12 @@ class Compositor private (surface: Surface, ctx: Context):
 
     boxes += box
 
-  def font(f: Font): Unit =
+  def setFont(f: Font): Unit =
     ctx.selectFontFace(f.family, f.slant, f.weight)
     ctx.setFontSize(f.size)
+    currentFont = f
 
-  def font(family: String, slant: FontSlant, weight: FontWeight, size: Double): Font =
+  def font(family: String, slant: FontSlant, weight: FontWeight, size: Double, set: Boolean = false): Font =
     ctx.selectFontFace(family, slant, weight)
     ctx.setFontSize(size)
 
@@ -43,7 +44,12 @@ class Compositor private (surface: Surface, ctx: Context):
     val TextExtents(_, _, _, _, _sWithSpaceWidth, _) = ctx.textExtents("_ _")
     val extents = ctx.fontExtents
 
-    new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
+    val res = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
+
+    if set then currentFont = res
+
+    res
+
   def paragraph(width: Double): Unit =
     while boxes.nonEmpty do
       val hbox = new HBox
@@ -62,7 +68,7 @@ class Compositor private (surface: Surface, ctx: Context):
       page add hbox
   end paragraph
 
-  def textBox(s: String): TextBox = new TextBox(s, currentFont, currentColor, ctx.textExtents(s).xAdvance)
+  def textBox(s: String): TextBox = new TextBox(s, currentFont, currentColor, ctx)
 
 //  def charBox(text: String): CharBox =
 //    val extents = ctx textExtents text
