@@ -12,5 +12,4 @@ class TextBox(val text: String, val font: Font, val color: Color, ctx: Context) 
       ctx.moveTo(x, y)
       ctx.showText(text)
 
-  def newTextBox(s: String): TextBox =
-    new TextBox(s, font, color, ctx)
+  def newTextBox(s: String): TextBox = new TextBox(s, font, color, ctx)
