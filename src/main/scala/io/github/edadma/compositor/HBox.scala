@@ -7,6 +7,8 @@ class HBox extends ListBox:
 
   def ascent: Double = max(_.ascent)
 
+  def ascender: Double = max(_.ascender)
+
   def descent: Double = max(_.descent)
 
   def width: Double = sum(_.width)

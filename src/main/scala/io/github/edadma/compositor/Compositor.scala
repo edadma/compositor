@@ -8,9 +8,11 @@ import scala.collection.mutable.ArrayBuffer
 
 class Compositor private (surface: Surface, ctx: Context):
   private val boxes = new ArrayBuffer[Box]
-  private var currentFont: Font = font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10)
+  private var currentFont: Font = null
   private var currentColor: Color = new Color(0, 0, 0)
   private var page = new VBox
+
+  font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10)
 
   def addWord(text: String): Unit = addBox(textBox(text))
 
@@ -32,23 +34,21 @@ class Compositor private (surface: Surface, ctx: Context):
 
     boxes += box
 
-  def setFont(f: Font): Unit =
+  def font(f: Font): Unit =
     ctx.selectFontFace(f.family, f.slant, f.weight)
     ctx.setFontSize(f.size)
     currentFont = f
 
-  def font(family: String, slant: FontSlant, weight: FontWeight, size: Double, set: Boolean = false): Font =
+  def font(family: String, slant: FontSlant, weight: FontWeight, size: Double): Font =
     ctx.selectFontFace(family, slant, weight)
     ctx.setFontSize(size)
 
     val TextExtents(_, _, _, _, _Width, _) = ctx.textExtents("_")
     val TextExtents(_, _, _, _, _sWithSpaceWidth, _) = ctx.textExtents("_ _")
     val extents = ctx.fontExtents
-
     val res = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
 
-    if set then currentFont = res
-
+    currentFont = res
     res
 
   def paragraph(width: Double): Unit =
@@ -113,6 +113,26 @@ class Compositor private (surface: Surface, ctx: Context):
 
       page add hbox
   end paragraph
+
+  def bold(): Unit = font(currentFont.family, currentFont.slant, FontWeight.BOLD, currentFont.size)
+
+  def normal(): Unit = font(currentFont.family, currentFont.slant, FontWeight.NORMAL, currentFont.size)
+
+  def size(points: Double): Unit = font(currentFont.family, currentFont.slant, FontWeight.NORMAL, points)
+
+  def sup(s: String): Box =
+    val f = currentFont
+
+    bold()
+
+    val shift = -currentFont.size * .3333
+
+    size(currentFont.size * 0.583)
+
+    val res = new ShiftBox(textBox(s), shift)
+
+    font(f)
+    res
 
   def textBox(s: String): TextBox = new TextBox(s, currentFont, currentColor, ctx)
 

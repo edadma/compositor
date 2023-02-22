@@ -5,6 +5,8 @@ abstract class SameBox(box: Box) extends Box:
 
   def ascent: Double = box.ascent
 
+  def ascender: Double = box.ascender
+
   def descent: Double = box.descent
 
   def width: Double = box.width
