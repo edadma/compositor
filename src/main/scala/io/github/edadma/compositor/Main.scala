@@ -5,8 +5,12 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 @main def run(): Unit =
   val pdf = Compositor.pdf("test.pdf", 612, 792)
 
-  pdf addBox pdf.sup("12")
-  pdf addText "The"
+//  pdf addBox pdf.sup("12")
+  pdf addText "As I walked through the wilderness of this world"
+  pdf.paragraph(165)
+  println(pdf.currentFont.size)
+  pdf.size(pdf.currentFont.size * .5)
+  pdf addText "As I walked through the wilderness of this world"
   pdf.paragraph(165)
   pdf.draw()
   pdf.destroy()

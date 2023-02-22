@@ -8,7 +8,7 @@ import scala.collection.mutable.ArrayBuffer
 
 class Compositor private (surface: Surface, ctx: Context):
   private val boxes = new ArrayBuffer[Box]
-  private var currentFont: Font = null
+  var currentFont: Font = null
   private var currentColor: Color = new Color(0, 0, 0)
   private var page = new VBox
 
@@ -35,9 +35,10 @@ class Compositor private (surface: Surface, ctx: Context):
     boxes += box
 
   def font(f: Font): Unit =
-    ctx.selectFontFace(f.family, f.slant, f.weight)
-    ctx.setFontSize(f.size)
-    currentFont = f
+    if currentFont ne f then
+      ctx.selectFontFace(f.family, f.slant, f.weight)
+      ctx.setFontSize(f.size)
+      currentFont = f
 
   def font(family: String, slant: FontSlant, weight: FontWeight, size: Double): Font =
     ctx.selectFontFace(family, slant, weight)
@@ -46,10 +47,9 @@ class Compositor private (surface: Surface, ctx: Context):
     val TextExtents(_, _, _, _, _Width, _) = ctx.textExtents("_")
     val TextExtents(_, _, _, _, _sWithSpaceWidth, _) = ctx.textExtents("_ _")
     val extents = ctx.fontExtents
-    val res = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
 
-    currentFont = res
-    res
+    currentFont = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
+    currentFont
 
   def paragraph(width: Double): Unit =
     while boxes.nonEmpty do
