@@ -1,7 +1,5 @@
 package io.github.edadma.compositor
 
-class SpaceBox(min: Double) extends SimpleBox with EmptyBox:
-  val height: Double = 0
+abstract class SpaceBox extends SimpleBox with EmptyBox:
+  val order: Int
   var stretch: Double = 0
-
-  def width: Double = min + stretch

@@ -26,7 +26,8 @@ class Compositor private (private[compositor] val surface: Surface, private[comp
       boxes.last match
         case b: TextBox =>
           if b.text.nonEmpty then
-            boxes += new SpaceBox(
+            boxes += new HSpaceBox(
+              0,
               if ".!?:" contains b.text.last then b.font.space * 1.5 else b.font.space,
             ) // todo: use font info for spaces
         case _ =>
@@ -103,13 +104,7 @@ class Compositor private (private[compositor] val surface: Surface, private[comp
 
       if hbox.boxes.last.isSpace then hbox.boxes.remove(hbox.boxes.length - 1)
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
-
-      if boxes.nonEmpty then
-        val diff = width - hbox.width
-        val spaces = hbox.boxes.filter(_.isSpace).asInstanceOf[ArrayBuffer[SpaceBox]]
-        val stretch = diff / spaces.length
-
-        spaces foreach (_.stretch = stretch)
+      if boxes.nonEmpty then hbox.set(width)
 
       page add hbox
   end paragraph

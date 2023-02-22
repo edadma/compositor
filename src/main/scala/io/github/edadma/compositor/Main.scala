@@ -5,6 +5,9 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 @main def run(): Unit =
   val pdf = Compositor.pdf("test.pdf", 612, 792)
 
+  pdf addBox new HSpaceBox(1)
+  pdf addText "Pilgrim's Progress"
+  pdf.paragraph(165)
   pdf addBox pdf.sup("10")
   pdf addText "As I walked through the wilderness of this world"
   pdf.paragraph(165)

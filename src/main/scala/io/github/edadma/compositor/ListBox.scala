@@ -14,3 +14,12 @@ abstract class ListBox extends Box:
   def +=(box: Box): Unit = add(box)
 
   def clear(): Unit = boxes.clear()
+
+  def set(size: Double): Unit =
+    val diff = size - width
+    val allSpaces = boxes.filter(_.isSpace).asInstanceOf[ArrayBuffer[HSpaceBox]]
+    val maxOrder = allSpaces.map(_.order).max
+    val spaces = allSpaces.filter(_.order == maxOrder)
+    val stretch = diff / spaces.length
+
+    spaces foreach (_.stretch = stretch)
