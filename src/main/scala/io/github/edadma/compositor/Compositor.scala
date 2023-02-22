@@ -118,7 +118,7 @@ class Compositor private (surface: Surface, ctx: Context):
 
   def normal(): Unit = font(currentFont.family, currentFont.slant, FontWeight.NORMAL, currentFont.size)
 
-  def size(points: Double): Unit = font(currentFont.family, currentFont.slant, FontWeight.NORMAL, points)
+  def size(points: Double): Unit = font(currentFont.family, currentFont.slant, currentFont.weight, points)
 
   def sup(s: String): Box =
     val f = currentFont
