@@ -8,6 +8,6 @@ abstract class Box:
   def ascender: Double
   def descent: Double
   def width: Double
-  def draw(ctx: Context, x: Double, y: Double): Unit
+  def draw(comp: Compositor, x: Double, y: Double): Unit
   def isSpace: Boolean = this.isInstanceOf[SpaceBox]
   def isText: Boolean = this.isInstanceOf[TextBox]

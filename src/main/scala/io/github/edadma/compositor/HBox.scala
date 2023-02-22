@@ -13,11 +13,11 @@ class HBox extends ListBox:
 
   def width: Double = sum(_.width)
 
-  def draw(ctx: Context, x: Double, y: Double): Unit =
+  def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
       var cx = x
 
       boxes foreach { b =>
-        b.draw(ctx, cx, y)
+        b.draw(comp, cx, y)
         cx += b.width
       }

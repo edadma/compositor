@@ -12,7 +12,7 @@ class VBox extends ListBox:
 
   def width: Double = max(_.width)
 
-  def draw(ctx: Context, x: Double, y: Double): Unit =
+  def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
       var cy = y
       var first = true
@@ -23,5 +23,5 @@ class VBox extends ListBox:
           cy += b.ascent
         else cy += b.height
 
-        b.draw(ctx, x, cy)
+        b.draw(comp, x, cy)
       }

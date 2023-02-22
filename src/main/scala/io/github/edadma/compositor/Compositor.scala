@@ -6,9 +6,9 @@ import io.github.edadma.libcairo.{Context, FontSlant, FontWeight, Surface, TextE
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-class Compositor private (surface: Surface, ctx: Context):
+class Compositor private (private[compositor] val surface: Surface, private[compositor] val ctx: Context):
   private val boxes = new ArrayBuffer[Box]
-  var currentFont: Font = null
+  private[compositor] var currentFont: Font = null
   private var currentColor: Color = new Color(0, 0, 0)
   private var page = new VBox
 
@@ -134,7 +134,7 @@ class Compositor private (surface: Surface, ctx: Context):
     font(f)
     res
 
-  def textBox(s: String): TextBox = new TextBox(s, currentFont, currentColor, ctx)
+  def textBox(s: String): TextBox = new TextBox(this, s, currentFont, currentColor)
 
 //  def charBox(text: String): CharBox =
 //    val extents = ctx textExtents text
@@ -145,7 +145,7 @@ class Compositor private (surface: Surface, ctx: Context):
 //      val width: Double = extents.width
 
   def draw(): Unit =
-    page.draw(ctx, 0, 0)
+    page.draw(this, 0, 0)
     ctx.showPage()
 
   def destroy(): Unit =
