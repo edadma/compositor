@@ -26,4 +26,4 @@ abstract class ListBox extends Box:
       val spaces = allSpaces.filter(_.order == maxOrder)
       val totalStretchable = spaces.map(_.stretchable).sum
 
-      if totalStretchable > 0 then spaces foreach (s => s.stretch = s.stretchable / totalStretchable)
+      if totalStretchable > 0 then spaces foreach (s => s.stretch = diff * s.stretchable / totalStretchable)
