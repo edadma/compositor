@@ -1,12 +1,24 @@
 package io.github.edadma.compositor
 
 import io.github.edadma.compositor
-import io.github.edadma.libcairo.{Context, FontSlant, FontWeight, Surface, TextExtents, pdfSurfaceCreate}
+import io.github.edadma.libcairo.{
+  Context,
+  FontSlant,
+  FontWeight,
+  Format,
+  Surface,
+  TextExtents,
+  pdfSurfaceCreate,
+  imageSurfaceCreate,
+}
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-class Compositor private (private[compositor] val surface: Surface, private[compositor] val ctx: Context):
+abstract class Compositor private[compositor] (
+    private[compositor] val surface: Surface,
+    private[compositor] val ctx: Context,
+):
   private val boxes = new ArrayBuffer[Box]
   private[compositor] var currentFont: Font = null
   private var currentColor: Color = new Color(0, 0, 0)
@@ -142,20 +154,32 @@ class Compositor private (private[compositor] val surface: Surface, private[comp
 //      val descent: Double = 0
 //      val width: Double = extents.width
 
-  def draw(): Unit =
-    page.set(792)
-    page.draw(this, 0, 0)
-    ctx.showPage()
+  def draw(): Unit
 
   def destroy(): Unit =
     ctx.destroy()
     surface.destroy()
 end Compositor
 
+class PDFCompositor private (private[compositor] val surface: Surface, private[compositor] val ctx: Context)
+    extends Compositor:
+  def draw(): Unit =
+    page.set(792)
+    page.draw(this, 0, 0)
+    ctx.showPage()
+end PDFCompositor
+
 object Compositor:
   def pdf(path: String, width: Double, height: Double): Compositor =
     val surface = pdfSurfaceCreate(path, width, height)
     val context = surface.create
 
+    new PDFCompositor(surface, context)
+
+  def png(path: String, width: Int, height: Int): Compositor =
+    val surface = imageSurfaceCreate(Format.ARGB32, width, height)
+    val context = surface.create
+
     new Compositor(surface, context)
+
 end Compositor
