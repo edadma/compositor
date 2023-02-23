@@ -17,9 +17,11 @@ abstract class ListBox extends Box:
 
   def set(size: Double): Unit =
     val diff = size - width
-    val allSpaces = boxes.filter(_.isSpace).asInstanceOf[ArrayBuffer[HSpaceBox]]
-    val maxOrder = allSpaces.map(_.order).max
-    val spaces = allSpaces.filter(_.order == maxOrder)
-    val stretch = diff / spaces.length
+    val allSpaces = boxes.filter(_.isSpace).asInstanceOf[ArrayBuffer[SpaceBox]]
 
-    spaces foreach (_.stretch = stretch)
+    if allSpaces.nonEmpty then
+      val maxOrder = allSpaces.map(_.order).max
+      val spaces = allSpaces.filter(_.order == maxOrder)
+      val stretch = diff / spaces.length
+
+      spaces foreach (_.stretch = stretch)

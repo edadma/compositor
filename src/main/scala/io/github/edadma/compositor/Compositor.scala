@@ -14,6 +14,8 @@ class Compositor private (private[compositor] val surface: Surface, private[comp
 
   font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10)
 
+  def add(box: Box): Unit = page add box
+
   def addWord(text: String): Unit = addBox(textBox(text))
 
   def addText(text: String): Unit =
@@ -140,6 +142,7 @@ class Compositor private (private[compositor] val surface: Surface, private[comp
 //      val width: Double = extents.width
 
   def draw(): Unit =
+    page.set(792)
     page.draw(this, 0, 0)
     ctx.showPage()
 
