@@ -3,28 +3,29 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.pdfSurfaceCreate
 
 @main def run(): Unit =
-  val pdf = Compositor.png("test.png", 612, 792, ppi(1920, 1080, 13))
+  val png = Compositor.png("test.png", 612, 792, ppi(1920, 1080, 13))
 
+  png.color(0, 1, 0)
 //  pdf add new VSpaceBox(1)
-  pdf addBox new HSpaceBox(1)
-  pdf addText "Pilgrim's Progress"
-  pdf addBox new HSpaceBox(1)
-  pdf.line(pdf.pageWidth)
-  pdf add new VSpaceBox(0, 20, 0)
+  png addBox new HSpaceBox(1)
+  png addText "Pilgrim's Progress"
+  png addBox new HSpaceBox(1)
+  png.line(png.pageWidth)
+  png add new VSpaceBox(0, 20, 0)
 //  pdf addBox pdf.sup("10")
-  pdf addText "As I walked through the"
-  pdf.paragraph(pdf.pageWidth)
-  pdf addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
-  pdf.paragraph(pdf.pageWidth)
-  pdf.size(pdf.currentFont.size * .5)
-  pdf addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
-  pdf.paragraph(pdf.pageWidth)
-  pdf.size(10)
-  pdf addText "As I walked through the wilderness of this world"
-  pdf.paragraph(pdf.pageWidth)
+  png addText "As I walked through the"
+  png.paragraph(png.pageWidth)
+  png addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
+  png.paragraph(png.pageWidth)
+  png.size(png.currentFont.size * .5)
+  png addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
+  png.paragraph(png.pageWidth)
+  png.size(10)
+  png addText "As I walked through the wilderness of this world"
+  png.paragraph(png.pageWidth)
 //  pdf add new VSpaceBox(1)
-  pdf.draw(pdf.pageHeight)
-  pdf.destroy()
+  png.draw(png.pageHeight)
+  png.destroy()
 
 /*
 pdf addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream. I dreamed, and behold, I saw a man clothed with rags, standing in a certain place, with his face from his own house, a book in his hand, and a great burden upon his back. [Isa. 64:6; Luke 14:33; Ps. 38:4; Hab. 2:2; Acts 16:30,31] I looked, and saw him open the book, and read therein; and, as he read, he wept, and trembled; and, not being able longer to contain, he brake out with a lamentable cry, saying, \"What shall I do?\" [Acts 2:37] "
