@@ -109,6 +109,7 @@ class Compositor private (private[compositor] val surface: Surface, private[comp
       if boxes.nonEmpty then hbox.set(width)
 
       page add hbox
+    end while
   end paragraph
 
   def bold(): Unit = font(currentFont.family, currentFont.slant, FontWeight.BOLD, currentFont.size)
