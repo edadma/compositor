@@ -13,6 +13,8 @@ class HBox extends ListBox:
 
   def width: Double = sum(_.width)
 
+  def length: Double = width
+
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
       var cx = x

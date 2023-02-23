@@ -3,6 +3,8 @@ package io.github.edadma.compositor
 import scala.collection.mutable.ArrayBuffer
 
 abstract class ListBox extends Box:
+  def length: Double
+
   protected[compositor] val boxes = new ArrayBuffer[Box]
 
   protected def sum(measure: Box => Double): Double = boxes map measure sum
@@ -16,7 +18,7 @@ abstract class ListBox extends Box:
   def clear(): Unit = boxes.clear()
 
   def set(size: Double): Unit =
-    val diff = size - width
+    val diff = size - length
     val allSpaces = boxes.filter(_.isSpace).asInstanceOf[ArrayBuffer[SpaceBox]]
 
     if allSpaces.nonEmpty then

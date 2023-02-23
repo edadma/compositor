@@ -4,6 +4,8 @@ import io.github.edadma.libcairo.Context
 class VBox extends ListBox:
   def height: Double = sum(_.height)
 
+  def length: Double = height
+
   def ascent: Double = height // todo: not really correct
 
   def ascender: Double = height // todo: not really correct
