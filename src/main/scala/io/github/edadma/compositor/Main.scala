@@ -9,7 +9,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   pdf addBox new HSpaceBox(1)
   pdf addText "Pilgrim's Progress"
   pdf.paragraph(165)
-  pdf add new VSpaceBox(0, 20)
+  pdf add new VSpaceBox(0, 20, 0)
   pdf addBox pdf.sup("10")
   pdf addText "As I walked through the wilderness of this world"
   pdf.paragraph(165)

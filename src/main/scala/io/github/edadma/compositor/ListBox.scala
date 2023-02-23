@@ -24,6 +24,6 @@ abstract class ListBox extends Box:
     if allSpaces.nonEmpty then
       val maxOrder = allSpaces.map(_.order).max
       val spaces = allSpaces.filter(_.order == maxOrder)
-      val stretch = diff / spaces.length
+      val totalStretchable = spaces.map(_.stretchable).sum
 
-      spaces foreach (_.stretch = stretch)
+      if totalStretchable > 0 then spaces foreach (s => s.stretch = s.stretchable / totalStretchable)
