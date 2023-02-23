@@ -201,9 +201,11 @@ object Compositor:
 
     new PDFCompositor(surface, context, width, height)
 
-  def png(path: String, width: Int, height: Int): Compositor =
-    val surface = imageSurfaceCreate(Format.ARGB32, width, height)
+  def png(path: String, width: Int, height: Int, ppi: Double): Compositor =
+    val pixelsPerPoint = ppi / 72
+    val surface = imageSurfaceCreate(Format.ARGB32, (width * pixelsPerPoint).toInt, (height * pixelsPerPoint).toInt)
     val context = surface.create
 
+    context.scale(pixelsPerPoint, pixelsPerPoint)
     new PNGCompositor(surface, context, path, width, height)
 end Compositor

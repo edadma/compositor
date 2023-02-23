@@ -3,7 +3,7 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.pdfSurfaceCreate
 
 @main def run(): Unit =
-  val pdf = Compositor.pdf("test.pdf", 612, 792)
+  val pdf = Compositor.png("test.png", 612, 792, ppi(1920, 1080, 13))
 
 //  pdf add new VSpaceBox(1)
   pdf addBox new HSpaceBox(1)
