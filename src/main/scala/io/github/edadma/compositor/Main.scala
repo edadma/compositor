@@ -8,21 +8,21 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   pdf add new VSpaceBox(1)
   pdf addBox new HSpaceBox(1)
   pdf addText "Pilgrim's Progress"
-  pdf.paragraph(165)
+  pdf.paragraph(pdf.pageWidth)
   pdf add new VSpaceBox(0, 20, 0)
 //  pdf addBox pdf.sup("10")
   pdf addText "As I walked through the"
-  pdf.paragraph(165)
+  pdf.paragraph(pdf.pageWidth)
   pdf addText "As I walked through the wilderness"
-  pdf.paragraph(165)
+  pdf.paragraph(pdf.pageWidth)
   pdf.size(pdf.currentFont.size * .5)
   pdf addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
-  pdf.paragraph(165)
+  pdf.paragraph(pdf.pageWidth)
   pdf.size(10)
   pdf addText "As I walked through the wilderness of this world"
-  pdf.paragraph(165)
+  pdf.paragraph(pdf.pageWidth)
   pdf add new VSpaceBox(1)
-  pdf.draw()
+  pdf.draw(pdf.pageHeight)
   pdf.destroy()
 
 /*

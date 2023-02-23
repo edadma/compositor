@@ -15,14 +15,16 @@ import io.github.edadma.libcairo.{
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-abstract class Compositor private[compositor] (
-    private[compositor] val surface: Surface,
-    private[compositor] val ctx: Context,
-):
-  private val boxes = new ArrayBuffer[Box]
-  private[compositor] var currentFont: Font = null
-  private var currentColor: Color = new Color(0, 0, 0)
-  private var page = new VBox
+abstract class Compositor private[compositor]:
+  protected[compositor] val surface: Surface
+  protected[compositor] val ctx: Context
+  val pageWidth: Int
+  val pageHeight: Int
+
+  protected val boxes = new ArrayBuffer[Box]
+  protected[compositor] var currentFont: Font = null
+  protected var currentColor: Color = new Color(0, 0, 0)
+  protected var page = new VBox
 
   font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10)
 
@@ -66,14 +68,14 @@ abstract class Compositor private[compositor] (
     currentFont = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
     currentFont
 
-  def paragraph(width: Double): Unit =
+  def paragraph(lineWidth: Double): Unit =
     while boxes.nonEmpty do
       val hbox = new HBox
 
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.width + boxes.head.width <= width then
+          if hbox.width + boxes.head.width <= lineWidth then
             hbox add boxes.remove(0)
             line()
           else
@@ -93,7 +95,7 @@ abstract class Compositor private[compositor] (
                             val (before, after) = hyphenation.next
                             val beforeHyphen = b.newTextBox(before)
 
-                            if hbox.width + beforeHyphen.width <= width then
+                            if hbox.width + beforeHyphen.width <= lineWidth then
                               lastBefore = beforeHyphen
                               lastAfter = after
                               longest()
@@ -108,7 +110,7 @@ abstract class Compositor private[compositor] (
                   case idx =>
                     val beforeHyphen = b.newTextBox(b.text.substring(0, idx + 1))
 
-                    if hbox.width + beforeHyphen.width <= width then
+                    if hbox.width + beforeHyphen.width <= lineWidth then
                       hbox add beforeHyphen
                       boxes.remove(0)
                       boxes.insert(0, b.newTextBox(b.text.substring(idx + 1)))
@@ -118,7 +120,7 @@ abstract class Compositor private[compositor] (
 
       if hbox.boxes.last.isSpace then hbox.boxes.remove(hbox.boxes.length - 1)
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
-      if boxes.nonEmpty then hbox.set(width)
+      if boxes.nonEmpty then hbox.set(lineWidth)
 
       page add hbox
     end while
@@ -154,32 +156,46 @@ abstract class Compositor private[compositor] (
 //      val descent: Double = 0
 //      val width: Double = extents.width
 
-  def draw(): Unit
+  def draw(height: Int): Unit
 
   def destroy(): Unit =
     ctx.destroy()
     surface.destroy()
 end Compositor
 
-class PDFCompositor private (private[compositor] val surface: Surface, private[compositor] val ctx: Context)
-    extends Compositor:
-  def draw(): Unit =
-    page.set(792)
+class PDFCompositor private[compositor] (
+    protected[compositor] val surface: Surface,
+    protected[compositor] val ctx: Context,
+    val pageWidth: Int,
+    val pageHeight: Int,
+) extends Compositor:
+  def draw(height: Int): Unit =
+    page.set(height)
     page.draw(this, 0, 0)
     ctx.showPage()
-end PDFCompositor
+
+class PNGCompositor private[compositor] (
+    protected[compositor] val surface: Surface,
+    protected[compositor] val ctx: Context,
+    path: String,
+    val pageWidth: Int,
+    val pageHeight: Int,
+) extends Compositor:
+  def draw(height: Int): Unit =
+    page.set(height)
+    page.draw(this, 0, 0)
+    surface.writeToPNG(path)
 
 object Compositor:
-  def pdf(path: String, width: Double, height: Double): Compositor =
+  def pdf(path: String, width: Int, height: Int): Compositor =
     val surface = pdfSurfaceCreate(path, width, height)
     val context = surface.create
 
-    new PDFCompositor(surface, context)
+    new PDFCompositor(surface, context, width, height)
 
   def png(path: String, width: Int, height: Int): Compositor =
     val surface = imageSurfaceCreate(Format.ARGB32, width, height)
     val context = surface.create
 
-    new Compositor(surface, context)
-
+    new PNGCompositor(surface, context, path, width, height)
 end Compositor
