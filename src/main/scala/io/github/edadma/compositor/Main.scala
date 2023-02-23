@@ -5,15 +5,16 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 @main def run(): Unit =
   val pdf = Compositor.pdf("test.pdf", 612, 792)
 
-  pdf add new VSpaceBox(1)
+//  pdf add new VSpaceBox(1)
   pdf addBox new HSpaceBox(1)
   pdf addText "Pilgrim's Progress"
-  pdf.paragraph(pdf.pageWidth)
+  pdf addBox new HSpaceBox(1)
+  pdf.line(pdf.pageWidth)
   pdf add new VSpaceBox(0, 20, 0)
 //  pdf addBox pdf.sup("10")
   pdf addText "As I walked through the"
   pdf.paragraph(pdf.pageWidth)
-  pdf addText "As I walked through the wilderness"
+  pdf addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
   pdf.paragraph(pdf.pageWidth)
   pdf.size(pdf.currentFont.size * .5)
   pdf addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
@@ -21,7 +22,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   pdf.size(10)
   pdf addText "As I walked through the wilderness of this world"
   pdf.paragraph(pdf.pageWidth)
-  pdf add new VSpaceBox(1)
+//  pdf add new VSpaceBox(1)
   pdf.draw(pdf.pageHeight)
   pdf.destroy()
 

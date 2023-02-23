@@ -68,6 +68,14 @@ abstract class Compositor private[compositor]:
     currentFont = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
     currentFont
 
+  def line(lineWidth: Double): Unit =
+    val hbox = new HBox
+
+    boxes foreach hbox.add
+    boxes.clear()
+    hbox.set(lineWidth)
+    page add hbox
+
   def paragraph(lineWidth: Double): Unit =
     while boxes.nonEmpty do
       val hbox = new HBox
