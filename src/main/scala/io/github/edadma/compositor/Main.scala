@@ -6,7 +6,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   val png = Compositor.png("test.png", 612, 792, ppi(1920, 1080, 13))
 
   png.color(0, 1, 0)
-//  pdf add new VSpaceBox(1)
+  png add new VSpaceBox(1)
   png addBox new HSpaceBox(1)
   png addText "Pilgrim's Progress"
   png addBox new HSpaceBox(1)
@@ -23,7 +23,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   png.size(10)
   png addText "As I walked through the wilderness of this world"
   png.paragraph(png.pageWidth)
-//  pdf add new VSpaceBox(1)
+  png add new VSpaceBox(1)
   png.draw(png.pageHeight)
   png.destroy()
 
