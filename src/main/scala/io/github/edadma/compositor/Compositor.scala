@@ -42,9 +42,14 @@ abstract class Compositor private[compositor]:
       boxes.last match
         case b: TextBox =>
           if b.text.nonEmpty then
+            val space =
+              if b.text.last == '.' && Abbreviation(b.text.dropRight(1)) then b.font.space
+              else if ".!?:;" contains b.text.last then b.font.space * 1.5
+              else b.font.space
+
             boxes += new HSpaceBox(
               0,
-              if ".!?:" contains b.text.last then b.font.space * 1.5 else b.font.space,
+              space,
             ) // todo: use font info for spaces
         case _ =>
     else boxes += new RigidBox(width = 36)
