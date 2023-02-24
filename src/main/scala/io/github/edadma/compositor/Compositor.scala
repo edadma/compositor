@@ -18,8 +18,8 @@ import scala.collection.mutable.ArrayBuffer
 abstract class Compositor private[compositor]:
   protected[compositor] val surface: Surface
   protected[compositor] val ctx: Context
-  val pageWidth: Int
-  val pageHeight: Int
+  val pageWidth: Double
+  val pageHeight: Double
 
   protected val boxes = new ArrayBuffer[Box]
   protected[compositor] var currentFont: Font = null
@@ -178,8 +178,8 @@ end Compositor
 class PDFCompositor private[compositor] (
     protected[compositor] val surface: Surface,
     protected[compositor] val ctx: Context,
-    val pageWidth: Int,
-    val pageHeight: Int,
+    val pageWidth: Double,
+    val pageHeight: Double,
 ) extends Compositor:
   def draw(height: Int): Unit =
     page.set(height)
@@ -190,8 +190,8 @@ class PNGCompositor private[compositor] (
     protected[compositor] val surface: Surface,
     protected[compositor] val ctx: Context,
     path: String,
-    val pageWidth: Int,
-    val pageHeight: Int,
+    val pageWidth: Double,
+    val pageHeight: Double,
 ) extends Compositor:
   def draw(height: Int): Unit =
     page.set(height)
@@ -206,10 +206,11 @@ object Compositor:
     new PDFCompositor(surface, context, width, height)
 
   def png(path: String, width: Int, height: Int, ppi: Double): Compositor =
-    val pixelsPerPoint = ppi / 72
-    val surface = imageSurfaceCreate(Format.ARGB32, (width * pixelsPerPoint).toInt, (height * pixelsPerPoint).toInt)
+    val pointsPerInch = 72
+    val pixelsPerPoint = ppi / pointsPerInch
+    val surface = imageSurfaceCreate(Format.ARGB32, width, height)
     val context = surface.create
 
     context.scale(pixelsPerPoint, pixelsPerPoint)
-    new PNGCompositor(surface, context, path, width, height)
+    new PNGCompositor(surface, context, path, width / pixelsPerPoint, height / pixelsPerPoint)
 end Compositor
