@@ -1,5 +1,4 @@
 package io.github.edadma.compositor
-import io.github.edadma.libcairo.Context
 
 class VBox extends ListBox:
   def height: Double = sum(_.height)
@@ -29,6 +28,6 @@ class VBox extends ListBox:
 
         b.draw(comp, x, cy)
 
-  def setWidth(width: Double): Unit = boxes foreach (_.setWidth(width))
+  def setToWidth(width: Double): Unit = boxes foreach (_.setToWidth(width))
 
-  def setHeight(height: Double): Unit = set(height)
+  def setToHeight(height: Double): Unit = set(height)

@@ -20,17 +20,20 @@ abstract class Compositor private[compositor]:
   protected[compositor] val ctx: Context
   val pageWidth: Double
   val pageHeight: Double
+  val pageFactory: (Double, Double) => PageBox
 
   protected val boxes = new ArrayBuffer[Box]
   protected[compositor] var currentFont: Font = null
   protected var currentColor: Color = new Color(0, 0, 0)
-  protected var page = new VBox
+  protected var page: PageBox = pageFactory(pageWidth, pageHeight)
 
   font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10)
 
+  def setPage(box: PageBox): Unit = page = box
+
   def add(box: Box): Unit = page add box
 
-  def addWord(text: String): Unit = addBox(textBox(text))
+  def addWord(text: String): Unit = addBox(charBox(text))
 
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
@@ -40,7 +43,7 @@ abstract class Compositor private[compositor]:
   def addBox(box: Box): Unit =
     if boxes.nonEmpty then
       boxes.last match
-        case b: TextBox =>
+        case b: CharBox =>
           if b.text.nonEmpty then
             val space =
               if b.text.last == '.' && Abbreviation(b.text.dropRight(1)) then b.font.space
@@ -73,42 +76,42 @@ abstract class Compositor private[compositor]:
     currentFont = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
     currentFont
 
-  def line(lineWidth: Double): Unit =
+  def line(): Unit =
     val hbox = new HBox
 
     boxes foreach hbox.add
     boxes.clear()
-    hbox.set(lineWidth)
+    hbox.set(page.lineWidth)
     page add hbox
 
-  def paragraph(lineWidth: Double): Unit =
+  def paragraph(): Unit =
     while boxes.nonEmpty do
       val hbox = new HBox
 
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.width + boxes.head.width <= lineWidth then
+          if hbox.width + boxes.head.width <= page.lineWidth then
             hbox add boxes.remove(0)
             line()
           else
             boxes.head match
-              case b: TextBox =>
+              case b: CharBox =>
                 b.text indexOf '-' match
                   case -1 =>
                     Hyphenation(b.text) match
                       case None =>
                       case Some(hyphenation) =>
-                        var lastBefore: TextBox = null
+                        var lastBefore: CharBox = null
                         var lastAfter: String = null
 
                         @tailrec
                         def longest(): Unit =
                           if hyphenation.hasNext then
                             val (before, after) = hyphenation.next
-                            val beforeHyphen = b.newTextBox(before)
+                            val beforeHyphen = b.newCharBox(before)
 
-                            if hbox.width + beforeHyphen.width <= lineWidth then
+                            if hbox.width + beforeHyphen.width <= page.lineWidth then
                               lastBefore = beforeHyphen
                               lastAfter = after
                               longest()
@@ -118,15 +121,15 @@ abstract class Compositor private[compositor]:
                         if lastBefore ne null then
                           hbox add lastBefore
                           boxes.remove(0)
-                          boxes.insert(0, b.newTextBox(lastAfter))
+                          boxes.insert(0, b.newCharBox(lastAfter))
                     end match
                   case idx =>
-                    val beforeHyphen = b.newTextBox(b.text.substring(0, idx + 1))
+                    val beforeHyphen = b.newCharBox(b.text.substring(0, idx + 1))
 
-                    if hbox.width + beforeHyphen.width <= lineWidth then
+                    if hbox.width + beforeHyphen.width <= page.lineWidth then
                       hbox add beforeHyphen
                       boxes.remove(0)
-                      boxes.insert(0, b.newTextBox(b.text.substring(idx + 1)))
+                      boxes.insert(0, b.newCharBox(b.text.substring(idx + 1)))
               case _ =>
 
       line()
@@ -158,22 +161,20 @@ abstract class Compositor private[compositor]:
 
     size(currentFont.size * 0.583)
 
-    val res = new ShiftBox(textBox(s), shift)
+    val res = new ShiftBox(charBox(s), shift)
 
     font(f)
     res
 
-  def textBox(s: String): TextBox = new TextBox(this, s, currentFont, currentColor)
+  def charBox(s: String): CharBox = new CharBox(this, s, currentFont, currentColor)
 
-//  def charBox(text: String): CharBox =
-//    val extents = ctx textExtents text
-//
-//    new CharBox(text, currentFont, currentColor):
-//      val height: Double = extents.height
-//      val descent: Double = 0
-//      val width: Double = extents.width
+  def draw(): Unit =
+    page.set()
+    page.draw(this, 0, 0)
+    emit()
+    page = pageFactory(pageWidth, pageHeight)
 
-  def draw(height: Double): Unit
+  def emit(): Unit
 
   def destroy(): Unit =
     ctx.destroy()
@@ -185,12 +186,9 @@ class PDFCompositor private[compositor] (
     protected[compositor] val ctx: Context,
     val pageWidth: Double,
     val pageHeight: Double,
+    val pageFactory: (Double, Double) => PageBox,
 ) extends Compositor:
-  def draw(height: Double): Unit =
-    page.setWidth(pageWidth)
-    page.setHeight(pageHeight)
-    page.draw(this, 0, 0)
-    ctx.showPage()
+  def emit(): Unit = ctx.showPage()
 
 class PNGCompositor private[compositor] (
     protected[compositor] val surface: Surface,
@@ -198,23 +196,31 @@ class PNGCompositor private[compositor] (
     path: String,
     val pageWidth: Double,
     val pageHeight: Double,
+    val pageFactory: (Double, Double) => PageBox,
 ) extends Compositor:
-  def draw(height: Double): Unit =
-    page.setWidth(pageWidth)
-    page.setHeight(pageHeight)
-    page.draw(this, 0, 0)
-    surface.writeToPNG(path)
+  def emit(): Unit = surface.writeToPNG(path)
 
 object Compositor:
   val pointsPerInch = 72
 
-  def pdf(path: String, widthIn: Int, heightIn: Int): Compositor =
+  def pdf(
+      path: String,
+      widthIn: Int,
+      heightIn: Int,
+      pageFactory: PageBox = (width: Double, height: Double) => new SimplePage(width, height),
+  ): Compositor =
     val surface = pdfSurfaceCreate(path, widthIn * pointsPerInch, heightIn * pointsPerInch)
     val context = surface.create
 
     new PDFCompositor(surface, context, widthIn * pointsPerInch, heightIn * pointsPerInch)
 
-  def png(path: String, widthPx: Int, heightPx: Int, ppi: Double): Compositor =
+  def png(
+      path: String,
+      widthPx: Int,
+      heightPx: Int,
+      ppi: Double,
+      pageFactory: PageBox = (width: Double, height: Double) => new SimplePage(width, height),
+  ): Compositor =
     val pixelsPerPoint = ppi / pointsPerInch
     val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
     val context = surface.create

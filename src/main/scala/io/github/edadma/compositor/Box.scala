@@ -9,7 +9,7 @@ abstract class Box:
   def descent: Double
   def width: Double
   def draw(comp: Compositor, x: Double, y: Double): Unit
-  def setWidth(width: Double): Unit
-  def setHeight(height: Double): Unit
+  def setToWidth(width: Double): Unit
+  def setToHeight(height: Double): Unit
   def isSpace: Boolean = this.isInstanceOf[SpaceBox]
-  def isText: Boolean = this.isInstanceOf[TextBox]
+  def isText: Boolean = this.isInstanceOf[CharBox]

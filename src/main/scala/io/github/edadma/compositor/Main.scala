@@ -4,28 +4,28 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 
 @main def run(): Unit =
   val doc = Compositor.png("test.png", 400, 500, ppi(1920, 1080, 13))
-//  val doc = Compositor.pdf("test.pdf", 3, 5)
+//  val doc = Compositor.pdf("test.pdf", 4, 5)
 
   doc.color(0, 1, 0)
   doc add new VSpaceBox(1)
   doc addBox new HSpaceBox(1)
   doc addText "Pilgrim's Progress"
   doc addBox new HSpaceBox(1)
-  doc.line(doc.pageWidth)
+  doc.line()
   doc add new VSpaceBox(0, 20, 0)
 //  pdf addBox pdf.sup("10")
   doc addText "As I walked through the"
-  doc.paragraph(doc.pageWidth)
+  doc.paragraph()
   doc addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
-  doc.paragraph(doc.pageWidth)
+  doc.paragraph()
   doc.size(doc.currentFont.size * .5)
   doc addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream."
-  doc.paragraph(doc.pageWidth)
+  doc.paragraph()
   doc.size(10)
   doc addText "As I walked through the wilderness of this world"
-  doc.paragraph(doc.pageWidth)
+  doc.paragraph()
   doc add new VSpaceBox(1)
-  doc.draw(doc.pageHeight)
+  doc.draw()
   doc.destroy()
 
 /*

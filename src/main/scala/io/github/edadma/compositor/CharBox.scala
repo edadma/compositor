@@ -1,7 +1,7 @@
 package io.github.edadma.compositor
 import io.github.edadma.libcairo.{Context, TextExtents}
 
-class TextBox(comp: Compositor, val text: String, val font: Font, val color: Color) extends SetBox:
+class CharBox(comp: Compositor, val text: String, val font: Font, val color: Color) extends SetBox:
   comp.font(font)
 
   val extents: TextExtents = comp.ctx.textExtents(text)
@@ -18,4 +18,4 @@ class TextBox(comp: Compositor, val text: String, val font: Font, val color: Col
       comp.ctx.moveTo(x, y)
       comp.ctx.showText(text)
 
-  def newTextBox(s: String): TextBox = new TextBox(comp, s, font, color)
+  def newCharBox(s: String): CharBox = new CharBox(comp, s, font, color)

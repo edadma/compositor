@@ -24,6 +24,6 @@ class HBox extends ListBox:
         cx += b.width
       }
 
-  def setWidth(width: Double): Unit = set(width)
+  def setToWidth(width: Double): Unit = set(width)
 
-  def setHeight(height: Double): Unit = {}
+  def setToHeight(height: Double): Unit = {}
