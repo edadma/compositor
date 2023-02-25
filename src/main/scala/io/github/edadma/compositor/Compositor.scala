@@ -8,8 +8,8 @@ import io.github.edadma.libcairo.{
   Format,
   Surface,
   TextExtents,
-  pdfSurfaceCreate,
   imageSurfaceCreate,
+  pdfSurfaceCreate,
 }
 
 import scala.annotation.tailrec
@@ -133,7 +133,7 @@ abstract class Compositor private[compositor]:
 
       if hbox.boxes.last.isSpace then hbox.boxes.remove(hbox.boxes.length - 1)
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
-      if boxes.nonEmpty then hbox.set(lineWidth)
+      if boxes.isEmpty then hbox add new HSpaceBox(2)
 
       page add hbox
     end while
@@ -187,7 +187,8 @@ class PDFCompositor private[compositor] (
     val pageHeight: Double,
 ) extends Compositor:
   def draw(height: Double): Unit =
-    page.set(height)
+    page.setWidth(pageWidth)
+    page.setHeight(pageHeight)
     page.draw(this, 0, 0)
     ctx.showPage()
 
@@ -199,7 +200,8 @@ class PNGCompositor private[compositor] (
     val pageHeight: Double,
 ) extends Compositor:
   def draw(height: Double): Unit =
-    page.set(height)
+    page.setWidth(pageWidth)
+    page.setHeight(pageHeight)
     page.draw(this, 0, 0)
     surface.writeToPNG(path)
 
@@ -207,10 +209,10 @@ object Compositor:
   val pointsPerInch = 72
 
   def pdf(path: String, widthIn: Int, heightIn: Int): Compositor =
-    val surface = pdfSurfaceCreate(path, widthIn*pointsPerInch, heightIn*pointsPerInch)
+    val surface = pdfSurfaceCreate(path, widthIn * pointsPerInch, heightIn * pointsPerInch)
     val context = surface.create
 
-    new PDFCompositor(surface, context, widthIn*pointsPerInch, heightIn*pointsPerInch)
+    new PDFCompositor(surface, context, widthIn * pointsPerInch, heightIn * pointsPerInch)
 
   def png(path: String, widthPx: Int, heightPx: Int, ppi: Double): Compositor =
     val pixelsPerPoint = ppi / pointsPerInch

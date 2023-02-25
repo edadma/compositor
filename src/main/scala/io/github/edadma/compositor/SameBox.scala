@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-abstract class SameBox(box: Box) extends Box:
+abstract class SameBox(box: Box) extends SetBox:
   def height: Double = box.height
 
   def ascent: Double = box.ascent

@@ -28,3 +28,7 @@ class VBox extends ListBox:
           cy += b.height - (b.descent - above.descent)
 
         b.draw(comp, x, cy)
+
+  def setWidth(width: Double): Unit = boxes foreach (_.setWidth(width))
+
+  def setHeight(height: Double): Unit = set(height)

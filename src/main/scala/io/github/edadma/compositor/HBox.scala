@@ -23,3 +23,7 @@ class HBox extends ListBox:
         b.draw(comp, cx, y)
         cx += b.width
       }
+
+  def setWidth(width: Double): Unit = set(width)
+
+  def setHeight(height: Double): Unit = {}

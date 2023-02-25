@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-trait SimpleBox extends Box:
+trait SimpleBox extends SetBox:
   def ascent: Double = height
   def ascender: Double = height
 
