@@ -33,7 +33,19 @@ abstract class Compositor private[compositor]:
 
   def add(box: Box): Unit = page add box
 
-  def addWord(text: String): Unit = addBox(charBox(text))
+  val `LEFT SINGLE QUOTATION MARK` = "\u2018"
+  val `RIGHT SINGLE QUOTATION MARK` = "\u2019"
+  val `LEFT DOUBLE QUOTATION MARK` = "\u201C"
+  val `RIGHT DOUBLE QUOTATION MARK` = "\u201D"
+
+  def addWord(text: String): Unit =
+    val text1 =
+      text
+        .replace("``", `LEFT DOUBLE QUOTATION MARK`)
+        .replace("''", `RIGHT DOUBLE QUOTATION MARK`)
+        .replace("`", `LEFT SINGLE QUOTATION MARK`)
+        .replace("'", `RIGHT SINGLE QUOTATION MARK`)
+    addBox(charBox(text1))
 
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
