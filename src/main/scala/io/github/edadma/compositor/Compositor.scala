@@ -20,12 +20,12 @@ abstract class Compositor private[compositor]:
   protected[compositor] val ctx: Context
   val pageWidth: Double
   val pageHeight: Double
-  val pageFactory: (Double, Double) => PageBox
+  val pageFactory: (Compositor, Double, Double) => PageBox
 
   protected val boxes = new ArrayBuffer[Box]
   protected[compositor] var currentFont: Font = null
   protected var currentColor: Color = new Color(0, 0, 0)
-  protected var page: PageBox = pageFactory(pageWidth, pageHeight)
+  protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
 
   font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10)
 
@@ -172,7 +172,7 @@ abstract class Compositor private[compositor]:
     page.set()
     page.draw(this, 0, 0)
     emit()
-    page = pageFactory(pageWidth, pageHeight)
+    page = pageFactory(this, pageWidth, pageHeight)
 
   def emit(): Unit
 
@@ -186,7 +186,7 @@ class PDFCompositor private[compositor] (
     protected[compositor] val ctx: Context,
     val pageWidth: Double,
     val pageHeight: Double,
-    val pageFactory: (Double, Double) => PageBox,
+    val pageFactory: (Compositor, Double, Double) => PageBox,
 ) extends Compositor:
   def emit(): Unit = ctx.showPage()
 
@@ -196,7 +196,7 @@ class PNGCompositor private[compositor] (
     path: String,
     val pageWidth: Double,
     val pageHeight: Double,
-    val pageFactory: (Double, Double) => PageBox,
+    val pageFactory: (Compositor, Double, Double) => PageBox,
 ) extends Compositor:
   def emit(): Unit = surface.writeToPNG(path)
 
@@ -207,7 +207,8 @@ object Compositor:
       path: String,
       widthIn: Int,
       heightIn: Int,
-      pageFactory: (Double, Double) => PageBox = (width: Double, height: Double) => new SimplePage(width, height),
+      pageFactory: (Compositor, Double, Double) => PageBox = (comp: Compositor, width: Double, height: Double) =>
+        new SimplePage(width, height),
   ): Compositor =
     val surface = pdfSurfaceCreate(path, widthIn * pointsPerInch, heightIn * pointsPerInch)
     val context = surface.create
@@ -219,7 +220,8 @@ object Compositor:
       widthPx: Int,
       heightPx: Int,
       ppi: Double,
-      pageFactory: (Double, Double) => PageBox = (width: Double, height: Double) => new SimplePage(width, height),
+      pageFactory: (Compositor, Double, Double) => PageBox = (comp: Compositor, width: Double, height: Double) =>
+        new SimplePage(width, height),
   ): Compositor =
     val pixelsPerPoint = ppi / pointsPerInch
     val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
