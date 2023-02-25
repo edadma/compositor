@@ -4,3 +4,5 @@ class LowerThirdPage(val lineWidth: Double, pageHeight: Double) extends VBox wit
   override def set(): Unit =
     setToWidth(lineWidth)
     setToHeight(pageHeight)
+
+def lowerThirdPagecomp(Compositor, width: Double, height: Double)
