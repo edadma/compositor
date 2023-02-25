@@ -1,5 +1,6 @@
 package io.github.edadma.compositor
-import io.github.edadma.libcairo.{Context, TextExtents}
+
+import io.github.edadma.libcairo.TextExtents
 
 class CharBox(comp: Compositor, val text: String, val font: Font, val color: Color) extends SetBox:
   comp.font(font)

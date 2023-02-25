@@ -3,8 +3,8 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.pdfSurfaceCreate
 
 @main def run(): Unit =
-  val doc = Compositor.png("test.png", 400, 500, ppi(1920, 1080, 13))
-//  val doc = Compositor.pdf("test.pdf", 4, 5)
+//  val doc = Compositor.png("test.png", 400, 500, ppi(1920, 1080, 13))
+  val doc = Compositor.pdf("test.pdf", 4, 5)
 
   doc.color(0, 1, 0)
   doc add new VSpaceBox(1)
