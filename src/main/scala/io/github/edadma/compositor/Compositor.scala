@@ -207,24 +207,24 @@ object Compositor:
       path: String,
       widthIn: Int,
       heightIn: Int,
-      pageFactory: PageBox = (width: Double, height: Double) => new SimplePage(width, height),
+      pageFactory: (Double, Double) => PageBox = (width: Double, height: Double) => new SimplePage(width, height),
   ): Compositor =
     val surface = pdfSurfaceCreate(path, widthIn * pointsPerInch, heightIn * pointsPerInch)
     val context = surface.create
 
-    new PDFCompositor(surface, context, widthIn * pointsPerInch, heightIn * pointsPerInch)
+    new PDFCompositor(surface, context, widthIn * pointsPerInch, heightIn * pointsPerInch, pageFactory)
 
   def png(
       path: String,
       widthPx: Int,
       heightPx: Int,
       ppi: Double,
-      pageFactory: PageBox = (width: Double, height: Double) => new SimplePage(width, height),
+      pageFactory: (Double, Double) => PageBox = (width: Double, height: Double) => new SimplePage(width, height),
   ): Compositor =
     val pixelsPerPoint = ppi / pointsPerInch
     val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
     val context = surface.create
 
     context.scale(pixelsPerPoint, pixelsPerPoint)
-    new PNGCompositor(surface, context, path, widthPx / pixelsPerPoint, heightPx / pixelsPerPoint)
+    new PNGCompositor(surface, context, path, widthPx / pixelsPerPoint, heightPx / pixelsPerPoint, pageFactory)
 end Compositor
