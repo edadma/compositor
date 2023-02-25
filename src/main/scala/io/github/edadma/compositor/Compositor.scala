@@ -173,7 +173,7 @@ abstract class Compositor private[compositor]:
 //      val descent: Double = 0
 //      val width: Double = extents.width
 
-  def draw(height: Int): Unit
+  def draw(height: Double): Unit
 
   def destroy(): Unit =
     ctx.destroy()
@@ -186,7 +186,7 @@ class PDFCompositor private[compositor] (
     val pageWidth: Double,
     val pageHeight: Double,
 ) extends Compositor:
-  def draw(height: Int): Unit =
+  def draw(height: Double): Unit =
     page.set(height)
     page.draw(this, 0, 0)
     ctx.showPage()
@@ -198,24 +198,25 @@ class PNGCompositor private[compositor] (
     val pageWidth: Double,
     val pageHeight: Double,
 ) extends Compositor:
-  def draw(height: Int): Unit =
+  def draw(height: Double): Unit =
     page.set(height)
     page.draw(this, 0, 0)
     surface.writeToPNG(path)
 
 object Compositor:
-  def pdf(path: String, width: Int, height: Int): Compositor =
-    val surface = pdfSurfaceCreate(path, width, height)
+  val pointsPerInch = 72
+
+  def pdf(path: String, widthIn: Int, heightIn: Int): Compositor =
+    val surface = pdfSurfaceCreate(path, widthIn*pointsPerInch, heightIn*pointsPerInch)
     val context = surface.create
 
-    new PDFCompositor(surface, context, width, height)
+    new PDFCompositor(surface, context, widthIn*pointsPerInch, heightIn*pointsPerInch)
 
-  def png(path: String, width: Int, height: Int, ppi: Double): Compositor =
-    val pointsPerInch = 72
+  def png(path: String, widthPx: Int, heightPx: Int, ppi: Double): Compositor =
     val pixelsPerPoint = ppi / pointsPerInch
-    val surface = imageSurfaceCreate(Format.ARGB32, width, height)
+    val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
     val context = surface.create
 
     context.scale(pixelsPerPoint, pixelsPerPoint)
-    new PNGCompositor(surface, context, path, width / pixelsPerPoint, height / pixelsPerPoint)
+    new PNGCompositor(surface, context, path, widthPx / pixelsPerPoint, heightPx / pixelsPerPoint)
 end Compositor

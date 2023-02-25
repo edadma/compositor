@@ -54,3 +54,5 @@ object Abbreviation:
       "Deut",
       "Chron",
     )
+
+  def apply(s: String): Boolean = words(s)
