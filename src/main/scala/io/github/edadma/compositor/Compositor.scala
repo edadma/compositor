@@ -26,8 +26,9 @@ abstract class Compositor private[compositor]:
   protected[compositor] var currentFont: Font = null
   protected var currentColor: Color = new Color(0, 0, 0)
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
+  private var indent = true
 
-  font("sans", FontSlant.NORMAL, FontWeight.NORMAL, 10)
+  font("serif", FontSlant.NORMAL, FontWeight.NORMAL, 12)
 
   def setPage(box: PageBox): Unit = page = box
 
@@ -71,7 +72,7 @@ abstract class Compositor private[compositor]:
               space,
             ) // todo: use font info for spaces
         case _ =>
-    else boxes += new RigidBox(width = 36)
+    else if indent then boxes += new RigidBox(width = 36)
 
     boxes += box
 
@@ -155,7 +156,11 @@ abstract class Compositor private[compositor]:
 
       page add hbox
     end while
+
+    indent = true
   end paragraph
+
+  def noindent(): Unit = indent = false
 
   def bold(): Unit = font(currentFont.family, currentFont.slant, FontWeight.BOLD, currentFont.size)
 
@@ -170,7 +175,7 @@ abstract class Compositor private[compositor]:
 
   def color(r: Double, g: Double, b: Double, a: Double = 1): Unit = color(Color(r, g, b, a))
 
-  def sup(s: String): Box =
+  def sup(s: String): Unit =
     val f = currentFont
 
     bold()
@@ -179,10 +184,10 @@ abstract class Compositor private[compositor]:
 
     size(currentFont.size * 0.583)
 
-    val res = new ShiftBox(charBox(s), shift)
+    addBox(new ShiftBox(charBox(s), shift))
+    addBox(new HSpaceBox(0, 1, 0))
 
     font(f)
-    res
 
   def charBox(s: String): CharBox = new CharBox(this, s, currentFont, currentColor)
 

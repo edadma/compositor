@@ -17,6 +17,8 @@ object Hyphenation:
       "stand-ing",
       "trem-bled",
       "dream-ed",
+      "gen-tle-ness",
+      "faith-ful-ness",
     ) map (w => w.filterNot(_ == '-') -> w.split('-').toSeq) toMap
 
   def apply(word: String): Option[Iterator[(String, String)]] =
