@@ -6,7 +6,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   val doc = Compositor.png("test.png", 1280, 720, ppi(1920, 1080, 13), lowerThirdPage)
 //  val doc = Compositor.pdf("test.pdf", 4, 5, lowerThirdPage)
 
-  doc.color(0, 1, 0)
+  doc.color(1, 1, 1)
   doc.bold()
   doc.line(doc.textBox("Galatians 5:22-23"))
   doc.normal()
