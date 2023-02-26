@@ -39,13 +39,17 @@ abstract class Compositor private[compositor]:
   val `RIGHT DOUBLE QUOTATION MARK` = "\u201D"
 
   def addWord(text: String): Unit =
+    addBox(textBox(text))
+
+  def textBox(text: String): CharBox =
     val text1 =
       text
         .replace("``", `LEFT DOUBLE QUOTATION MARK`)
         .replace("''", `RIGHT DOUBLE QUOTATION MARK`)
         .replace("`", `LEFT SINGLE QUOTATION MARK`)
         .replace("'", `RIGHT SINGLE QUOTATION MARK`)
-    addBox(charBox(text1))
+
+    charBox(text1)
 
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
@@ -88,11 +92,10 @@ abstract class Compositor private[compositor]:
     currentFont = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
     currentFont
 
-  def line(): Unit =
+  def line(bs: Box*): Unit =
     val hbox = new HBox
 
-    boxes foreach hbox.add
-    boxes.clear()
+    bs foreach hbox.add
     hbox.set(page.lineWidth)
     page add hbox
 
