@@ -1,3 +1,3 @@
 package io.github.edadma.compositor
 
-class Color(val red: Double, val green: Double, val blue: Double, alpha: Double = 1)
+case class Color(red: Double, green: Double, blue: Double, alpha: Double = 1)

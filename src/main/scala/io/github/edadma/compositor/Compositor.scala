@@ -160,9 +160,12 @@ abstract class Compositor private[compositor]:
 
   def size(points: Double): Unit = font(currentFont.family, currentFont.slant, currentFont.weight, points)
 
-  def color(r: Double, g: Double, b: Double, a: Double = 1): Unit =
-    currentColor = new Color(r, g, b, a)
-    ctx.setSourceRGBA(r, g, b, a)
+  def color(c: Color): Unit =
+    if currentColor != c then
+      currentColor = c
+      ctx.setSourceRGBA(c.red, c.green, c.blue, c.alpha)
+
+  def color(r: Double, g: Double, b: Double, a: Double = 1): Unit = color(Color(r, g, b, a))
 
   def sup(s: String): Box =
     val f = currentFont
