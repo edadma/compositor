@@ -93,11 +93,14 @@ abstract class Compositor private[compositor]:
     currentFont = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
     currentFont
 
+  def center(text: String): Unit = line(new HSpaceBox(1))
+
+  def line(text: String): Unit = page add textBox(text)
+
   def line(bs: Box*): Unit =
     val hbox = new HBox
 
     bs foreach hbox.add
-    hbox.set(page.lineWidth)
     page add hbox
 
   def paragraph(): Unit =
@@ -219,7 +222,7 @@ class PNGCompositor private[compositor] (
     path: String,
     val pageWidth: Double,
     val pageHeight: Double,
-    val pageFactory: (Compositor, Double, Double) => PageBox,
+    val pageFactory: PageFactory,
 ) extends Compositor:
   def emit(): Unit = surface.writeToPNG(path)
 
@@ -230,8 +233,7 @@ object Compositor:
       path: String,
       widthIn: Int,
       heightIn: Int,
-      pageFactory: (Compositor, Double, Double) => PageBox = (comp: Compositor, width: Double, height: Double) =>
-        new SimplePage(width, height),
+      pageFactory: PageFactory = simplePage(),
   ): Compositor =
     val surface = pdfSurfaceCreate(path, widthIn * pointsPerInch, heightIn * pointsPerInch)
     val context = surface.create
@@ -243,8 +245,7 @@ object Compositor:
       widthPx: Int,
       heightPx: Int,
       ppi: Double,
-      pageFactory: (Compositor, Double, Double) => PageBox = (comp: Compositor, width: Double, height: Double) =>
-        new SimplePage(width, height),
+      pageFactory: PageFactory = simplePage(),
   ): Compositor =
     val pixelsPerPoint = ppi / pointsPerInch
     val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
