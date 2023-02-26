@@ -7,16 +7,13 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   //  val doc = Compositor.pdf("test.pdf", 4, 5, lowerThirdPage)
 
   doc.color(1, 1, 1)
-  doc.bold()
-  doc.line("Galatians 5:22-23")
-  doc.normal()
+  doc add new VSpaceBox(1)
+  doc.size(30)
+  doc.center("``Message Title''")
   doc add new VSpaceBox(0, 10, 0)
-  doc.noindent()
-  doc sup "22"
-  doc addText "But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness,"
-  doc sup "23"
-  doc addText "gentleness and self-control. Against such things there is no law."
-  doc.paragraph()
+  doc.size(20)
+  doc.center("by Speaker's Name")
+  doc add new VSpaceBox(1)
   doc.draw()
   doc.destroy()
 

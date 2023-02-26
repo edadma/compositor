@@ -93,7 +93,7 @@ abstract class Compositor private[compositor]:
     currentFont = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
     currentFont
 
-  def center(text: String): Unit = line(new HSpaceBox(1))
+  def center(text: String): Unit = line(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
 
   def line(text: String): Unit = page add textBox(text)
 
