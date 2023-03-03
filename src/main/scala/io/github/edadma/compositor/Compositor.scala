@@ -1,18 +1,22 @@
 package io.github.edadma.compositor
 
 import io.github.edadma.compositor
+import io.github.edadma.freetype.initFreeType
 import io.github.edadma.libcairo.{
   Context,
+  FontFace,
   FontSlant,
   FontWeight,
   Format,
   Surface,
   TextExtents,
+  fontFaceCreateForFTFace,
   imageSurfaceCreate,
   pdfSurfaceCreate,
 }
 
 import scala.annotation.tailrec
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 abstract class Compositor private[compositor]:
@@ -27,8 +31,22 @@ abstract class Compositor private[compositor]:
   protected var currentColor: Color = new Color(0, 0, 0)
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
   private var indent = true
+  protected val fontfaces = new mutable.HashMap[(String, Set[String]), FontFace]
+  private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
   font("serif", FontSlant.NORMAL, FontWeight.NORMAL, 12)
+
+  def loadFont(typeface: String, path: String, style: String*): Unit =
+    if fontfaces.contains((typeface, style.toSet)) then
+      sys.error(s"font for typefact '$typeface' with style '${style.mkString(", ")}' has already been loaded")
+
+    fontfaces((typeface, style.toSet)) = fontFaceCreateForFTFace(
+      freetype
+        .newFace(path, 0)
+        .getOrElse(sys.error(s"error loading face: $path"))
+        .faceptr,
+      0,
+    )
 
   def setPage(box: PageBox): Unit = page = box
 
