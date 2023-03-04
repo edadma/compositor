@@ -216,32 +216,44 @@ abstract class Compositor private[compositor]:
 
   def noindent(): Unit = indent = false
 
-//  def bold(): Unit = font(currentFont.family, currentFont.slant, FontWeight.BOLD, currentFont.size)
-//
-//  def normal(): Unit = font(currentFont.family, currentFont.slant, FontWeight.NORMAL, currentFont.size)
+  def italic(): Font = addStyle("italic")
 
-  def size(points: Double): Unit = font(currentFont.family, points, currentFont.style)
+  def noitalic(): Font = removeStyle("italic")
 
-  def color(c: Color): Unit =
+  def bold(): Font = addStyle("bold")
+
+  def nobold(): Font = removeStyle("bold")
+
+  def addStyle(style: String): Font = font(currentFont.family, currentFont.size, currentFont.style + style)
+
+  def removeStyle(style: String): Font = font(currentFont.family, currentFont.size, currentFont.style - style)
+
+  def regular(): Font = font(currentFont.family, currentFont.size)
+
+  def size(points: Double): Font = font(currentFont.family, points, currentFont.style)
+
+  def color(c: Color): Color =
     if currentColor != c then
       currentColor = c
       ctx.setSourceRGBA(c.red, c.green, c.blue, c.alpha)
 
-  def color(r: Double, g: Double, b: Double, a: Double = 1): Unit = color(Color(r, g, b, a))
+    c
 
-//  def sup(s: String): Unit =
-//    val f = currentFont
-//
-//    bold()
-//
-//    val shift = -currentFont.size * .3333
-//
-//    size(currentFont.size * 0.583)
-//
-//    addBox(new ShiftBox(charBox(s), shift))
-//    addBox(new HSpaceBox(0, 1, 0))
-//
-//    font(f)
+  def color(r: Double, g: Double, b: Double, a: Double = 1): Color = color(Color(r, g, b, a))
+
+  def sup(s: String): Unit =
+    val f = currentFont
+
+    bold()
+
+    val shift = -currentFont.size * .3333
+
+    size(currentFont.size * 0.583)
+
+    addBox(new ShiftBox(charBox(s), shift))
+    addBox(new HSpaceBox(0, 1, 0))
+
+    font(f)
 
   def charBox(s: String): CharBox = new CharBox(this, s, currentFont, currentColor)
 
