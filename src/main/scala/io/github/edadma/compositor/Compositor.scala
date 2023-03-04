@@ -248,8 +248,22 @@ abstract class Compositor private[compositor]:
   def color(c: String): Color =
     c match
       case RGBRegex(r, g, b) => color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16), 255)
-      case "black"           => color(0, 0, 0)
-      case "white"           => color(1, 1, 1)
+      case "white"           => color(0xff, 0xff, 0xff)
+      case "silver"          => color(0xc0, 0xc0, 0xc0)
+      case "gray"            => color(0x80, 0x80, 0x80)
+      case "black"           => color(0x00, 0x00, 0x00)
+      case "red"             => color(0xff, 0x00, 0x00)
+      case "maroon"          => color(0x80, 0x00, 0x00)
+      case "yellow"          => color(0xff, 0xff, 0x00)
+      case "olive"           => color(0x80, 0x80, 0x00)
+      case "lime"            => color(0x00, 0xff, 0x00)
+      case "green"           => color(0x00, 0x80, 0x00)
+      case "aqua"            => color(0x00, 0xff, 0xff)
+      case "teal"            => color(0x00, 0x80, 0x80)
+      case "blue"            => color(0x00, 0x00, 0xff)
+      case "navy"            => color(0x00, 0x00, 0x80)
+      case "fuchsia"         => color(0xff, 0x00, 0xff)
+      case "purple"          => color(0x80, 0x00, 0x80)
       case _                 => sys.error(s"color code not recognized: $c")
 
   def sup(s: String): Unit =
