@@ -9,7 +9,7 @@ class BackgroundBox(box: Box) extends Box:
   def paint(comp: Compositor, x: Double, y: Double): Unit =
     if background ne null then
       comp.color(background)
-      comp.ctx.rectangle(x, y, width, height)
+      comp.ctx.rectangle(x, y - box.ascent, width, height)
       comp.ctx.fill()
 
   def width: Double = _width

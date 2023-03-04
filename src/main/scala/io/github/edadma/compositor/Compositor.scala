@@ -85,19 +85,19 @@ abstract class Compositor private[compositor]:
 
   def addBox(box: Box): Unit =
     if boxes.nonEmpty then
-      boxes.last match
-        case b: CharBox =>
-          if b.text.nonEmpty then
-            val space =
-              if b.text.last == '.' && Abbreviation(b.text.dropRight(1)) then b.font.space
-              else if ".!?:;" contains b.text.last then b.font.space * 1.5
-              else b.font.space
+      val space =
+        boxes.last match
+          case b: CharBox
+              if b.text.nonEmpty &&
+                !(b.text.last == '.' && Abbreviation(b.text.dropRight(1))) &&
+                ".!?:;".contains(b.text.last) =>
+            currentFont.space * 1.5
+          case _ => currentFont.space
 
-            boxes += new HSpaceBox(
-              0,
-              space,
-            ) // todo: use font info for spaces
-        case _ =>
+      boxes += new HSpaceBox(
+        0,
+        space,
+      )
     else if indent && !firstParagraph then boxes += new RigidBox(width = parindent)
 
     boxes += box

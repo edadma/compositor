@@ -15,7 +15,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   doc.loadFont("galatia", "GalSIL21/GalSILB.ttf", "bold")
   doc.font("galatia", 12)
   doc.color("black")
-  doc addText "As I walked through the"
+  doc addBox new BackgroundBox(doc.textBox("As I walked through the")) { background = new Color(.3, .3, .3) }
   doc.bold()
   doc addText "wilderness"
   doc.nobold()
