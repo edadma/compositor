@@ -241,7 +241,7 @@ abstract class Compositor private[compositor]:
 
   def color(r: Double, g: Double, b: Double, a: Double = 1): Color = color(Color(r, g, b, a))
 
-  def color(r: Int, g: Int, b: Int, a: Int): Color = color(r / 255.0, g / 255.0, b / 255.0, a / 255.0)
+  def color(r: Int, g: Int, b: Int, a: Int): Color = color(Color(r, g, b, a))
 
   private val RGBRegex = "#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})".r
 
