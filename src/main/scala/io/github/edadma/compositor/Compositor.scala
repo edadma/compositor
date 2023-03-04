@@ -241,6 +241,17 @@ abstract class Compositor private[compositor]:
 
   def color(r: Double, g: Double, b: Double, a: Double = 1): Color = color(Color(r, g, b, a))
 
+  def color(r: Int, g: Int, b: Int, a: Int): Color = color(r / 255.0, g / 255.0, b / 255.0, a / 255.0)
+
+  private val RGBRegex = "#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})".r
+
+  def color(c: String): Color =
+    c match
+      case RGBRegex(r, g, b) => color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16), 255)
+      case "black"           => color(0, 0, 0)
+      case "white"           => color(1, 1, 1)
+      case _                 => sys.error(s"color code not recognized: $c")
+
   def sup(s: String): Unit =
     val f = currentFont
 
