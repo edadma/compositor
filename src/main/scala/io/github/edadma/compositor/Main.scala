@@ -3,13 +3,18 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.pdfSurfaceCreate
 
 @main def run(): Unit =
-  val doc = Compositor.png("test.png", 1280, 720, ppi(1920, 1080, 13), simplePage(Some(Color(0x19, 0x25, 0x40))))
+  val doc = Compositor.png("test.png", 1280, 720, ppi(1920, 1080, 13), simplePage(Some(Color(0x19, 0x25, 0x40, 255))))
   //  val doc = Compositor.pdf("test.pdf", 4, 5, lowerThirdPage)
 
-  doc.loadFont("gentium", "GalSIL21/GalSILR.ttf" /*"GentiumPlus-6.200/GentiumPlus-Regular.ttf"*/ )
-  doc.font("gentium", 14)
+  doc.loadFont("galatia", "GalSIL21/GalSILR.ttf")
+  doc.loadFont("galatia", "GalSIL21/GalSILB.ttf", "bold")
+  doc.font("galatia", 14)
   doc.color("white")
-  doc addText "As I walked through the wilderness of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream. I dreamed, and behold, I saw a man clothed with rags, standing in a certain place, with his face from his own house, a book in his hand, and a great burden upon his back. [Isa. 64:6; Luke 14:33; Ps. 38:4; Hab. 2:2; Acts 16:30,31] I looked, and saw him open the book, and read therein; and, as he read, he wept, and trembled; and, not being able longer to contain, he brake out with a lamentable cry, saying, ``What shall I do?'' [Acts 2:37]"
+  doc addText "As I walked through the"
+  doc.bold()
+  doc addText "wilderness"
+  doc.nobold()
+  doc addText "of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream. I dreamed, and behold, I saw a man clothed with rags, standing in a certain place, with his face from his own house, a book in his hand, and a great burden upon his back. [Isa. 64:6; Luke 14:33; Ps. 38:4; Hab. 2:2; Acts 16:30,31] I looked, and saw him open the book, and read therein; and, as he read, he wept, and trembled; and, not being able longer to contain, he brake out with a lamentable cry, saying, ``What shall I do?'' [Acts 2:37]"
   doc.paragraph()
 //  doc add new VSpaceBox(1)
 //  doc.size(30)
