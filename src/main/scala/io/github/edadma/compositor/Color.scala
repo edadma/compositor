@@ -7,26 +7,13 @@ class Color(val red: Double, val green: Double, val blue: Double, val alpha: Dou
 
 object Color:
   def apply(c: String): Color =
-    c match
-      case RGBRegex(r, g, b) =>
-        new Color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16), 255)
-      case "white"   => new Color(0xff, 0xff, 0xff)
-      case "silver"  => new Color(0xc0, 0xc0, 0xc0)
-      case "gray"    => new Color(0x80, 0x80, 0x80)
-      case "black"   => new Color(0x00, 0x00, 0x00)
-      case "red"     => new Color(0xff, 0x00, 0x00)
-      case "maroon"  => new Color(0x80, 0x00, 0x00)
-      case "yellow"  => new Color(0xff, 0xff, 0x00)
-      case "olive"   => new Color(0x80, 0x80, 0x00)
-      case "lime"    => new Color(0x00, 0xff, 0x00)
-      case "green"   => new Color(0x00, 0x80, 0x00)
-      case "aqua"    => new Color(0x00, 0xff, 0xff)
-      case "teal"    => new Color(0x00, 0x80, 0x80)
-      case "blue"    => new Color(0x00, 0x00, 0xff)
-      case "navy"    => new Color(0x00, 0x00, 0x80)
-      case "fuchsia" => new Color(0xff, 0x00, 0xff)
-      case "purple"  => new Color(0x80, 0x00, 0x80)
-      case _         => sys.error(s"color code not recognized: $c")
+    colorMap get c.toLowerCase match
+      case None =>
+        c match
+          case RGBRegex(r, g, b) =>
+            new Color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16), 255)
+          case _ => sys.error(s"color code not recognized: $c")
+      case Some(color) => color
 
 private val colorMap = Map(
   "aliceblue" -> new Color(0xf0, 0xf8, 0xff),
