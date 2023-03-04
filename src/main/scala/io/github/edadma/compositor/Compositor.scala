@@ -30,9 +30,12 @@ abstract class Compositor private[compositor]:
   protected[compositor] var currentFont: Font = null
   protected var currentColor: Color = new Color(0, 0, 0)
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
-  private var indent = true
+  protected var firstParagraph: Boolean = true
   protected val fontfaces = new mutable.HashMap[String, mutable.HashMap[Set[String], FontFace]]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
+
+  var indent: Boolean = true
+  var parindent: Double = 36
 
   font("serif", 12)
 
@@ -95,9 +98,10 @@ abstract class Compositor private[compositor]:
               space,
             ) // todo: use font info for spaces
         case _ =>
-    else if indent then boxes += new RigidBox(width = 36)
+    else if indent && !firstParagraph then boxes += new RigidBox(width = parindent)
 
     boxes += box
+  end addBox
 
   def font(f: Font): Unit =
     if currentFont ne f then
@@ -212,6 +216,7 @@ abstract class Compositor private[compositor]:
     end while
 
     indent = true
+    firstParagraph = false
   end paragraph
 
   def noindent(): Unit = indent = false
@@ -286,6 +291,7 @@ abstract class Compositor private[compositor]:
     page.set()
     page.draw(this, 0, 0)
     emit()
+    firstParagraph = true
     page = pageFactory(this, pageWidth, pageHeight)
 
   def emit(): Unit
@@ -319,8 +325,8 @@ object Compositor:
 
   def pdf(
       path: String,
-      widthIn: Int,
-      heightIn: Int,
+      widthIn: Double,
+      heightIn: Double,
       pageFactory: PageFactory = simplePage(),
   ): Compositor =
     val surface = pdfSurfaceCreate(path, widthIn * pointsPerInch, heightIn * pointsPerInch)
