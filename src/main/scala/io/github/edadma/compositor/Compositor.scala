@@ -102,8 +102,8 @@ abstract class Compositor private[compositor]:
   def font(f: Font): Unit =
     if currentFont ne f then
       f match
-        case t: ToyFont =>
-          ctx.selectFontFace(t.family, t.slant, t.weight)
+        case t: ToyFont    => ctx.selectFontFace(t.family, t.slant, t.weight)
+        case l: LoadedFont => ctx.setFontFace(l.fontFace)
 
       ctx.setFontSize(f.size)
       currentFont = f
@@ -113,6 +113,7 @@ abstract class Compositor private[compositor]:
   def font(family: String, size: Double, styleSet: Set[String]): Font =
     var slant = FontSlant.NORMAL
     var weight = FontWeight.NORMAL
+    var fontFace: FontFace = null.asInstanceOf[FontFace]
     val toy = fontfaces get family match
       case None =>
         if styleSet("italic") then slant = FontSlant.ITALIC
@@ -123,14 +124,13 @@ abstract class Compositor private[compositor]:
         ctx.selectFontFace(family, slant, weight)
         true
       case Some(f) =>
-        ctx.setFontFace(
-          f.getOrElse(
-            styleSet,
-            sys.error(
-              s"font for typeface '$family' with style '${styleSet.mkString(", ")}' has not been loaded",
-            ),
+        fontFace = f.getOrElse(
+          styleSet,
+          sys.error(
+            s"font for typeface '$family' with style '${styleSet.mkString(", ")}' has not been loaded",
           ),
         )
+        ctx.setFontFace(fontFace)
         false
 
     ctx.setFontSize(size)
@@ -140,7 +140,8 @@ abstract class Compositor private[compositor]:
     val extents = ctx.fontExtents
 
     currentFont =
-      if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight) else null
+      if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight)
+      else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace)
     currentFont
 
   def center(text: String): Unit = line(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
