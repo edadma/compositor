@@ -31,22 +31,27 @@ abstract class Compositor private[compositor]:
   protected var currentColor: Color = new Color(0, 0, 0)
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
   private var indent = true
-  protected val fontfaces = new mutable.HashMap[(String, Set[String]), FontFace]
+  protected val fontfaces = new mutable.HashMap[String, mutable.HashMap[Set[String], FontFace]]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
-  font("serif", FontSlant.NORMAL, FontWeight.NORMAL, 12)
+  font("serif", 12)
 
   def loadFont(typeface: String, path: String, style: String*): Unit =
-    if fontfaces.contains((typeface, style.toSet)) then
-      sys.error(s"font for typefact '$typeface' with style '${style.mkString(", ")}' has already been loaded")
-
-    fontfaces((typeface, style.toSet)) = fontFaceCreateForFTFace(
+    val styleSet = style.toSet
+    val face = fontFaceCreateForFTFace(
       freetype
         .newFace(path, 0)
         .getOrElse(sys.error(s"error loading face: $path"))
         .faceptr,
       0,
     )
+
+    fontfaces get typeface match
+      case None => fontfaces(typeface) = mutable.HashMap(styleSet -> face)
+      case Some(t) =>
+        if t contains styleSet then
+          sys.error(s"font for typeface '$typeface' with style '${style.mkString(", ")}' has already been loaded")
+        else t(styleSet) = face
 
   def setPage(box: PageBox): Unit = page = box
 
@@ -100,7 +105,7 @@ abstract class Compositor private[compositor]:
       ctx.setFontSize(f.size)
       currentFont = f
 
-  def font(family: String, slant: FontSlant, weight: FontWeight, size: Double): Font =
+  def font(family: String, size: Double, style: String*): Font =
     ctx.selectFontFace(family, slant, weight)
     ctx.setFontSize(size)
 
