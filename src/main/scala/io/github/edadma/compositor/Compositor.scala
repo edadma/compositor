@@ -26,7 +26,7 @@ abstract class Compositor private[compositor]:
   val pageHeight: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
-  protected val boxes = new ArrayBuffer[Box]
+  protected[compositor] val boxes = new ArrayBuffer[Box]
   protected[compositor] var currentFont: Font = null
   protected var currentColor: Color = new Color(0, 0, 0)
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
@@ -69,14 +69,13 @@ abstract class Compositor private[compositor]:
     addBox(textBox(text))
 
   def textBox(text: String): CharBox =
-    val text1 =
+    charBox(
       text
         .replace("``", `LEFT DOUBLE QUOTATION MARK`)
         .replace("''", `RIGHT DOUBLE QUOTATION MARK`)
         .replace("`", `LEFT SINGLE QUOTATION MARK`)
-        .replace("'", `RIGHT SINGLE QUOTATION MARK`)
-
-    charBox(text1)
+        .replace("'", `RIGHT SINGLE QUOTATION MARK`),
+    )
 
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")

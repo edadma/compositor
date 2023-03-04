@@ -9,4 +9,6 @@ abstract class SameBox(box: Box) extends SetBox:
 
   def descent: Double = box.descent
 
+  def descender: Double = box.descender
+
   def width: Double = box.width

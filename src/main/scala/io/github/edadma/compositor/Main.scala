@@ -18,6 +18,8 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   doc addText "As I walked through the"
   doc.bold()
   doc addText "wilderness"
+  doc.boxes.last.asInstanceOf[AbstractBox].background = new Color(.5, .5, .5)
+  doc.boxes.last.asInstanceOf[AbstractBox].tightBackground = true
   doc.nobold()
   doc addText "of this world, I lighted on a certain place where was a Den, and I laid me down in that place to sleep: and, as I slept, I dreamed a dream. I dreamed, and behold, I saw a man clothed with rags, standing in a certain place, with his face from his own house, a book in his hand, and a great burden upon his back. [Isa. 64:6; Luke 14:33; Ps. 38:4; Hab. 2:2; Acts 16:30,31] I looked, and saw him open the book, and read therein; and, as he read, he wept, and trembled; and, not being able longer to contain, he brake out with a lamentable cry, saying, ``What shall I do?'' [Acts 2:37]"
   doc.paragraph()

@@ -2,7 +2,7 @@ package io.github.edadma.compositor
 
 import io.github.edadma.libcairo.TextExtents
 
-class CharBox(comp: Compositor, val text: String, val font: Font, val color: Color) extends SetBox:
+class CharBox(comp: Compositor, val text: String, val font: Font, val color: Color) extends AbstractBox with SetBox:
   comp.font(font)
 
   val extents: TextExtents = comp.ctx.textExtents(text)
@@ -10,9 +10,12 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
   val ascent: Double = font.extents.ascent
   val ascender: Double = -extents.yBearing
   val descent: Double = font.extents.descent
+  val descender: Double = extents.height + extents.yBearing
   val width: Double = extents.xAdvance
 
-  def draw(comp: Compositor, x: Double, y: Double): Unit =
+  override def draw(comp: Compositor, x: Double, y: Double): Unit =
+    super.draw(comp, x, y)
+
     if text.nonEmpty then
       comp.font(font)
       comp.color(color)
@@ -22,4 +25,8 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
 //      comp.ctx.lineTo(x + extents.xAdvance, y)
 //      comp.ctx.stroke()
 
-  def newCharBox(s: String): CharBox = new CharBox(comp, s, font, color)
+  def newCharBox(s: String): CharBox =
+    val bg = background
+
+    new CharBox(comp, s, font, color):
+      background = bg
