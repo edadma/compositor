@@ -101,19 +101,46 @@ abstract class Compositor private[compositor]:
 
   def font(f: Font): Unit =
     if currentFont ne f then
-      ctx.selectFontFace(f.family, f.slant, f.weight)
+      f match
+        case t: ToyFont =>
+          ctx.selectFontFace(t.family, t.slant, t.weight)
+
       ctx.setFontSize(f.size)
       currentFont = f
 
-  def font(family: String, size: Double, style: String*): Font =
-    ctx.selectFontFace(family, slant, weight)
+  def font(family: String, size: Double, style: String*): Font = font(family, size, style.toSet)
+
+  def font(family: String, size: Double, styleSet: Set[String]): Font =
+    var slant = FontSlant.NORMAL
+    var weight = FontWeight.NORMAL
+    val toy = fontfaces get family match
+      case None =>
+        if styleSet("italic") then slant = FontSlant.ITALIC
+        else if styleSet("oblique") then slant = FontSlant.OBLIQUE
+
+        if styleSet("bold") then weight = FontWeight.BOLD
+
+        ctx.selectFontFace(family, slant, weight)
+        true
+      case Some(f) =>
+        ctx.setFontFace(
+          f.getOrElse(
+            styleSet,
+            sys.error(
+              s"font for typeface '$family' with style '${styleSet.mkString(", ")}' has not been loaded",
+            ),
+          ),
+        )
+        false
+
     ctx.setFontSize(size)
 
     val TextExtents(_, _, _, _, _Width, _) = ctx.textExtents("_")
     val TextExtents(_, _, _, _, _sWithSpaceWidth, _) = ctx.textExtents("_ _")
     val extents = ctx.fontExtents
 
-    currentFont = new Font(family, slant, weight, size, extents, _sWithSpaceWidth - 2 * _Width)
+    currentFont =
+      if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight) else null
     currentFont
 
   def center(text: String): Unit = line(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
@@ -188,11 +215,11 @@ abstract class Compositor private[compositor]:
 
   def noindent(): Unit = indent = false
 
-  def bold(): Unit = font(currentFont.family, currentFont.slant, FontWeight.BOLD, currentFont.size)
+//  def bold(): Unit = font(currentFont.family, currentFont.slant, FontWeight.BOLD, currentFont.size)
+//
+//  def normal(): Unit = font(currentFont.family, currentFont.slant, FontWeight.NORMAL, currentFont.size)
 
-  def normal(): Unit = font(currentFont.family, currentFont.slant, FontWeight.NORMAL, currentFont.size)
-
-  def size(points: Double): Unit = font(currentFont.family, currentFont.slant, currentFont.weight, points)
+  def size(points: Double): Unit = font(currentFont.family, points, currentFont.style)
 
   def color(c: Color): Unit =
     if currentColor != c then
@@ -201,19 +228,19 @@ abstract class Compositor private[compositor]:
 
   def color(r: Double, g: Double, b: Double, a: Double = 1): Unit = color(Color(r, g, b, a))
 
-  def sup(s: String): Unit =
-    val f = currentFont
-
-    bold()
-
-    val shift = -currentFont.size * .3333
-
-    size(currentFont.size * 0.583)
-
-    addBox(new ShiftBox(charBox(s), shift))
-    addBox(new HSpaceBox(0, 1, 0))
-
-    font(f)
+//  def sup(s: String): Unit =
+//    val f = currentFont
+//
+//    bold()
+//
+//    val shift = -currentFont.size * .3333
+//
+//    size(currentFont.size * 0.583)
+//
+//    addBox(new ShiftBox(charBox(s), shift))
+//    addBox(new HSpaceBox(0, 1, 0))
+//
+//    font(f)
 
   def charBox(s: String): CharBox = new CharBox(this, s, currentFont, currentColor)
 
