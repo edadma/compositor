@@ -12,8 +12,6 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
   val descent: Double = font.extents.descent
   val width: Double = extents.xAdvance
 
-  override def isChar: Boolean = true
-
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if text.nonEmpty then
       comp.font(font)
