@@ -1,7 +1,5 @@
 package io.github.edadma.compositor
 
-import io.github.edadma.libcairo.Context
-
 class HBox extends ListBox:
   def height: Double = max(_.height)
 

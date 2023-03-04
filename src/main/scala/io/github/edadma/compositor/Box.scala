@@ -1,7 +1,5 @@
 package io.github.edadma.compositor
 
-import io.github.edadma.libcairo.Context
-
 abstract class Box:
   def height: Double
   def ascent: Double
@@ -12,4 +10,4 @@ abstract class Box:
   def setToWidth(width: Double): Unit
   def setToHeight(height: Double): Unit
   def isSpace: Boolean = this.isInstanceOf[SpaceBox]
-  def isText: Boolean = this.isInstanceOf[CharBox]
+  def isChar: Boolean = false
