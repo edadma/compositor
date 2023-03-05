@@ -38,12 +38,22 @@ abstract class Compositor private[compositor]:
   protected var firstParagraph: Boolean = true
 
   var indent: Boolean = true
-  var parindent: Double = 36
+  var parindent: Double = 20
 
   protected[compositor] var currentSupFont: Font = makeFont("pragati", 12 * .583, "bold")
   protected[compositor] var currentFont: Font = makeFont("galatia", 12)
   protected var currentColor: Color = new Color(0, 0, 0)
+  protected val pageStack = new mutable.Stack[PageBox]
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
+
+  def startPage(newpage: PageBox): Unit =
+    pageStack push page
+    page = newpage
+
+  def endPage(): Unit =
+    page.set()
+    pageStack.top add page
+    page = pageStack.pop
 
   def loadFont(typeface: String, path: String, style: String*): Unit =
     val styleSet = style.toSet
@@ -286,9 +296,8 @@ abstract class Compositor private[compositor]:
 
   def charBox(s: String): CharBox = new CharBox(this, s, currentFont, currentColor)
 
-  def set(): Unit = page.set()
-
   def draw(): Unit =
+    page.set()
     page.draw(this, 0, 0)
     emit()
     firstParagraph = true

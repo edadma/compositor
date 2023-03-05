@@ -17,7 +17,7 @@ class VBox extends ListBox:
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
-      var cy = y
+      var cy = y // todo: is this correct?
 
       for i <- boxes.indices do
         val b = boxes(i)
