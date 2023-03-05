@@ -41,7 +41,7 @@ abstract class Compositor private[compositor]:
   var parindent: Double = 36
 
   protected[compositor] var currentSupFont: Font = makeFont("pragati", 12 * .583, "bold")
-  protected[compositor] var currentFont: Font = makeFont("galatia", 12
+  protected[compositor] var currentFont: Font = makeFont("galatia", 12)
   protected var currentColor: Color = new Color(0, 0, 0)
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
 
