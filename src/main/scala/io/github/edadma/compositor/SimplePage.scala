@@ -3,7 +3,7 @@ package io.github.edadma.compositor
 class SimplePage(val lineWidth: Double, pageHeight: Option[Double], background: Option[Color])
     extends VBox
     with PageBox:
-  override def set(): Unit =
+  def set(): Unit =
     setToWidth(lineWidth)
     pageHeight foreach setToHeight
 
