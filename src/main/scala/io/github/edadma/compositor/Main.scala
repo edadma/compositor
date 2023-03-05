@@ -24,15 +24,5 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
     rightPadding = 5
     topPadding = 5
   }
-//  doc.startPage(new SimplePage(Units.in(4), Some(Units.in(2))))
-//  doc addText "Now, I saw, upon a time, when he was walking in the fields, that he was, as he was wont, reading in his book, and greatly distressed in his mind; and, as he read, he burst out, as he had done before, crying, ``What shall I do to be saved?''"
-//  doc.paragraph()
-//  doc add new VSpaceBox(1)
-//  doc add new FrameBox(doc.endPage) {
-//    background = Color("lightgrey")
-//    leftPadding = Units.in(2.25)
-//    rightPadding = Units.in(2.25)
-//    topPadding = 5
-//  }
   doc.draw()
   doc.destroy()
