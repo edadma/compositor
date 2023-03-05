@@ -10,6 +10,7 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
   val ascent: Double = font.extents.ascent
   val ascender: Double = -extents.yBearing
   val descent: Double = font.extents.descent
+  val descender: Double = extents.height + extents.yBearing
   val width: Double = extents.xAdvance
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
