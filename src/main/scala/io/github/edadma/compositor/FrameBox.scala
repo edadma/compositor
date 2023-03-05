@@ -6,7 +6,16 @@ class FrameBox(box: Box) extends Box:
 
   var background: Color | Null = null
   var topPadding: Double = 0
+  var bottomPadding: Double = 0
+  var leftPadding: Double = 0
+  var rightPadding: Double = 0
   var tight: Boolean = false
+
+  def padding(pts: Double): Unit =
+    topPadding = pts
+    bottomPadding = pts
+    leftPadding = pts
+    rightPadding = pts
 
   def paint(comp: Compositor, x: Double, y: Double): Unit =
     if background ne null then
@@ -19,17 +28,17 @@ class FrameBox(box: Box) extends Box:
       )
       comp.ctx.fill()
 
-  def width: Double = box.width // _width
+  def width: Double = box.width + leftPadding + rightPadding // _width
 
-  def height: Double = box.height /*_height*/ + topPadding
+  def height: Double = box.height /*_height*/ + topPadding + bottomPadding
 
   def ascender: Double = box.ascender + topPadding
 
   def ascent: Double = box.ascent + topPadding
 
-  def descent: Double = box.descent
+  def descent: Double = box.descent + bottomPadding
 
-  def descender: Double = box.descender
+  def descender: Double = box.descender + bottomPadding
 
   def setToWidth(width: Double): Unit =
     box.setToWidth(width)
@@ -43,4 +52,4 @@ class FrameBox(box: Box) extends Box:
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     paint(comp, x, y)
-    box.draw(comp, x, y)
+    box.draw(comp, x + leftPadding, y)
