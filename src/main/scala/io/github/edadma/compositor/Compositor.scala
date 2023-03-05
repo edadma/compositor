@@ -267,7 +267,7 @@ abstract class Compositor private[compositor]:
 
   def color(r: Int, g: Int, b: Int, a: Int): Color = color(new Color(r, g, b, a))
 
-  def color(c: String): Color = Color(c)
+  def color(c: String): Color = color(Color(c))
 
   def prefixSup(sup: String, word: String): Unit =
     val f = currentFont
