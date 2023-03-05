@@ -28,6 +28,7 @@ abstract class Compositor private[compositor]:
 
   protected val boxes = new ArrayBuffer[Box]
   protected[compositor] var currentFont: Font = null
+  protected[compositor] var currentSupFont: Font = null
   protected var currentColor: Color = new Color(0, 0, 0)
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
   protected var firstParagraph: Boolean = true
@@ -37,7 +38,7 @@ abstract class Compositor private[compositor]:
   var indent: Boolean = true
   var parindent: Double = 36
 
-  font("serif", 12)
+  selectFont("serif", 12)
 
   def loadFont(typeface: String, path: String, style: String*): Unit =
     val styleSet = style.toSet
@@ -103,18 +104,34 @@ abstract class Compositor private[compositor]:
     boxes += box
   end addBox
 
-  def font(f: Font): Unit =
-    if currentFont ne f then
-      f match
-        case t: ToyFont    => ctx.selectFontFace(t.family, t.slant, t.weight)
-        case l: LoadedFont => ctx.setFontFace(l.fontFace)
+  private def setFont(): Unit =
+    currentFont match
+      case t: ToyFont    => ctx.selectFontFace(t.family, t.slant, t.weight)
+      case l: LoadedFont => ctx.setFontFace(l.fontFace)
 
-      ctx.setFontSize(f.size)
+    ctx.setFontSize(currentFont.size)
+
+  def selectFont(f: Font): Unit =
+    if currentFont ne f then
       currentFont = f
+      setFont()
+
+  def selectFont(family: String, size: Double, style: String*): Font = selectFont(family, size, style.toSet)
+
+  def selectFont(family: String, size: Double, styleSet: Set[String]): Font =
+    currentFont = makeFont(family, size, styleSet)
+    setFont()
+    currentFont
 
   def font(family: String, size: Double, style: String*): Font = font(family, size, style.toSet)
 
   def font(family: String, size: Double, styleSet: Set[String]): Font =
+    val res = makeFont(family, size, styleSet)
+
+    setFont()
+    res
+
+  private def makeFont(family: String, size: Double, styleSet: Set[String]): Font =
     var slant = FontSlant.NORMAL
     var weight = FontWeight.NORMAL
     var fontFace: FontFace = null.asInstanceOf[FontFace]
@@ -143,10 +160,8 @@ abstract class Compositor private[compositor]:
     val TextExtents(_, _, _, _, _sWithSpaceWidth, _) = ctx.textExtents("_ _")
     val extents = ctx.fontExtents
 
-    currentFont =
-      if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight)
-      else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace)
-    currentFont
+    if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight)
+    else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace)
 
   def center(text: String): Unit = line(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
 
@@ -229,13 +244,13 @@ abstract class Compositor private[compositor]:
 
   def nobold(): Font = removeStyle("bold")
 
-  def addStyle(style: String): Font = font(currentFont.family, currentFont.size, currentFont.style + style)
+  def addStyle(style: String): Font = selectFont(currentFont.family, currentFont.size, currentFont.style + style)
 
-  def removeStyle(style: String): Font = font(currentFont.family, currentFont.size, currentFont.style - style)
+  def removeStyle(style: String): Font = selectFont(currentFont.family, currentFont.size, currentFont.style - style)
 
-  def regular(): Font = font(currentFont.family, currentFont.size)
+  def regular(): Font = selectFont(currentFont.family, currentFont.size)
 
-  def size(points: Double): Font = font(currentFont.family, points, currentFont.style)
+  def size(points: Double): Font = selectFont(currentFont.family, points, currentFont.style)
 
   def color(c: Color): Color =
     if currentColor != c then
@@ -250,15 +265,15 @@ abstract class Compositor private[compositor]:
 
   def color(c: String): Color = Color(c)
 
-  def presup(sup: String, word: String): Unit =
+  def prefixSup(sup: String, word: String, typeface: String): Unit =
     val f = currentFont
     val shift = -currentFont.size * .3333
     val hbox = new HBox
 
-    font("narrow", currentFont.size * 0.583, "bold")
+    selectFont(currentSupFont) // , currentFont.size * 0.583, "bold")
     hbox += new ShiftBox(charBox(sup), shift)
     hbox += new HSpaceBox(0, 1, 0)
-    font(f)
+    selectFont(f)
     hbox += charBox(word)
     addBox(hbox)
 
@@ -305,7 +320,7 @@ object Compositor:
       path: String,
       widthIn: Double,
       heightIn: Double,
-      pageFactory: PageFactory = simplePage(),
+      pageFactory: PageFactory = simplePageFactory(),
   ): Compositor =
     val surface = pdfSurfaceCreate(path, widthIn * pointsPerInch, heightIn * pointsPerInch)
     val context = surface.create
@@ -317,7 +332,7 @@ object Compositor:
       widthPx: Int,
       heightPx: Int,
       ppi: Double,
-      pageFactory: PageFactory = simplePage(),
+      pageFactory: PageFactory = simplePageFactory(),
   ): Compositor =
     val pixelsPerPoint = ppi / pointsPerInch
     val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
