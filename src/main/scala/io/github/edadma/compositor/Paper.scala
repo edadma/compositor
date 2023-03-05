@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-case class Paper(widthInPoints: Double, heightInPoints: Double)
+case class Paper(width: Double, height: Double)
 
 object Paper:
   def convert(width: Double, height: Double, units: Double => Double): Paper =
