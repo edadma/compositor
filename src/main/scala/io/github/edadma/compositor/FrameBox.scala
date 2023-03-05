@@ -29,6 +29,8 @@ class FrameBox(box: Box) extends Box:
 
   def descent: Double = box.descent
 
+  def descender: Double = box.descender
+
   def setToWidth(width: Double): Unit =
     box.setToWidth(width)
 //    _width = box.width

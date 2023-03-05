@@ -5,3 +5,4 @@ trait SimpleBox extends SetBox:
   def ascender: Double = height
 
   val descent = 0
+  val descender = 0

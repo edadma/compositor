@@ -11,6 +11,8 @@ class VBox extends ListBox:
 
   def descent: Double = if boxes.nonEmpty then boxes.last.descent else 0
 
+  def descender: Double = if boxes.nonEmpty then boxes.last.descender else 0
+
   def width: Double = max(_.width)
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =

@@ -5,6 +5,7 @@ abstract class Box:
   def ascent: Double
   def ascender: Double
   def descent: Double
+  def descender: Double
   def width: Double
   def draw(comp: Compositor, x: Double, y: Double): Unit
   def setToWidth(width: Double): Unit
