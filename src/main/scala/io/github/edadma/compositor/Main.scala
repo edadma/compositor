@@ -14,6 +14,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   doc add doc.charBox("[line 1]")
   doc.size(8)
   doc add doc.charBox("[line 2]")
+  doc add doc.charBox("[line 2a]")
   doc.size(12)
   doc add doc.charBox("[line 3]")
   doc.size(8)
