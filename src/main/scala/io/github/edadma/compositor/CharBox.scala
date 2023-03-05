@@ -24,3 +24,5 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
 //      comp.ctx.stroke()
 
   def newCharBox(s: String): CharBox = new CharBox(comp, s, font, color)
+
+  override def toString: String = s"CharBox($height, $descent, \"$text\")"

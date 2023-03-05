@@ -27,3 +27,5 @@ class HBox extends ListBox:
   def setToWidth(width: Double): Unit = set(width)
 
   def setToHeight(height: Double): Unit = {}
+
+  override def toString: String = s"HBox($height, $descent, ${boxes.mkString("[", ", ", "]")})"

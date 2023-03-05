@@ -4,3 +4,5 @@ class HSpaceBox(val order: Int, min: Double = 0, val stretchable: Double = 1) ex
   val height: Double = 0
 
   def width: Double = min + stretch
+
+  override def toString: String = s"HSpaceBox($width)"
