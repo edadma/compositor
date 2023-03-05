@@ -298,7 +298,7 @@ abstract class Compositor private[compositor]:
 
   def draw(): Unit =
     page.set()
-    page.draw(this, 0, 0)
+    page.draw(this, 0, page.ascent)
     emit()
     firstParagraph = true
     page = pageFactory(this, pageWidth, pageHeight)
@@ -330,18 +330,15 @@ class PNGCompositor private[compositor] (
   def emit(): Unit = surface.writeToPNG(path)
 
 object Compositor:
-  val pointsPerInch = 72
-
   def pdf(
       path: String,
-      widthIn: Double,
-      heightIn: Double,
+      paper: Paper,
       pageFactory: PageFactory = simplePageFactory(),
   ): Compositor =
-    val surface = pdfSurfaceCreate(path, widthIn * pointsPerInch, heightIn * pointsPerInch)
+    val surface = pdfSurfaceCreate(path, paper.width, paper.height)
     val context = surface.create
 
-    new PDFCompositor(surface, context, widthIn * pointsPerInch, heightIn * pointsPerInch, pageFactory)
+    new PDFCompositor(surface, context, paper.width, paper.height, pageFactory)
 
   def png(
       path: String,
@@ -350,7 +347,7 @@ object Compositor:
       ppi: Double,
       pageFactory: PageFactory = simplePageFactory(),
   ): Compositor =
-    val pixelsPerPoint = ppi / pointsPerInch
+    val pixelsPerPoint = ppi / Units.POINTS_PER_INCH
     val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
     val context = surface.create
 
