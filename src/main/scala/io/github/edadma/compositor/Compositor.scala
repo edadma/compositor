@@ -248,28 +248,25 @@ abstract class Compositor private[compositor]:
 
   def color(r: Int, g: Int, b: Int, a: Int): Color = color(new Color(r, g, b, a))
 
-  private val RGBRegex = "#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})".r
-
   def color(c: String): Color = Color(c)
 
-  def sup(s: String): Unit =
+  def presup(sup: String, word: String): Unit =
     val f = currentFont
-
-    bold()
-
     val shift = -currentFont.size * .3333
+    val hbox = new HBox
 
-    size(currentFont.size * 0.583)
-
-    addBox(new ShiftBox(charBox(s), shift))
-    addBox(new HSpaceBox(0, 1, 0))
-
+    font("narrow", currentFont.size * 0.583, "bold")
+    hbox += new ShiftBox(charBox(sup), shift)
+    hbox += new HSpaceBox(0, 1, 0)
     font(f)
+    hbox += charBox(word)
+    addBox(hbox)
 
   def charBox(s: String): CharBox = new CharBox(this, s, currentFont, currentColor)
 
+  def set(): Unit = page.set()
+
   def draw(): Unit =
-    page.set()
     page.draw(this, 0, 0)
     emit()
     firstParagraph = true

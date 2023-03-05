@@ -13,8 +13,12 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 
   doc.loadFont("galatia", "GalSIL21/GalSILR.ttf")
   doc.loadFont("galatia", "GalSIL21/GalSILB.ttf", "bold")
+  doc.loadFont("narrow", "PT_Sans_Narrow/PTSansNarrow-Regular.ttf")
+  doc.loadFont("narrow", "PT_Sans_Narrow/PTSansNarrow-Bold.ttf", "bold")
+
   doc.font("galatia", 12)
   doc.color("black")
+  doc.presup("12", "asdf")
   doc addText "As I walked through the"
   doc.bold()
   doc addBox new FrameBox(doc.textBox("wilderness")) { background = Color("orange"); padding(5) }
@@ -31,6 +35,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 //  doc.size(20)
 //  doc.center("Speaker's Name")
 //  doc add new VSpaceBox(1)
+  doc.set()
   doc.draw()
   doc.destroy()
 
