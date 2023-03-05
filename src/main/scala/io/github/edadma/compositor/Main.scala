@@ -11,13 +11,6 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
     simplePageFactory(),
   )
 
-  doc.loadFont("galatia", "GalSIL21/GalSILR.ttf")
-  doc.loadFont("galatia", "GalSIL21/GalSILB.ttf", "bold")
-  doc.loadFont("narrow", "PT_Sans_Narrow/PTSansNarrow-Regular.ttf")
-  doc.loadFont("narrow", "PT_Sans_Narrow/PTSansNarrow-Bold.ttf", "bold")
-  doc.loadFont("pragati", "PragatiNarrow/PragatiNarrow-Regular.ttf")
-  doc.loadFont("pragati", "PragatiNarrow/PragatiNarrow-Bold.ttf", "bold")
-
   doc.selectFont("galatia", 12)
   doc.color("black")
   doc.prefixSup("12", "asdf")
