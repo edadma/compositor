@@ -44,7 +44,7 @@ abstract class Compositor private[compositor]:
 
   protected[compositor] var currentSupFont: Font = makeFont("pragati", 12 * .583, "bold")
   protected[compositor] var currentFont: Font = makeFont("galatia", 12)
-  protected var currentColor: Color = new Color(0, 0, 0)
+  protected var currentColor: Color = Color(0, 0, 0, 1)
   protected val pageStack = new mutable.Stack[State]
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
 

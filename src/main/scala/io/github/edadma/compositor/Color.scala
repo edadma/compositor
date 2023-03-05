@@ -2,18 +2,20 @@ package io.github.edadma.compositor
 
 private val RGBRegex = "#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})".r
 
-case class Color(red: Double, green: Double, blue: Double, alpha: Double = 1):
+case class Color(red: Double, green: Double, blue: Double, alpha: Double):
   def this(r: Int, g: Int, b: Int, a: Int) = this(r / 255.0, g / 255.0, b / 255.0, a / 255.0)
 
 object Color:
-  def apply(c: String): Color =
+  def apply(c: String, alpha: Double = 1): Color =
     colorMap get c.toLowerCase match
       case None =>
         c match
           case RGBRegex(r, g, b) =>
-            new Color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16), 255)
+            new Color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16), (alpha * 255).toInt)
           case _ => sys.error(s"color code not recognized: $c")
       case Some(color) => color
+
+  val TRANSPARENT: Color = new Color(0, 0, 0, 0)
 
 private val colorMap = Map(
   "aliceblue" -> new Color(0xf0, 0xf8, 0xff, 0xff),
