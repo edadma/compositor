@@ -19,7 +19,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   )
   doc add new VSpaceBox(1)
   doc add new FrameBox(doc.endPage) {
-    background = Color("teal")
+    background = Color("black", 0.5)
     leftPadding = 5
     rightPadding = 5
     topPadding = 5
