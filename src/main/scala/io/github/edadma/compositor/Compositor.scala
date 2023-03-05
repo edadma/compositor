@@ -36,15 +36,13 @@ abstract class Compositor private[compositor]:
 
   protected val boxes = new ArrayBuffer[Box]
   protected[compositor] var currentSupFont: Font = makeFont("pragati", 12 * .583, Set("bold"))
-  protected[compositor] var currentFont: Font = null
+  protected[compositor] var currentFont: Font = makeFont("galatia", 12, Set())
   protected var currentColor: Color = new Color(0, 0, 0)
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
   protected var firstParagraph: Boolean = true
 
   var indent: Boolean = true
   var parindent: Double = 36
-
-  selectFont("galatia", 12)
 
   def loadFont(typeface: String, path: String, style: String*): Unit =
     val styleSet = style.toSet
