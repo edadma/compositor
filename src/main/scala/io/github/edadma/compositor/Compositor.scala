@@ -274,10 +274,10 @@ abstract class Compositor private[compositor]:
     val shift = -currentFont.size * .3333
     val hbox = new HBox
 
-    selectFont(currentSupFont) // , currentFont.size * 0.583, "bold")
+    selectFont(currentSupFont)
     hbox += new ShiftBox(charBox(sup), shift)
-    hbox += new HSpaceBox(0, 1, 0)
     selectFont(f)
+    hbox += new HSpaceBox(0, 1, 0)
     hbox += charBox(word)
     addBox(hbox)
 
