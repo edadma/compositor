@@ -40,20 +40,28 @@ abstract class Compositor private[compositor]:
   var indent: Boolean = true
   var parindent: Double = 20
 
+  case class State(page: PageBox, firstParagraph: Boolean)
+
   protected[compositor] var currentSupFont: Font = makeFont("pragati", 12 * .583, "bold")
   protected[compositor] var currentFont: Font = makeFont("galatia", 12)
   protected var currentColor: Color = new Color(0, 0, 0)
-  protected val pageStack = new mutable.Stack[PageBox]
+  protected val pageStack = new mutable.Stack[State]
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
 
   def startPage(newpage: PageBox): Unit =
-    pageStack push page
+    pageStack push State(page, firstParagraph)
     page = newpage
 
-  def endPage(): Unit =
+  def endPage: PageBox =
+    val res = page
+
+    if boxes.nonEmpty then paragraph()
+
     page.set()
-    pageStack.top add page
-    page = pageStack.pop
+    page = pageStack.top.page
+    firstParagraph = pageStack.top.firstParagraph
+    pageStack.pop
+    res
 
   def loadFont(typeface: String, path: String, style: String*): Unit =
     val styleSet = style.toSet
@@ -297,6 +305,8 @@ abstract class Compositor private[compositor]:
   def charBox(s: String): CharBox = new CharBox(this, s, currentFont, currentColor)
 
   def draw(): Unit =
+    if boxes.nonEmpty then paragraph()
+
     page.set()
     page.draw(this, 0, page.ascent)
     emit()
