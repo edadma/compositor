@@ -39,12 +39,12 @@ abstract class Compositor private[compositor]:
   loadFont("playfairsc", "PlayfairDisplaySC/PlayfairDisplaySC-Black.ttf", "black")
   loadFont("playfairsc", "PlayfairDisplaySC/PlayfairDisplaySC-BoldItalic.ttf", "bold", "italic")
   loadFont("playfairsc", "PlayfairDisplaySC/PlayfairDisplaySC-BlackItalic.ttf", "black", "italic")
-  loadFont("playfair", "PlayfairDisplay/PlayfairDisplay-Regular.ttf")
-  loadFont("playfair", "PlayfairDisplay/PlayfairDisplay-Italic.ttf", "italic")
-  loadFont("playfair", "PlayfairDisplay/PlayfairDisplay-Bold.ttf", "bold")
-  loadFont("playfair", "PlayfairDisplay/PlayfairDisplay-Black.ttf", "black")
-  loadFont("playfair", "PlayfairDisplay/PlayfairDisplay-BoldItalic.ttf", "bold", "italic")
-  loadFont("playfair", "PlayfairDisplay/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
+  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Regular.ttf")
+  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Italic.ttf", "italic")
+  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Bold.ttf", "bold")
+  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Black.ttf", "black")
+  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BoldItalic.ttf", "bold", "italic")
+  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
 
   protected val boxes = new ArrayBuffer[Box]
   protected var firstParagraph: Boolean = true
