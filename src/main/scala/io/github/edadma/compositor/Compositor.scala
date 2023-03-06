@@ -31,8 +31,14 @@ abstract class Compositor private[compositor]:
 
   loadFont("galatia", "GalSIL21/GalSILR.ttf")
   loadFont("galatia", "GalSIL21/GalSILB.ttf", "bold")
-  loadFont("pragati", "PragatiNarrow/PragatiNarrow-Regular.ttf")
-  loadFont("pragati", "PragatiNarrow/PragatiNarrow-Bold.ttf", "bold")
+//  loadFont("pragati", "PragatiNarrow/PragatiNarrow-Regular.ttf")
+//  loadFont("pragati", "PragatiNarrow/PragatiNarrow-Bold.ttf", "bold")
+  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf")
+  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Italic.ttf", "italic")
+  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Bold.ttf", "bold")
+  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Black.ttf", "black")
+  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-BoldItalic.ttf", "bold", "italic")
+  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-BlackItalic.ttf", "black", "italic")
 
   protected val boxes = new ArrayBuffer[Box]
   protected var firstParagraph: Boolean = true
@@ -43,7 +49,7 @@ abstract class Compositor private[compositor]:
   case class State(page: PageBox, firstParagraph: Boolean)
 
   protected[compositor] var currentSupFont: Font = makeFont("pragati", 12 * .583, "bold")
-  protected[compositor] var currentFont: Font = makeFont("galatia", 12)
+  protected[compositor] var currentFont: Font = makeFont("playfair", 12)
   protected var currentColor: Color = Color(0, 0, 0, 1)
   protected val pageStack = new mutable.Stack[State]
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
