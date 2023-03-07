@@ -10,6 +10,8 @@ abstract class Font:
   val style: Set[String]
   val baseline: Option[Double]
 
+  def height: Double = extents.height * baseline.getOrElse(1.0)
+
 class ToyFont private[compositor] (
     val family: String,
     val size: Double,

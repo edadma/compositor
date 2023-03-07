@@ -37,6 +37,7 @@ abstract class Compositor private[compositor]:
   loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-Bold.ttf", "bold")
   loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-Italic.ttf", "italic")
   loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-BoldItalic.ttf", "bold", "italic")
+  overrideBaseline("gentium", 0.9)
   loadFont("pt", "PTSansNarrow/PTSansNarrow-Regular.ttf")
   loadFont("pt", "PTSansNarrow/PTSansNarrow-Bold.ttf", "bold")
   loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf", "smallcaps")

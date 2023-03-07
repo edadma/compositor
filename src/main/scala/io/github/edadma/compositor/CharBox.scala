@@ -6,7 +6,7 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
   comp.selectFont(font)
 
   val extents: TextExtents = comp.ctx.textExtents(text)
-  val height: Double = font.extents.height
+  val height: Double = font.height
   val ascent: Double = font.extents.ascent
   val ascender: Double = -extents.yBearing
   val descent: Double = font.extents.descent
