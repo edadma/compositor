@@ -26,7 +26,7 @@ abstract class Compositor private[compositor]:
   val pageHeight: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
-  protected val fontfaces = new mutable.HashMap[String, mutable.HashMap[Set[String], FontFace]]
+  protected val fontfaces = new mutable.HashMap[String, mutable.HashMap[Set[String], (FontFace, Option[Double])]]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
   loadFont("galatia", "GalSIL21/GalSILR.ttf")
@@ -90,11 +90,11 @@ abstract class Compositor private[compositor]:
     )
 
     fontfaces get typeface match
-      case None => fontfaces(typeface) = mutable.HashMap(styleSet -> face)
+      case None => fontfaces(typeface) = mutable.HashMap(styleSet -> (face, None))
       case Some(t) =>
         if t contains styleSet then
           sys.error(s"font for typeface '$typeface' with style '${style.mkString(", ")}' has already been loaded")
-        else t(styleSet) = face
+        else t(styleSet) = (face, None)
 
   def setPage(box: PageBox): Unit = page = box
 
@@ -176,7 +176,7 @@ abstract class Compositor private[compositor]:
     var slant = FontSlant.NORMAL
     var weight = FontWeight.NORMAL
     var fontFace: FontFace = null.asInstanceOf[FontFace]
-    val toy = fontfaces get family match
+    val (toy, baseline) = fontfaces get family match
       case None =>
         if styleSet("italic") then slant = FontSlant.ITALIC
         else if styleSet("oblique") then slant = FontSlant.OBLIQUE
@@ -184,16 +184,18 @@ abstract class Compositor private[compositor]:
         if styleSet("bold") then weight = FontWeight.BOLD
 
         ctx.selectFontFace(family, slant, weight)
-        true
+        (true, None)
       case Some(f) =>
-        fontFace = f.getOrElse(
+        val (face, b) = f.getOrElse(
           styleSet,
           sys.error(
             s"font for typeface '$family' with style '${styleSet.mkString(", ")}' has not been loaded",
           ),
         )
+
+        fontFace = face
         ctx.setFontFace(fontFace)
-        false
+        (false, b)
 
     ctx.setFontSize(size)
 
@@ -202,7 +204,7 @@ abstract class Compositor private[compositor]:
     val extents = ctx.fontExtents
 
     if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight)
-    else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace)
+    else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace, baseline)
 
   def center(text: String): Unit = line(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
 

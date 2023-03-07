@@ -8,6 +8,7 @@ abstract class Font:
   val extents: FontExtents
   val space: Double
   val style: Set[String]
+  val baseline: Option[Double]
 
 class ToyFont private[compositor] (
     val family: String,
@@ -17,7 +18,7 @@ class ToyFont private[compositor] (
     val style: Set[String],
     val slant: FontSlant,
     val weight: FontWeight,
-) extends Font
+) extends Font { val baseline: Option[Double] = None }
 
 class LoadedFont private[compositor] (
     val family: String,
@@ -26,4 +27,5 @@ class LoadedFont private[compositor] (
     val space: Double,
     val style: Set[String],
     val fontFace: FontFace,
+    val baseline: Option[Double],
 ) extends Font
