@@ -26,7 +26,9 @@ abstract class Compositor private[compositor]:
   val pageHeight: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
-  protected val fontfaces = new mutable.HashMap[String, mutable.HashMap[Set[String], (FontFace, Option[Double])]]
+  case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double])
+
+  protected val typefaces = new mutable.HashMap[String, Typeface]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
   loadFont("galatia", "GalSIL21/GalSILR.ttf")
@@ -89,12 +91,20 @@ abstract class Compositor private[compositor]:
       0,
     )
 
-    fontfaces get typeface match
-      case None => fontfaces(typeface) = mutable.HashMap(styleSet -> (face, None))
-      case Some(t) =>
-        if t contains styleSet then
+    typefaces get typeface match
+      case None => typefaces(typeface) = Typeface(mutable.HashMap(styleSet -> face), None)
+      case Some(Typeface(fonts, _)) =>
+        if fonts contains styleSet then
           sys.error(s"font for typeface '$typeface' with style '${style.mkString(", ")}' has already been loaded")
-        else t(styleSet) = (face, None)
+        else fonts(styleSet) = face
+
+//  def overrideBaseline(typeface: String, styleSet: Set[String], baseline: Double): Unit =
+//    fontfaces(typeface) get match
+//      case None => sys.error(s"typeface '$typeface' not found")
+//      case Some(t) =>
+//        t get styleSet match
+//          case None         => sys.error(s"style '${styleSet mkString ","}' for typeface '$typeface' not found")
+//          case Some((f, _)) => t(styleSet) = (f, Some(baseline))
 
   def setPage(box: PageBox): Unit = page = box
 
@@ -176,7 +186,7 @@ abstract class Compositor private[compositor]:
     var slant = FontSlant.NORMAL
     var weight = FontWeight.NORMAL
     var fontFace: FontFace = null.asInstanceOf[FontFace]
-    val (toy, baseline) = fontfaces get family match
+    val (toy, baseline) = typefaces get family match
       case None =>
         if styleSet("italic") then slant = FontSlant.ITALIC
         else if styleSet("oblique") then slant = FontSlant.OBLIQUE
@@ -185,8 +195,8 @@ abstract class Compositor private[compositor]:
 
         ctx.selectFontFace(family, slant, weight)
         (true, None)
-      case Some(f) =>
-        val (face, b) = f.getOrElse(
+      case Some(Typeface(fonts, baseline)) =>
+        val face = fonts.getOrElse(
           styleSet,
           sys.error(
             s"font for typeface '$family' with style '${styleSet.mkString(", ")}' has not been loaded",
@@ -195,7 +205,7 @@ abstract class Compositor private[compositor]:
 
         fontFace = face
         ctx.setFontFace(fontFace)
-        (false, b)
+        (false, baseline)
 
     ctx.setFontSize(size)
 
