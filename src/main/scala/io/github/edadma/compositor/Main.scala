@@ -11,6 +11,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 //  )
 
   doc.color("white")
+//  doc.selectFont("sans", 12)
   doc add new FrameBox(new RigidBox(doc.pageWidth, doc.pageHeight * 2 / 3)) { background = Color.TRANSPARENT }
   doc.startPage(new SimplePage(doc.pageWidth - 10, Some(doc.pageHeight * 3 - 5)))
   verses(

@@ -37,7 +37,7 @@ abstract class Compositor private[compositor]:
   loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-Bold.ttf", "bold")
   loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-Italic.ttf", "italic")
   loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-BoldItalic.ttf", "bold", "italic")
-  overrideBaseline("gentium", 0.9)
+  overrideBaseline("gentium", 0.8)
   loadFont("pt", "PTSansNarrow/PTSansNarrow-Regular.ttf")
   loadFont("pt", "PTSansNarrow/PTSansNarrow-Bold.ttf", "bold")
   loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf", "smallcaps")
@@ -103,6 +103,7 @@ abstract class Compositor private[compositor]:
     typefaces get typeface match
       case None                     => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _)) => typefaces(typeface) = Typeface(fonts, Some(baseline))
+    
 
   def setPage(box: PageBox): Unit = page = box
 
