@@ -98,13 +98,10 @@ abstract class Compositor private[compositor]:
           sys.error(s"font for typeface '$typeface' with style '${style.mkString(", ")}' has already been loaded")
         else fonts(styleSet) = face
 
-//  def overrideBaseline(typeface: String, styleSet: Set[String], baseline: Double): Unit =
-//    fontfaces(typeface) get match
-//      case None => sys.error(s"typeface '$typeface' not found")
-//      case Some(t) =>
-//        t get styleSet match
-//          case None         => sys.error(s"style '${styleSet mkString ","}' for typeface '$typeface' not found")
-//          case Some((f, _)) => t(styleSet) = (f, Some(baseline))
+  def overrideBaseline(typeface: String, baseline: Double): Unit =
+    typefaces get typeface match
+      case None                     => sys.error(s"typeface '$typeface' not found")
+      case Some(Typeface(fonts, _)) => typefaces(typeface) = Typeface(fonts, Some(baseline))
 
   def setPage(box: PageBox): Unit = page = box
 
