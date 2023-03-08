@@ -33,27 +33,52 @@ abstract class Compositor private[compositor]:
   protected val typefaces = new mutable.HashMap[String, Typeface]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
-  loadFont("galatia", "GalSIL21/GalSILR.ttf")
-  loadFont("galatia", "GalSIL21/GalSILB.ttf", "bold")
-  loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-Regular.ttf")
-  loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-Bold.ttf", "bold")
-  loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-Italic.ttf", "italic")
-  loadFont("gentium", "GentiumPlus-6.200/GentiumPlus-BoldItalic.ttf", "bold", "italic")
+  loadTypeface("charis", "fonts/CharisSIL-6.200/CharisSIL", "Regular", "Bold", "Italic", ("Bold", "Italic"))
+  overrideBaseline("charis", 0.8)
+  loadFont("galatia", "fonts/GalSIL21/GalSILR.ttf")
+  loadFont("galatia", "fonts/GalSIL21/GalSILB.ttf", "bold")
+  loadTypeface(
+    "gentium",
+    "fonts/GentiumPlus-6.200/GentiumPlus",
+    "Regular",
+    "Bold",
+    "Italic",
+    ("Bold", "Italic"),
+  )
   overrideBaseline("gentium", 0.8)
-  loadFont("pt", "PTSansNarrow/PTSansNarrow-Regular.ttf")
-  loadFont("pt", "PTSansNarrow/PTSansNarrow-Bold.ttf", "bold")
-  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf", "smallcaps")
-  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Italic.ttf", "italic", "smallcaps")
-  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Bold.ttf", "bold", "smallcaps")
-  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Black.ttf", "black", "smallcaps")
-  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-BoldItalic.ttf", "bold", "italic", "smallcaps")
-  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-BlackItalic.ttf", "black", "italic", "smallcaps")
-  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Regular.ttf")
-  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Italic.ttf", "italic")
-  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Bold.ttf", "bold")
-  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Black.ttf", "black")
-  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BoldItalic.ttf", "bold", "italic")
-  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
+  loadTypeface("pt", "fonts/PTSansNarrow/PTSansNarrow", "Regular", "Bold")
+  loadTypeface(
+    "mono",
+    "fonts/JetBrainsMono/static/JetBrainsMono",
+    "Bold",
+    ("Bold", "Italic"),
+    "ExtraBold",
+    ("ExtraBold", "Italic"),
+    "ExtraLight",
+    ("ExtraLight", "Italic"),
+    "Italic",
+    "Light",
+    ("Light", "Italic"),
+    "Medium",
+    ("Medium", "Italic"),
+    "Regular",
+    "SemiBold",
+    ("SemiBold", "Italic"),
+    "Thin",
+    ("Thin", "Italic"),
+  )
+  //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf", "smallcaps")
+//  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Italic.ttf", "italic", "smallcaps")
+//  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Bold.ttf", "bold", "smallcaps")
+//  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Black.ttf", "black", "smallcaps")
+//  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-BoldItalic.ttf", "bold", "italic", "smallcaps")
+//  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-BlackItalic.ttf", "black", "italic", "smallcaps")
+//  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Regular.ttf")
+//  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Italic.ttf", "italic")
+//  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Bold.ttf", "bold")
+//  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-Black.ttf", "black")
+//  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BoldItalic.ttf", "bold", "italic")
+//  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
 
   protected val boxes = new ArrayBuffer[Box]
   protected var firstParagraph: Boolean = true
@@ -64,7 +89,7 @@ abstract class Compositor private[compositor]:
   case class State(page: PageBox, firstParagraph: Boolean)
 
   protected[compositor] var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
-  protected[compositor] var currentFont: Font = makeFont("gentium", 12)
+  protected[compositor] var currentFont: Font = makeFont("charis", 12)
   protected var currentColor: Color = Color(0, 0, 0, 1)
   protected var ligatures: Boolean = false
   protected var representations: Boolean = false
@@ -86,8 +111,22 @@ abstract class Compositor private[compositor]:
     pageStack.pop
     res
 
-  def loadFont(typeface: String, path: String, style: String*): Unit =
-    val styleSet = style.toSet
+  def loadTypeface(typeface: String, basepath: String, styles: (Product | String)*): Unit =
+    for style <- styles do
+      val (styleName, styleSet) =
+        style match
+          case s: String  => (s, if s.toLowerCase == "regular" then Set.empty else Set(s.toLowerCase))
+          case p: Product => (p.productIterator.mkString, p.productIterator.map(_.toString.toLowerCase).toSet)
+
+      loadFont(
+        typeface,
+        s"$basepath-$styleName.ttf",
+        styleSet,
+      )
+
+  def loadFont(typeface: String, path: String, style: String*): Unit = loadFont(typeface, path, style.toSet)
+
+  def loadFont(typeface: String, path: String, styleSet: Set[String]): Unit =
     val face = fontFaceCreateForFTFace(
       freetype
         .newFace(path, 0)
@@ -100,7 +139,7 @@ abstract class Compositor private[compositor]:
       case None => typefaces(typeface) = Typeface(mutable.HashMap(styleSet -> face), None)
       case Some(Typeface(fonts, _)) =>
         if fonts contains styleSet then
-          sys.error(s"font for typeface '$typeface' with style '${style.mkString(", ")}' has already been loaded")
+          sys.error(s"font for typeface '$typeface' with style '${styleSet.mkString(", ")}' has already been loaded")
         else fonts(styleSet) = face
 
   def overrideBaseline(typeface: String, baseline: Double): Unit =

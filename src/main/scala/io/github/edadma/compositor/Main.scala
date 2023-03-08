@@ -20,12 +20,31 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 //  )
 //  doc addText "Koine Greek (UK: /ˈkɔɪniː/ COY-nee[2] US: /ˈkɔɪneɪ/ COY-nay or /kɔɪˈneɪ/ coy-NAY[3][4]; Koine Greek: ἡ κοινὴ διάλεκτος, romanized: hē koinè diálektos, lit. 'the common dialect'; Greek: [i cyˈni ðiˈalektos])"
 //  doc.paragraph()
-  doc addText "office file"
+  doc.selectFont("mono", 14)
+  doc addText "This is a happy font test."
   doc.paragraph()
+  doc.selectFont("mono", 14, "bold")
   doc.noindent()
-  doc addBox doc.charBox("office file")
+  doc addText "This is a happy font test."
   doc.paragraph()
-//  doc add new VSpaceBox(1)
+  doc.selectFont("mono", 14, "italic")
+  doc.noindent()
+  doc addText "This is a happy font test."
+  doc.paragraph()
+  doc.selectFont("mono", 14, "bold", "italic")
+  doc.noindent()
+  doc addText "This is a happy font test."
+  doc.paragraph()
+  doc.selectFont("mono", 14, "extrabold")
+  doc.noindent()
+  doc addText "This is a happy font test."
+  doc.paragraph()
+  doc.selectFont("mono", 14, "thin")
+  doc.noindent()
+  doc addText "This is a happy font test."
+  doc.paragraph()
+
+  //  doc add new VSpaceBox(1)
 //  doc add new FrameBox(doc.endPage) {
 //    background = Color("black", 0.5)
 //    leftPadding = 5
