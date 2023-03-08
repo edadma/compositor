@@ -66,6 +66,8 @@ abstract class Compositor private[compositor]:
   protected[compositor] var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
   protected[compositor] var currentFont: Font = makeFont("gentium", 12)
   protected var currentColor: Color = Color(0, 0, 0, 1)
+  protected var ligatures: Boolean = false
+  protected var representations: Boolean = false
   protected val pageStack = new mutable.Stack[State]
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
 
@@ -110,7 +112,10 @@ abstract class Compositor private[compositor]:
 
   def addWord(text: String): Unit = addBox(textBox(text))
 
-  def textBox(text: String): CharBox = charBox(Ligatures(Ligatures.replace(text, Ligatures.REPRESENTATIONS)))
+  def textBox(text: String): CharBox =
+    val rep = if representations then Ligatures.replace(text, Ligatures.REPRESENTATIONS) else text
+
+    charBox(if ligatures then Ligatures(rep) else rep)
 
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
