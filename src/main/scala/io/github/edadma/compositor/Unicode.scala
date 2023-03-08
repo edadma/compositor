@@ -1,0 +1,13 @@
+package io.github.edadma.compositor
+
+object Unicode:
+  val `LATIN SMALL LIGATURE FF` = "\uFB00"
+  val `LATIN SMALL LIGATURE FI` = "\uFB01"
+  val `LATIN SMALL LIGATURE FL` = "\uFB02"
+  val `LATIN SMALL LIGATURE FFI` = "\uFB03"
+  val `LATIN SMALL LIGATURE FFL` = "\uFB04"
+
+  val `LEFT SINGLE QUOTATION MARK` = "\u2018"
+  val `RIGHT SINGLE QUOTATION MARK` = "\u2019"
+  val `LEFT DOUBLE QUOTATION MARK` = "\u201C"
+  val `RIGHT DOUBLE QUOTATION MARK` = "\u201D"

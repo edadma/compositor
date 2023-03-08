@@ -20,6 +20,8 @@ import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 abstract class Compositor private[compositor]:
+  import Unicode.*
+
   protected[compositor] val surface: Surface
   protected[compositor] val ctx: Context
   val pageWidth: Double
@@ -103,29 +105,19 @@ abstract class Compositor private[compositor]:
     typefaces get typeface match
       case None                     => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _)) => typefaces(typeface) = Typeface(fonts, Some(baseline))
-    
-
-  def setPage(box: PageBox): Unit = page = box
 
   def add(box: Box): Unit = page add box
 
-  val `LEFT SINGLE QUOTATION MARK` = "\u2018"
-  val `RIGHT SINGLE QUOTATION MARK` = "\u2019"
-  val `LEFT DOUBLE QUOTATION MARK` = "\u201C"
-  val `RIGHT DOUBLE QUOTATION MARK` = "\u201D"
-
-  def addWord(text: String): Unit =
-    addBox(textBox(text))
+  def addWord(text: String): Unit = addBox(textBox(text))
 
   def textBox(text: String): CharBox =
-    val text1 =
+    charBox(
       text
         .replace("``", `LEFT DOUBLE QUOTATION MARK`)
         .replace("''", `RIGHT DOUBLE QUOTATION MARK`)
         .replace("`", `LEFT SINGLE QUOTATION MARK`)
-        .replace("'", `RIGHT SINGLE QUOTATION MARK`)
-
-    charBox(text1)
+        .replace("'", `RIGHT SINGLE QUOTATION MARK`),
+    )
 
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
