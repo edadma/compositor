@@ -1,9 +1,6 @@
 package io.github.edadma.compositor
 
 class FrameBox(box: Box) extends Box:
-//  private var _width: Double = box.width
-//  private var _height: Double = box.height
-
   var background: Color | Null = null
   var topPadding: Double = 0
   var bottomPadding: Double = 0
@@ -28,9 +25,9 @@ class FrameBox(box: Box) extends Box:
       )
       comp.ctx.fill()
 
-  def width: Double = box.width + leftPadding + rightPadding // _width
+  def width: Double = box.width + leftPadding + rightPadding
 
-  def height: Double = box.height /*_height*/ + topPadding + bottomPadding
+  def height: Double = box.height + topPadding + bottomPadding
 
   def ascender: Double = box.ascender + topPadding
 
@@ -40,15 +37,9 @@ class FrameBox(box: Box) extends Box:
 
   def descender: Double = box.descender + bottomPadding
 
-  def setToWidth(width: Double): Unit =
-    box.setToWidth(width)
-//    _width = box.width
-//    _height = box.height
+  def setToWidth(width: Double): Unit = box.setToWidth(width)
 
-  def setToHeight(height: Double): Unit =
-    box.setToHeight(height)
-//    _width = box.width
-//    _height = box.height
+  def setToHeight(height: Double): Unit = box.setToHeight(height)
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     paint(comp, x, y)
