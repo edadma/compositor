@@ -110,14 +110,7 @@ abstract class Compositor private[compositor]:
 
   def addWord(text: String): Unit = addBox(textBox(text))
 
-  def textBox(text: String): CharBox =
-    charBox(
-      text
-        .replace("``", `LEFT DOUBLE QUOTATION MARK`)
-        .replace("''", `RIGHT DOUBLE QUOTATION MARK`)
-        .replace("`", `LEFT SINGLE QUOTATION MARK`)
-        .replace("'", `RIGHT SINGLE QUOTATION MARK`),
-    )
+  def textBox(text: String): CharBox = charBox(Ligatures(Ligatures.replace(text, Ligatures.REPRESENTATIONS)))
 
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
