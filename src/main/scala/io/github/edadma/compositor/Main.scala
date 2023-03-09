@@ -29,7 +29,6 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
     border = Color("green")
     borderWidth = 2
     background = Color("teal")
-    rounded = false
   }
   doc.paragraph()
   doc.selectFont("mono", 14, "italic")
