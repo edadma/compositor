@@ -33,10 +33,11 @@ abstract class Compositor private[compositor]:
   protected val typefaces = new mutable.HashMap[String, Typeface]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
-  loadTypeface("charis", "fonts/CharisSIL-6.200/CharisSIL", "Regular", "Bold", "Italic", ("Bold", "Italic"))
-  overrideBaseline("charis", 0.8)
-  loadFont("galatia", "fonts/GalSIL21/GalSILR.ttf")
-  loadFont("galatia", "fonts/GalSIL21/GalSILB.ttf", "bold")
+  loadTypeface("notoserif", "fonts/NotoSerif/NotoSerif", "Regular", "Bold", "Italic", ("Bold", "Italic"))
+  //  loadTypeface("charis", "fonts/CharisSIL-6.200/CharisSIL", "Regular", "Bold", "Italic", ("Bold", "Italic"))
+//  overrideBaseline("charis", 0.8)
+//  loadFont("galatia", "fonts/GalSIL21/GalSILR.ttf")
+//  loadFont("galatia", "fonts/GalSIL21/GalSILB.ttf", "bold")
   loadTypeface(
     "gentium",
     "fonts/GentiumPlus-6.200/GentiumPlus",
@@ -89,7 +90,7 @@ abstract class Compositor private[compositor]:
   case class State(page: PageBox, firstParagraph: Boolean)
 
   protected[compositor] var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
-  protected[compositor] var currentFont: Font = makeFont("charis", 12)
+  protected[compositor] var currentFont: Font = makeFont("notoserif", 12)
   protected var currentColor: Color = Color(0, 0, 0, 1)
   protected var ligatures: Boolean = false
   protected var representations: Boolean = false
@@ -325,9 +326,13 @@ abstract class Compositor private[compositor]:
 
   def nobold(): Font = removeStyle("bold")
 
-  def addStyle(style: String): Font = selectFont(currentFont.family, currentFont.size, currentFont.style + style)
+  def setStyle(style: Set[String]): Font = selectFont(currentFont.family, currentFont.size, style)
 
-  def removeStyle(style: String): Font = selectFont(currentFont.family, currentFont.size, currentFont.style - style)
+  def setStyle(style: String*): Font = setStyle(style.toSet)
+
+  def addStyle(style: String*): Font = setStyle(currentFont.style ++ style)
+
+  def removeStyle(style: String*): Font = setStyle(currentFont.style -- style)
 
   def regular(): Font = selectFont(currentFont.family, currentFont.size)
 
