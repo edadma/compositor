@@ -1,7 +1,10 @@
 package io.github.edadma.compositor
 
 class FrameBox(box: Box) extends Box:
+  var rounded: Boolean = true
   var background: Color | Null = null
+  var border: Color | Null = null
+  var borderWidth: Double = 0.5
   var topPadding: Double = 0
   var bottomPadding: Double = 0
   var leftPadding: Double = 0
@@ -17,13 +20,46 @@ class FrameBox(box: Box) extends Box:
   def paint(comp: Compositor, x: Double, y: Double): Unit =
     if background ne null then
       comp.color(background)
-      comp.ctx.rectangle(
-        x,
-        y - (if tight then ascender else ascent),
-        width,
-        if tight then ascender + descender else height,
-      )
+
+      if rounded then
+        util.roundedRectanglePath(
+          comp.ctx,
+          x,
+          y - (if tight then ascender else ascent),
+          width,
+          if tight then ascender + descender else height,
+        )
+      else
+        comp.ctx.rectangle(
+          x,
+          y - (if tight then ascender else ascent),
+          width,
+          if tight then ascender + descender else height,
+        )
+
       comp.ctx.fill()
+
+    if border ne null then
+      comp.color(border)
+      comp.ctx.setLineWidth(borderWidth)
+
+      if rounded then
+        util.roundedRectanglePath(
+          comp.ctx,
+          x,
+          y - (if tight then ascender else ascent),
+          width,
+          if tight then ascender + descender else height,
+        )
+      else
+        comp.ctx.rectangle(
+          x,
+          y - (if tight then ascender else ascent),
+          width,
+          if tight then ascender + descender else height,
+        )
+
+      comp.ctx.stroke()
 
   def width: Double = box.width + leftPadding + rightPadding
 

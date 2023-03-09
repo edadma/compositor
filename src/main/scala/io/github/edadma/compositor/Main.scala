@@ -25,7 +25,9 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   doc.paragraph()
   doc.selectFont("mono", 14, "bold")
   doc.noindent()
-  doc addText "This is a happy font test."
+  doc addBox new FrameBox(doc.textBox("This is a happy font test.")) {
+    border = Color("green")
+  }
   doc.paragraph()
   doc.selectFont("mono", 14, "italic")
   doc.noindent()
