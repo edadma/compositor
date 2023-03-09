@@ -50,13 +50,19 @@ class FrameBox(box: Box) extends Box:
 
   def width: Double = box.width + leftPadding + rightPadding
 
-  def height: Double = box.height + topPadding + bottomPadding
+  def height: Double =
+    if tight then box.height max box.ascent + box.descender + topPadding + bottomPadding
+    else box.height + topPadding + bottomPadding
 
   def ascender: Double = box.ascender + topPadding
 
-  def ascent: Double = box.ascent + topPadding
+  def ascent: Double =
+    if tight then box.ascent max box.ascender + topPadding
+    else box.ascent + topPadding
 
-  def descent: Double = box.descent + bottomPadding
+  def descent: Double =
+    if tight then box.descent max box.descender + bottomPadding
+    else box.descent + bottomPadding
 
   def descender: Double = box.descender + bottomPadding
 

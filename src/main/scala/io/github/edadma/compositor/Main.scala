@@ -4,13 +4,15 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 
 @main def run(): Unit =
   val doc = Compositor.png("test.png", 1280, 720, ppi(1920, 1080, 13), simplePageFactory())
+  doc.color("white")
+
 //  val doc = Compositor.pdf(
 //    "test.pdf",
 //    Paper.LETTER,
 //    simplePageFactory(),
 //  )
+//  doc.color("black")
 
-  doc.color("white")
 //  doc add new FrameBox(new RigidBox(doc.pageWidth, doc.pageHeight * 2 / 3)) { background = Color.TRANSPARENT }
 //  doc.startPage(new SimplePage(doc.pageWidth - 10, Some(doc.pageHeight * 3 - 5)))
 //  verses(
@@ -23,10 +25,12 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   doc.paragraph()
   doc setStyle "bold"
   doc.noindent()
-  doc addBox new FrameBox(doc.textBox("office file waffle flux")) {
+  doc addText "office"
+  doc addBox new FrameBox(doc.textBox("file")) {
     border = Color("green")
 //    background = Color("teal")
   }
+  doc addText "waffle flux"
   doc.paragraph()
   doc setStyle "italic"
   doc.noindent()
