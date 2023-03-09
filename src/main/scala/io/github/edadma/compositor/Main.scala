@@ -21,6 +21,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 //  )
 //  doc addText "Koine Greek (UK: /ˈkɔɪniː/ COY-nee[2] US: /ˈkɔɪneɪ/ COY-nay or /kɔɪˈneɪ/ coy-NAY[3][4]; Koine Greek: ἡ κοινὴ διάλεκτος, romanized: hē koinè diálektos, lit. 'the common dialect'; Greek: [i cyˈni ðiˈalektos])"
 //  doc.paragraph()
+  doc.selectFont("notosans", 12)
   doc addText "office file waffle flux"
   doc.paragraph()
   doc setStyle "bold"

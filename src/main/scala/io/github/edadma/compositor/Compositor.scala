@@ -39,6 +39,28 @@ abstract class Compositor private[compositor]:
 //  loadFont("galatia", "fonts/GalSIL21/GalSILR.ttf")
 //  loadFont("galatia", "fonts/GalSIL21/GalSILB.ttf", "bold")
   loadTypeface(
+    "notosans",
+    "fonts/NotoSans/NotoSans",
+    "Black",
+    ("Black", "Italic"),
+    "Bold",
+    ("Bold", "Italic"),
+    "ExtraBold",
+    ("ExtraBold", "Italic"),
+    "ExtraLight",
+    ("ExtraLight", "Italic"),
+    "Italic",
+    "Light",
+    ("Light", "Italic"),
+    "Medium",
+    ("Medium", "Italic"),
+    "Regular",
+    "SemiBold",
+    ("SemiBold", "Italic"),
+    "Thin",
+    ("Thin", "Italic"),
+  )
+  loadTypeface(
     "gentium",
     "fonts/GentiumPlus-6.200/GentiumPlus",
     "Regular",
@@ -250,14 +272,14 @@ abstract class Compositor private[compositor]:
   def line(text: String): Unit = page add textBox(text)
 
   def line(bs: Box*): Unit =
-    val hbox = new HBox
+    val hbox = new HBox(this)
 
     bs foreach hbox.add
     page add hbox
 
   def paragraph(): Unit =
     while boxes.nonEmpty do
-      val hbox = new HBox
+      val hbox = new HBox(this)
 
       @tailrec
       def line(): Unit =
@@ -354,7 +376,7 @@ abstract class Compositor private[compositor]:
   def prefixSup(sup: String, word: String): Unit =
     val f = currentFont
     val shift = -currentFont.size * .3333
-    val hbox = new HBox
+    val hbox = new HBox(this)
 
     selectFont(currentSupFont)
     hbox += new ShiftBox(charBox(sup), shift)
