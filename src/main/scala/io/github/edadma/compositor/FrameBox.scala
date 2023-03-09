@@ -5,12 +5,12 @@ class FrameBox(box: Box) extends Box:
   var background: Color | Null = null
   var border: Color | Null = null
   var borderWidth: Double = 0.5
-  var cornerRadius: Double = 3
-  var topPadding: Double = 0
-  var bottomPadding: Double = 0
-  var leftPadding: Double = 0
-  var rightPadding: Double = 0
-  var tight: Boolean = false
+  var cornerRadius: Double = 2
+  var topPadding: Double = 2
+  var bottomPadding: Double = 2
+  var leftPadding: Double = 2
+  var rightPadding: Double = 2
+  var tight: Boolean = true
 
   def padding(pts: Double): Unit =
     topPadding = pts
