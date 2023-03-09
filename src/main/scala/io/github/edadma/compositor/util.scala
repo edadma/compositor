@@ -9,9 +9,9 @@ private[compositor] object util:
       y: Double,
       width: Double,
       height: Double,
+      corner_radius: Double,
   ): Unit =
     val aspect = 1.0
-    val corner_radius = height / 10.0
     val radius = corner_radius / aspect
     val degrees = math.Pi / 180.0
 

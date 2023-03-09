@@ -5,6 +5,7 @@ class FrameBox(box: Box) extends Box:
   var background: Color | Null = null
   var border: Color | Null = null
   var borderWidth: Double = 0.5
+  var cornerRadius: Double = 3
   var topPadding: Double = 0
   var bottomPadding: Double = 0
   var leftPadding: Double = 0
@@ -18,9 +19,7 @@ class FrameBox(box: Box) extends Box:
     rightPadding = pts
 
   def paint(comp: Compositor, x: Double, y: Double): Unit =
-    if background ne null then
-      comp.color(background)
-
+    def frame(): Unit =
       if rounded then
         util.roundedRectanglePath(
           comp.ctx,
@@ -28,6 +27,7 @@ class FrameBox(box: Box) extends Box:
           y - (if tight then ascender else ascent),
           width,
           if tight then ascender + descender else height,
+          cornerRadius,
         )
       else
         comp.ctx.rectangle(
@@ -37,28 +37,15 @@ class FrameBox(box: Box) extends Box:
           if tight then ascender + descender else height,
         )
 
+    if background ne null then
+      comp.color(background)
+      frame()
       comp.ctx.fill()
 
     if border ne null then
       comp.color(border)
       comp.ctx.setLineWidth(borderWidth)
-
-      if rounded then
-        util.roundedRectanglePath(
-          comp.ctx,
-          x,
-          y - (if tight then ascender else ascent),
-          width,
-          if tight then ascender + descender else height,
-        )
-      else
-        comp.ctx.rectangle(
-          x,
-          y - (if tight then ascender else ascent),
-          width,
-          if tight then ascender + descender else height,
-        )
-
+      frame()
       comp.ctx.stroke()
 
   def width: Double = box.width + leftPadding + rightPadding
