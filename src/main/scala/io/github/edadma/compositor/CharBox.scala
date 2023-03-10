@@ -19,9 +19,6 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
       comp.setColor(color)
       comp.ctx.moveTo(x, y)
       comp.ctx.showText(text)
-//      comp.ctx.moveTo(x, y)
-//      comp.ctx.lineTo(x + extents.xAdvance, y)
-//      comp.ctx.stroke()
 
   def newCharBox(s: String): CharBox = new CharBox(comp, s, font, color)
 

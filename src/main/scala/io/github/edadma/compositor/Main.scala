@@ -33,7 +33,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   doc.paragraph()
   doc setStyle "italic"
   doc.noindent()
-  doc addBox new UnderlineBox(doc, (new HBox).add(doc.textBox("office")))
+  doc addBox doc.glyphBox("office")
   doc addText "file waffle flux"
   doc.paragraph()
   doc.setStyle("bold", "italic")

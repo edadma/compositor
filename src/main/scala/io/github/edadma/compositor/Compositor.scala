@@ -389,6 +389,8 @@ abstract class Compositor private[compositor]:
 
   def charBox(s: String): CharBox = new CharBox(this, s, currentFont, currentColor)
 
+  def glyphBox(s: String): GlyphBox = new GlyphBox(this, s, currentFont, currentColor)
+
   def draw(): Unit =
     if boxes.nonEmpty then paragraph()
 
