@@ -2,7 +2,7 @@ package io.github.edadma.compositor
 
 import scala.collection.mutable.ArrayBuffer
 
-abstract class ListBox extends Box:
+abstract class ListBox extends AddableBox:
   def length: Double
 
   protected[compositor] val boxes = new ArrayBuffer[Box]
@@ -11,7 +11,9 @@ abstract class ListBox extends Box:
 
   protected def max(measure: Box => Double): Double = boxes map measure max
 
-  def add(box: Box): Unit = boxes += box
+  def add(box: Box): ListBox =
+    boxes += box
+    this
 
   def +=(box: Box): Unit = add(box)
 

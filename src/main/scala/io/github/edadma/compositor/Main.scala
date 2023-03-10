@@ -26,7 +26,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
   doc.paragraph()
   doc setStyle "bold"
   doc.noindent()
-  doc addText "office"
+  doc addBox new UnderlineBox(new HBox(doc).add(doc.textBox("office")))
   doc addBox new FrameBox(doc.textBox("file")) {
     border = Color("green")
 //    background = Color("teal")
