@@ -17,7 +17,7 @@ class GlyphBox(comp: Compositor, val text: String, val font: Font, val color: Co
     if text.nonEmpty then
       comp.selectFont(font)
       comp.setColor(color)
-      comp.ctx.moveTo(x - extents.xBearing, y - extents.yBearing)
+      comp.ctx.moveTo(x - extents.xBearing, y + extents.yBearing)
       comp.ctx.showText(text)
 
   override def toString: String = s"GlyphBox($height, \"$text\")"
