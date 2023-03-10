@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-class HBox(comp: Compositor) extends ListBox:
+class HBox extends ListBox:
   def height: Double = max(_.height)
 
   def ascent: Double = max(_.ascent)

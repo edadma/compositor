@@ -272,14 +272,14 @@ abstract class Compositor private[compositor]:
   def line(text: String): Unit = page add textBox(text)
 
   def line(bs: Box*): Unit =
-    val hbox = new HBox(this)
+    val hbox = new HBox
 
     bs foreach hbox.add
     page add hbox
 
   def paragraph(): Unit =
     while boxes.nonEmpty do
-      val hbox = new HBox(this)
+      val hbox = new HBox
 
       @tailrec
       def line(): Unit =
@@ -378,7 +378,7 @@ abstract class Compositor private[compositor]:
   def prefixSup(sup: String, word: String): Unit =
     val f = currentFont
     val shift = -currentFont.size * .3333
-    val hbox = new HBox(this)
+    val hbox = new HBox
 
     selectFont(currentSupFont)
     hbox += new ShiftBox(charBox(sup), shift)
@@ -412,6 +412,8 @@ class PDFCompositor private[compositor] (
     val pageHeight: Double,
     val pageFactory: (Compositor, Double, Double) => PageBox,
 ) extends Compositor:
+  color("black")
+
   def emit(): Unit = ctx.showPage()
 
 class PNGCompositor private[compositor] (
@@ -422,6 +424,8 @@ class PNGCompositor private[compositor] (
     val pageHeight: Double,
     val pageFactory: PageFactory,
 ) extends Compositor:
+  color("white")
+
   def emit(): Unit = surface.writeToPNG(path)
 
 object Compositor:
