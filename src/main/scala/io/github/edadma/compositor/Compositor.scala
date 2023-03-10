@@ -363,9 +363,11 @@ abstract class Compositor private[compositor]:
   def color(c: Color): Color =
     if currentColor != c then
       currentColor = c
-      ctx.setSourceRGBA(c.red, c.green, c.blue, c.alpha)
+      setColor(c)
 
     c
+
+  def setColor(c: Color): Unit = ctx.setSourceRGBA(c.red, c.green, c.blue, c.alpha)
 
   def color(r: Double, g: Double, b: Double, a: Double = 1): Color = color(new Color(r, g, b, a))
 

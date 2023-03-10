@@ -16,7 +16,7 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if text.nonEmpty then
       comp.selectFont(font)
-      comp.color(color)
+      comp.setColor(color)
       comp.ctx.moveTo(x, y)
       comp.ctx.showText(text)
 //      comp.ctx.moveTo(x, y)
