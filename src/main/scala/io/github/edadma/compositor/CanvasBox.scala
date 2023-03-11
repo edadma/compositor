@@ -3,6 +3,8 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.{LineCap, LineJoin}
 
 class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
+  import Paint._
+
   private val color = comp.currentColor
   private var x1 = Double.MaxValue
   private var y1 = Double.MaxValue
@@ -19,9 +21,10 @@ class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
     if y > y2 then y2 = y
 
   painting foreach {
-    case Paint.MoveTo(xo, yo) => point(xo, yo)
-    case Paint.LineTo(xo, yo) => point(xo, yo)
-    case _                    =>
+    case Extreme(xo, yo) => point(xo, yo)
+    case MoveTo(xo, yo)  => point(xo, yo)
+    case LineTo(xo, yo)  => point(xo, yo)
+    case _               =>
   }
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
@@ -30,12 +33,11 @@ class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
     comp.ctx.setLineWidth(2)
     comp.color(color)
 
-    import Paint._
-
     painting foreach {
       case MoveTo(xo, yo) => comp.ctx.moveTo(x - x1 + xo, y + y1 - yo)
       case LineTo(xo, yo) => comp.ctx.lineTo(x - x1 + xo, y + y1 - yo)
       case Width(pts)     => comp.ctx.setLineWidth(pts)
       case Color(c)       => comp.color(c)
       case Stroke         => comp.ctx.stroke()
+      case _              =>
     }
