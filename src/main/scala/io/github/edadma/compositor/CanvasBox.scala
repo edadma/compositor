@@ -24,7 +24,10 @@ class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
     case Extreme(xo, yo) => point(xo, yo)
     case MoveTo(xo, yo)  => point(xo, yo)
     case LineTo(xo, yo)  => point(xo, yo)
-    case _               =>
+    case Box(box, xo, yo, "center") =>
+      point(xo - box.width / 2, yo - box.height / 2)
+      point(xo + box.width / 2, yo + box.height / 2)
+    case _ =>
   }
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
@@ -39,5 +42,7 @@ class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
       case Width(pts)     => comp.ctx.setLineWidth(pts)
       case Color(c)       => comp.color(c)
       case Stroke         => comp.ctx.stroke()
-      case _              =>
+      case Box(box, xo, yo, "center") =>
+        box.draw(comp, x - x1 + xo - box.width / 2, y + y1 - yo + box.height / 2)
+      case _ =>
     }

@@ -7,3 +7,6 @@ enum Paint:
   case Width(pts: Double) extends Paint
   case Color(c: io.github.edadma.compositor.Color) extends Paint
   case Stroke extends Paint
+  case Box(box: io.github.edadma.compositor.Box, xo: Double, yo: Double, origin: Origin) extends Paint
+
+type Origin = "center" | "baseline"

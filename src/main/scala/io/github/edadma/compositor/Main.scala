@@ -22,7 +22,14 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 //  doc.selectFont("notosans", 12)
   doc addBox new CanvasBox(
     doc,
-    List(Paint.Extreme(0, 0), Paint.MoveTo(10, 10), Paint.LineTo(25, 25), Paint.LineTo(50, 0), Paint.Stroke),
+    List(
+      Paint.Extreme(0, 0),
+      Paint.MoveTo(10, 10),
+      Paint.LineTo(25, 25),
+      Paint.LineTo(50, 0),
+      Paint.Stroke,
+      Paint.Box(new GlyphBox(doc, "3"), 25, 25, "center"),
+    ),
   )
   doc addText "office file waffle flux"
   doc.paragraph()
