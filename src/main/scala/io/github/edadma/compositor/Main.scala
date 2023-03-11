@@ -3,7 +3,6 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.pdfSurfaceCreate
 
 @main def run(): Unit =
-  println(Color.hslToRgb(102, 71, 43))
   val doc = Compositor.png("test.png", 1280, 720, ppi(1920, 1080, 13), simplePageFactory())
 
 //  val doc = Compositor.pdf(

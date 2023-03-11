@@ -8,8 +8,6 @@ import io.github.edadma.libcairo.{
   FontSlant,
   FontWeight,
   Format,
-  LineCap,
-  LineJoin,
   Surface,
   TextExtents,
   fontFaceCreateForFTFace,
@@ -119,8 +117,6 @@ abstract class Compositor private[compositor]:
   var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
   var currentFont: Font = makeFont("notoserif", 12)
   var currentColor: Color = Color(0, 0, 0, 1)
-  var currentLineCap: LineCap = LineCap.BUTT
-  var currentLineJoin: LineJoin = LineJoin.MITER
   var ligatures: Boolean = true
   var representations: Boolean = false
 
@@ -227,7 +223,6 @@ abstract class Compositor private[compositor]:
 
   def selectFont(family: String, size: Double, styleSet: Set[String]): Font =
     currentFont = makeFont(family, size, styleSet)
-    setFont()
     currentFont
 
   def font(family: String, size: Double, style: String*): Font = font(family, size, style.toSet)
