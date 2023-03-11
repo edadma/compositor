@@ -1,10 +1,12 @@
 package io.github.edadma.compositor
 
-class CanvasBox(painting: List[Paint]) extends SimpleBox:
-  var x1: Double = Double.MaxValue
-  var y1: Double = Double.MaxValue
-  var x2: Double = Double.MinValue
-  var y2: Double = Double.MinValue
+class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
+  private val cap = comp.currentLineCap
+  private val join = comp.currentLineJoin
+  private var x1 = Double.MaxValue
+  private var y1 = Double.MaxValue
+  private var x2 = Double.MinValue
+  private var y2 = Double.MinValue
 
   def width: Double = x2 - x1
   def height: Double = y2 - y1
@@ -22,12 +24,19 @@ class CanvasBox(painting: List[Paint]) extends SimpleBox:
   }
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
+    val ctx = comp.surface.create
+
+    setColor(ctx, comp.currentColor)
+    comp.setScale(ctx)
+
     import Paint._
 
     painting foreach {
-      case MoveTo(xo, yo) => comp.ctx.moveTo(x - x1 + xo, y + y1 - yo)
-      case LineTo(xo, yo) => comp.ctx.lineTo(x - x1 + xo, y + y1 - yo)
-      case Width(pts)     => comp.ctx.setLineWidth(pts)
-      case Color(c)       => comp.setColor(c)
-      case Stroke         => comp.ctx.stroke()
+      case MoveTo(xo, yo) => ctx.moveTo(x - x1 + xo, y + y1 - yo)
+      case LineTo(xo, yo) => ctx.lineTo(x - x1 + xo, y + y1 - yo)
+      case Width(pts)     => ctx.setLineWidth(pts)
+      case Color(c)       => setColor(ctx, c)
+      case Stroke         => ctx.stroke()
     }
+
+    ctx.destroy()

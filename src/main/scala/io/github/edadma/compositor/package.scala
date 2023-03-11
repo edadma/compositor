@@ -1,5 +1,7 @@
 package io.github.edadma.compositor
 
+import io.github.edadma.libcairo.Context
+
 import math.sqrt
 
 def ppi(width: Int, height: Int, diagonal: Double): Double = sqrt(width * width + height * height) / diagonal
@@ -27,3 +29,5 @@ def verses(comp: Compositor, text: String): Unit =
 
   comp.paragraph()
 end verses
+
+def setColor(ct: Context, c: Color): Unit = ct.setSourceRGBA(c.red, c.green, c.blue, c.alpha)

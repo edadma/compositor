@@ -8,6 +8,8 @@ import io.github.edadma.libcairo.{
   FontSlant,
   FontWeight,
   Format,
+  LineCap,
+  LineJoin,
   Surface,
   TextExtents,
   fontFaceCreateForFTFace,
@@ -27,12 +29,14 @@ abstract class Compositor private[compositor]:
   val pageWidth: Double
   val pageHeight: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
+  val scale: Option[Double]
 
   case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double])
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
+  setScale(ctx)
   loadTypeface("notoserif", "fonts/NotoSerif/NotoSerif", "Regular", "Bold", "Italic", ("Bold", "Italic"))
   //  loadTypeface("charis", "fonts/CharisSIL-6.200/CharisSIL", "Regular", "Bold", "Italic", ("Bold", "Italic"))
 //  overrideBaseline("charis", 0.8)
@@ -105,19 +109,22 @@ abstract class Compositor private[compositor]:
 
   protected val boxes = new ArrayBuffer[Box]
   protected var firstParagraph: Boolean = true
-
-  var indent: Boolean = true
-  var parindent: Double = 20
+  protected val pageStack = new mutable.Stack[State]
+  protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
 
   case class State(page: PageBox, firstParagraph: Boolean)
 
-  protected[compositor] var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
-  protected[compositor] var currentFont: Font = makeFont("notoserif", 12)
+  var indent: Boolean = true
+  var parindent: Double = 20
+  var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
+  var currentFont: Font = makeFont("notoserif", 12)
   var currentColor: Color = Color(0, 0, 0, 1)
-  protected var ligatures: Boolean = true
-  protected var representations: Boolean = false
-  protected val pageStack = new mutable.Stack[State]
-  protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
+  var currentLineCap: LineCap = LineCap.BUTT
+  var currentLineJoin: LineJoin = LineJoin.MITER
+  var ligatures: Boolean = true
+  var representations: Boolean = false
+
+  def setScale(c: Context): Unit = if scale.isDefined then c.scale(scale.get, scale.get)
 
   def startPage(newpage: PageBox): Unit =
     pageStack push State(page, firstParagraph)
@@ -367,7 +374,7 @@ abstract class Compositor private[compositor]:
 
     c
 
-  def setColor(c: Color): Unit = ctx.setSourceRGBA(c.red, c.green, c.blue, c.alpha)
+  def setColor(c: Color): Unit = io.github.edadma.compositor.setColor(ctx, c)
 
   def color(r: Double, g: Double, b: Double, a: Double = 1): Color = color(new Color(r, g, b, a))
 
@@ -414,6 +421,8 @@ class PDFCompositor private[compositor] (
     val pageHeight: Double,
     val pageFactory: (Compositor, Double, Double) => PageBox,
 ) extends Compositor:
+  val scale: Option[Double] = None
+
   color("black")
 
   def emit(): Unit = ctx.showPage()
@@ -425,6 +434,7 @@ class PNGCompositor private[compositor] (
     val pageWidth: Double,
     val pageHeight: Double,
     val pageFactory: PageFactory,
+    val scale: Option[Double],
 ) extends Compositor:
   color("white")
 
@@ -452,6 +462,13 @@ object Compositor:
     val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
     val context = surface.create
 
-    context.scale(pixelsPerPoint, pixelsPerPoint)
-    new PNGCompositor(surface, context, path, widthPx / pixelsPerPoint, heightPx / pixelsPerPoint, pageFactory)
+    new PNGCompositor(
+      surface,
+      context,
+      path,
+      widthPx / pixelsPerPoint,
+      heightPx / pixelsPerPoint,
+      pageFactory,
+      Some(pixelsPerPoint),
+    )
 end Compositor

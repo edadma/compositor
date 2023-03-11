@@ -3,7 +3,7 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.pdfSurfaceCreate
 
 @main def run(): Unit =
-  println(Color.hslToRgb(0, 0, 0))
+  println(Color.hslToRgb(102, 71, 43))
   val doc = Compositor.png("test.png", 1280, 720, ppi(1920, 1080, 13), simplePageFactory())
 
 //  val doc = Compositor.pdf(
@@ -22,6 +22,7 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
 //  doc.paragraph()
 //  doc.selectFont("notosans", 12)
   doc addBox new CanvasBox(
+    doc,
     List(Paint.MoveTo(0, 0), Paint.LineTo(25, 25), Paint.Color(Color("blue")), Paint.LineTo(50, 0), Paint.Stroke),
   )
   doc addText "office file waffle flux"
