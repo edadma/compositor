@@ -3,7 +3,7 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.TextExtents
 
 class GlyphBox(comp: Compositor, val text: String, val font: Font, val color: Color) extends SetBox:
-  comp.selectFont(font)
+  def this(comp: Compositor, text: String) = this(comp, text, comp.currentFont, comp.currentColor)
 
   val extents: TextExtents = comp.ctx.textExtents(text)
   val height: Double = extents.height
@@ -16,7 +16,7 @@ class GlyphBox(comp: Compositor, val text: String, val font: Font, val color: Co
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if text.nonEmpty then
       comp.selectFont(font)
-      comp.setColor(color)
+      comp.color(color)
       comp.ctx.moveTo(x - extents.xBearing, y - (extents.height + extents.yBearing))
       comp.ctx.showText(text)
 

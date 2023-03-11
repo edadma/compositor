@@ -3,7 +3,7 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.TextExtents
 
 class CharBox(comp: Compositor, val text: String, val font: Font, val color: Color) extends SetBox:
-  comp.selectFont(font)
+  def this(comp: Compositor, text: String) = this(comp, text, comp.currentFont, comp.currentColor)
 
   val extents: TextExtents = comp.ctx.textExtents(text)
   val height: Double = font.height
