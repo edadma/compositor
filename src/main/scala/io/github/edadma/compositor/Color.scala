@@ -6,6 +6,45 @@ case class Color(red: Double, green: Double, blue: Double, alpha: Double):
   def this(r: Int, g: Int, b: Int, a: Int) = this(r / 255.0, g / 255.0, b / 255.0, a / 255.0)
 
 object Color:
+  def hsl(hue: Double, saturation: Double, lightness: Double, alpha: Double): Color =
+    /* https://www.w3.org/TR/css-color-3/#hsl-color
+
+      function hslToRgb (hue, sat, light) {
+        hue = hue % 360;
+
+        if (hue < 0) {
+            hue += 360;
+        }
+
+        sat /= 100;
+        light /= 100;
+
+        function f(n) {
+            let k = (n + hue/30) % 12;
+            let a = sat * Math.min(light, 1 - light);
+            return light - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+        }
+
+        return [f(0), f(8), f(4)];
+      }
+     */
+    val h =
+      val h = hue % 360
+
+      if h < 0 then h + 360
+      else h
+    val s = saturation / 100
+    val l = lightness / 100
+
+    def f(n: Double): Double =
+      val k = (n + h / 30) % 12
+      val a = s * math.min(l, 1 - l)
+
+      l - a * math.max(-1, math.min(k - 3, 9 - k, 1))
+
+    Color(f(0), f(8), f(4), alpha)
+  end hsl
+
   def apply(c: String, alpha: Double = 1): Color =
     colorMap get c.toLowerCase match
       case None =>

@@ -18,12 +18,16 @@ class CanvasBox(painting: List[Paint]) extends SimpleBox:
   painting foreach {
     case Paint.MoveTo(xo, yo) => point(xo, yo)
     case Paint.LineTo(xo, yo) => point(xo, yo)
-    case Paint.Stroke         =>
+    case _                    =>
   }
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
+    import Paint._
+
     painting foreach {
-      case Paint.MoveTo(xo, yo) => comp.ctx.moveTo(x - x1 + xo, y + y1 - yo)
-      case Paint.LineTo(xo, yo) => comp.ctx.lineTo(x - x1 + xo, y + y1 - yo)
-      case Paint.Stroke         => comp.ctx.stroke()
+      case MoveTo(xo, yo) => comp.ctx.moveTo(x - x1 + xo, y + y1 - yo)
+      case LineTo(xo, yo) => comp.ctx.lineTo(x - x1 + xo, y + y1 - yo)
+      case Width(pts)     => comp.ctx.setLineWidth(pts)
+      case Color(c)       => comp.setColor(c)
+      case Stroke         => comp.ctx.stroke()
     }
