@@ -25,7 +25,9 @@ import io.github.edadma.libcairo.pdfSurfaceCreate
     List(
       Paint.Extreme(0, 0),
       Paint.Extreme(40, 40),
-      Paint.Box(new GlyphBox(doc, "3"), 20, 20, "center"),
+      Paint.Arc(20, 20, 8, 0, 2 * math.Pi),
+      Paint.Fill,
+      Paint.Box(new GlyphBox(doc, "3", doc.currentFont, Color("black")), 20, 20, "center"),
     ),
   )
   doc addText "office file waffle flux"
