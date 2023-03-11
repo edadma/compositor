@@ -38,12 +38,12 @@ class FrameBox(box: Box) extends Box:
         )
 
     if background ne null then
-      comp.color(background)
+      comp.setColor(background)
       frame()
       comp.ctx.fill()
 
     if border ne null then
-      comp.color(border)
+      comp.setColor(border)
       comp.ctx.setLineWidth(borderWidth)
       frame()
       comp.ctx.stroke()
