@@ -27,6 +27,10 @@ class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
     case Box(box, xo, yo, "center") =>
       point(xo - box.width / 2, yo - box.height / 2)
       point(xo + box.width / 2, yo + box.height / 2)
+    case Arc(xo, yo, radius, angle1, angle2) =>
+      // todo: assumes a circle
+      point(xo - radius, yo - radius)
+      point(xo + radius, yo + radius)
     case _ =>
   }
 
@@ -37,12 +41,13 @@ class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
     comp.color(color)
 
     painting foreach {
-      case MoveTo(xo, yo) => comp.ctx.moveTo(x - x1 + xo, y + y1 - yo)
-      case LineTo(xo, yo) => comp.ctx.lineTo(x - x1 + xo, y + y1 - yo)
-      case Width(pts)     => comp.ctx.setLineWidth(pts)
-      case Color(c)       => comp.color(c)
-      case Stroke         => comp.ctx.stroke()
-      case Box(box, xo, yo, "center") =>
-        box.draw(comp, x - x1 + xo - box.width / 2, y + y1 - yo + box.height / 2)
-      case _ =>
+      case MoveTo(xo, yo)             => comp.ctx.moveTo(x - x1 + xo, y + y1 - yo)
+      case LineTo(xo, yo)             => comp.ctx.lineTo(x - x1 + xo, y + y1 - yo)
+      case Width(pts)                 => comp.ctx.setLineWidth(pts)
+      case Color(c)                   => comp.color(c)
+      case Stroke                     => comp.ctx.stroke()
+      case Fill                       => comp.ctx.fill()
+      case Box(box, xo, yo, "center") => box.draw(comp, x - x1 + xo - box.width / 2, y + y1 - yo + box.height / 2)
+      case Arc(xo, yo, radius, angle1, angle2) => comp.ctx.arc(x - x1 + xo, y + y1 - yo, radius, angle1, angle2)
+      case _                                   =>
     }
