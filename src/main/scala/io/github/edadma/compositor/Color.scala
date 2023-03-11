@@ -40,10 +40,19 @@ object Color:
       val k = (n + h / 30) % 12
       val a = s * math.min(l, 1 - l)
 
-      l - a * math.max(-1, math.min(k - 3, 9 - k, 1))
+      l - a * math.max(-1, math.min(math.min(k - 3, 9 - k), 1))
 
     Color(f(0), f(8), f(4), alpha)
   end hsl
+
+  def hslToRgb(hue: Double, saturation: Double, lightness: Double): (Int, Int, Int) =
+    hsl(hue, saturation, lightness, 0) match
+      case Color(red, green, blue, _) =>
+        (
+          math.min(255, (red * 255).round.toInt),
+          math.min(255, (green * 255).round.toInt),
+          math.min(255, (blue * 255).round.toInt),
+        )
 
   def apply(c: String, alpha: Double = 1): Color =
     colorMap get c.toLowerCase match
