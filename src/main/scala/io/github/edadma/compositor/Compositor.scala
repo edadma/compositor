@@ -27,14 +27,12 @@ abstract class Compositor private[compositor]:
   val pageWidth: Double
   val pageHeight: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
-  val scale: Option[Double]
 
   case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double])
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
-  setScale(ctx)
   loadTypeface("notoserif", "fonts/NotoSerif/NotoSerif", "Regular", "Bold", "Italic", ("Bold", "Italic"))
   //  loadTypeface("charis", "fonts/CharisSIL-6.200/CharisSIL", "Regular", "Bold", "Italic", ("Bold", "Italic"))
 //  overrideBaseline("charis", 0.8)
@@ -119,8 +117,6 @@ abstract class Compositor private[compositor]:
   var currentColor: Color = Color(0, 0, 0, 1)
   var ligatures: Boolean = true
   var representations: Boolean = false
-
-  def setScale(c: Context): Unit = if scale.isDefined then c.scale(scale.get, scale.get)
 
   def startPage(newpage: PageBox): Unit =
     pageStack push State(page, firstParagraph)
@@ -429,7 +425,6 @@ class PNGCompositor private[compositor] (
     val pageWidth: Double,
     val pageHeight: Double,
     val pageFactory: PageFactory,
-    val scale: Option[Double],
 ) extends Compositor:
   color("white")
 
@@ -457,6 +452,7 @@ object Compositor:
     val surface = imageSurfaceCreate(Format.ARGB32, widthPx, heightPx)
     val context = surface.create
 
+    context.scale(pixelsPerPoint, pixelsPerPoint)
     new PNGCompositor(
       surface,
       context,
@@ -464,6 +460,5 @@ object Compositor:
       widthPx / pixelsPerPoint,
       heightPx / pixelsPerPoint,
       pageFactory,
-      Some(pixelsPerPoint),
     )
 end Compositor
