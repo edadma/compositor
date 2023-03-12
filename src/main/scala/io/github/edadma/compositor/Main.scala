@@ -6,9 +6,9 @@ case class Config(
     input: Option[File] = None,
     output: Option[File] = None,
     typ: Option[String] = Some("pdf"),
-    size: Option["a4" | "letter"] = Some("letter"),
-    resolution: Option["sd" | "hd" | "fhd"] = Some("hd"),
-    ppi: Option[Int] = Some(13),
+    paper: Option[String] = Some("letter"),
+    resolution: Option[String] = Some("hd"),
+    size: Option[Int] = Some(14),
 )
 
 @main def run(args: String*): Unit =
@@ -28,12 +28,28 @@ case class Config(
         .valueName("<file>")
         .action((x, c) => c.copy(output = Some(x)))
         .text("output file (omit for standard output)"),
-      opt[String]('s', "size")
+      opt[Int]('s', "size")
+        .valueName("<inches>")
+        .action((x, c) => c.copy(size = Some(x)))
+        .validate(s =>
+          if 0 < s then success
+          else failure("only positive values are allowed as screen sizes"),
+        )
+        .text("resolution"),
+      opt[String]('r', "resolution")
+        .valueName("<sd | hd | fhd>")
+        .action((x, c) => c.copy(resolution = Some(x)))
+        .validate({
+          case "sd" | "hd" | "fhd" => success
+          case _                   => failure("only 'sd' | 'hd' | 'fhd' are allowed as resolutions")
+        })
+        .text("resolution"),
+      opt[String]('p', "paper")
         .valueName("<a4 | letter>")
-        .action((x, c) => c.copy(typ = Some(x)))
+        .action((x, c) => c.copy(paper = Some(x)))
         .validate({
           case "a4" | "letter" => success
-          case _               => failure("only 'a4' or 'letter' are allowed as paper sizes")
+          case _               => failure("only 'a4' or 'letter' are allowed as paper types")
         })
         .text("paper size"),
       opt[String]('t', "type")
