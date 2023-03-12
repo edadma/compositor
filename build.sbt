@@ -42,6 +42,7 @@ libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.15" % "test"
 libraryDependencies ++= Seq(
   "io.github.edadma" %%% "libcairo" % "0.0.4",
   "io.github.edadma" %%% "freetype" % "0.0.2",
+  "com.github.scopt" %%% "scopt" % "4.1.0",
 )
 
 publishMavenStyle := true
