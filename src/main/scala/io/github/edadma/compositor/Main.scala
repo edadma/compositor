@@ -28,6 +28,14 @@ case class Config(
         .valueName("<file>")
         .action((x, c) => c.copy(output = Some(x)))
         .text("output file (omit for standard output)"),
+      opt[String]('s', "size")
+        .valueName("<a4 | letter>")
+        .action((x, c) => c.copy(typ = Some(x)))
+        .validate({
+          case "a4" | "letter" => success
+          case _               => failure("only 'a4' or 'letter' are allowed as paper sizes")
+        })
+        .text("paper size"),
       opt[String]('t', "type")
         .valueName("<pdf | png>")
         .action((x, c) => c.copy(typ = Some(x)))
