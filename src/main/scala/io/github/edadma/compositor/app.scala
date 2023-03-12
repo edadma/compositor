@@ -2,7 +2,7 @@ package io.github.edadma.compositor
 
 import java.io.FileOutputStream
 import scala.util.Using
-import java.nio.file.Files
+import java.nio.file.{Files, Paths}
 
 def app(config: Config): Unit =
   val input =
@@ -17,13 +17,17 @@ def app(config: Config): Unit =
         else new String(Files.readAllBytes(file.toPath))
   val output =
     config match
-      case Config(_, None, _, _, _, _) => Console.out
-      case Config(_, Some(file), _, _, _, _) =>
+      case Config(None, None, typ, _, _, _) => Paths.get(s"out.$typ").normalize.toAbsolutePath
+      case Config(Some(file), None, typ, _, _, _) =>
         val path = file.toPath.normalize.toAbsolutePath
 
-        if !Files.isWritable(path) then problem(s"'$path' is not writable")
-        else new FileOutputStream(file)
+        path.getParent.resolve(s"${path.getFileName.toString}.$typ")
+      case Config(_, Some(file), _, _, _, _) => file.toPath.normalize.toAbsolutePath
 
-//      case Config(input, output, "pdf", paper, _, _) => null
-//      case Config(input, output, "png", _, resolution, size) =>
-//        println(input.get.toPath) // Using(scala.io.Source.fromFile(".gitignore"))(_.mkString).get
+  if !Files.isWritable(output) then problem(s"'$output' is not writable")
+
+  val doc =
+    config match
+      case Config(_, _, "pdf", paper, _, _) => null
+      case Config(_, _, "png", _, resolution, size) =>
+        Compositor.png(output.toString)
