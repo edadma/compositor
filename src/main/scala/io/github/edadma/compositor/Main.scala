@@ -5,10 +5,10 @@ import java.io.File
 case class Config(
     input: Option[File] = None,
     output: Option[File] = None,
-    typ: Option[String] = Some("pdf"),
-    paper: Option[String] = Some("letter"),
-    resolution: Option[String] = Some("hd"),
-    size: Option[Int] = Some(14),
+    typ: String = "pdf",
+    paper: String = "letter",
+    resolution: String = "hd",
+    size: Int = 14,
 )
 
 @main def run(args: String*): Unit =
@@ -30,7 +30,7 @@ case class Config(
         .text("output file (omit for standard output)"),
       opt[Int]('s', "size")
         .valueName("<inches>")
-        .action((x, c) => c.copy(size = Some(x)))
+        .action((x, c) => c.copy(size = x))
         .validate(s =>
           if 0 < s then success
           else failure("only positive values are allowed as screen sizes"),
@@ -38,7 +38,7 @@ case class Config(
         .text("resolution"),
       opt[String]('r', "resolution")
         .valueName("<sd | hd | fhd>")
-        .action((x, c) => c.copy(resolution = Some(x)))
+        .action((x, c) => c.copy(resolution = x))
         .validate({
           case "sd" | "hd" | "fhd" => success
           case _                   => failure("only 'sd' | 'hd' | 'fhd' are allowed as resolutions")
@@ -46,7 +46,7 @@ case class Config(
         .text("resolution"),
       opt[String]('p', "paper")
         .valueName("<a4 | letter>")
-        .action((x, c) => c.copy(paper = Some(x)))
+        .action((x, c) => c.copy(paper = x))
         .validate({
           case "a4" | "letter" => success
           case _               => failure("only 'a4' or 'letter' are allowed as paper types")
@@ -54,7 +54,7 @@ case class Config(
         .text("paper size"),
       opt[String]('t', "type")
         .valueName("<pdf | png>")
-        .action((x, c) => c.copy(typ = Some(x)))
+        .action((x, c) => c.copy(typ = x))
         .validate({
           case "png" | "pdf" => success
           case _             => failure("only 'png' or 'pdf' are allowed as output file types")
@@ -68,7 +68,7 @@ case class Config(
     case _            =>
   }
 
-//  val doc = Compositor.png("test.png", 1280, 720, ppi(1920, 1080, 13), simplePageFactory())
+//  val doc = Compositor.png("test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
 //
 ////  val doc = Compositor.pdf(
 ////    "test.pdf",
