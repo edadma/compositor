@@ -28,6 +28,18 @@ def app(config: Config): Unit =
 
   val doc =
     config match
-      case Config(_, _, "pdf", paper, _, _) => null
+      case Config(_, _, "pdf", paper, _, _) =>
+        val p =
+          paper match
+            case "a4"     => Paper.A4
+            case "letter" => Paper.LETTER
+
+        Compositor.pdf(output.toString, p, simplePageFactory())
       case Config(_, _, "png", _, resolution, size) =>
-        Compositor.png(output.toString)
+        val (width, height) =
+          resolution match
+            case "sd"  => (720, 480)
+            case "hd"  => (1280, 720)
+            case "fhd" => (1920, 1080)
+
+        Compositor.png(output.toString, width, height, ppi(width, height, size), simplePageFactory())
