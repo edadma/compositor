@@ -5,7 +5,7 @@ import java.io.File
 case class Config(
     input: Option[File] = None,
     output: Option[File] = None,
-    typ: Option["png" | "pdf"] = Some("pdf"),
+    typ: Option[String] = Some("pdf"),
     size: Option["a4" | "letter"] = Some("letter"),
     resolution: Option["sd" | "hd" | "fhd"] = Some("hd"),
     ppi: Option[Int] = Some(13),
@@ -20,13 +20,22 @@ case class Config(
       programName("compositor"),
       head("compositor", "0.x"),
       help("help").text("prints this usage text"),
-      arg[File]("<input>")
+      arg[File]("<file>")
         .optional()
         .action((x, c) => c.copy(input = Some(x)))
-        .text("optional input file (omit for standard input)"),
+        .text("input file (omit for standard input)"),
       opt[File]('o', "output")
+        .valueName("<file>")
         .action((x, c) => c.copy(output = Some(x)))
         .text("output file (omit for standard output)"),
+      opt[String]('t', "type")
+        .valueName("<pdf | png>")
+        .action((x, c) => c.copy(typ = Some(x)))
+        .validate({
+          case "png" | "pdf" => success
+          case _             => failure("only 'png' or 'pdf' are allowed as output file types")
+        })
+        .text("output file type"),
     )
   }
 
