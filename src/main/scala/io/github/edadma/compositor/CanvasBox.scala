@@ -28,7 +28,7 @@ class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
       point(xo - box.width / 2, yo - box.height / 2)
       point(xo + box.width / 2, yo + box.height / 2)
     case Arc(xo, yo, radius, angle1, angle2) =>
-      // todo: assumes a circle
+      // todo: assumes a circle - check which quadrants the arc is in
       point(xo - radius, yo - radius)
       point(xo + radius, yo + radius)
     case _ =>
