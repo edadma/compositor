@@ -105,8 +105,9 @@ abstract class Compositor private[compositor]:
 
   protected val boxes = new ArrayBuffer[Box]
   protected var firstParagraph: Boolean = true
-  protected val pageStack = new mutable.Stack[State]
+  protected val modeStack = new mutable.Stack[Mode]
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
+  protected val document = new DocumentMode(this)
 
   case class State(page: PageBox, firstParagraph: Boolean)
 
