@@ -315,10 +315,7 @@ abstract class Compositor private[compositor]:
 
     while !modeStack.top.isInstanceOf[DocumentMode] do modeStack.top.done()
 
-//    page.set()
-//    page.draw(this, 0, page.ascent)
-//    emit()
-//    page = pageFactory(this, pageWidth, pageHeight)
+    document.done()
 
   def emit(): Unit
 
