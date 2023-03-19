@@ -103,7 +103,7 @@ abstract class Compositor private[compositor]:
 //  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BoldItalic.ttf", "bold", "italic")
 //  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
 
-  protected val modeStack = new mutable.Stack[Mode]
+  protected[compositor] val modeStack = new mutable.Stack[Mode]
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
   protected val document = new DocumentMode(this)
 
@@ -166,7 +166,7 @@ abstract class Compositor private[compositor]:
       case None                     => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _)) => typefaces(typeface) = Typeface(fonts, Some(baseline))
 
-  def add(box: Box): Unit = page add box
+  def add(box: Box): Unit = modeStack.top add box
 
   def addWord(text: String): Unit = addBox(textBox(text))
 
@@ -179,26 +179,6 @@ abstract class Compositor private[compositor]:
     val words = text.split(' ').filterNot(_ == "")
 
     words foreach addWord
-
-  def addBox(box: Box): Unit =
-    if boxes.nonEmpty then
-      val space =
-        boxes.last match
-          case b: CharBox
-              if b.text.nonEmpty &&
-                !(b.text.last == '.' && Abbreviation(b.text.dropRight(1))) &&
-                ".!?:;".contains(b.text.last) =>
-            currentFont.space * 1.5
-          case _ => currentFont.space
-
-      boxes += new HSpaceBox(
-        0,
-        space,
-      )
-    else if indent && !firstParagraph then boxes += new RigidBox(width = parindent)
-
-    boxes += box
-  end addBox
 
   private def setFont(): Unit =
     currentFont match
@@ -328,14 +308,18 @@ abstract class Compositor private[compositor]:
 
   def glyphBox(s: String): GlyphBox = new GlyphBox(this, s)
 
-  def draw(): Unit =
-    if boxes.nonEmpty then paragraph()
+  def paragraph(): Unit =
+    modeStack.top match
+      case p: ParagraphMode => p.paragraph()
+      case _                =>
 
-    page.set()
-    page.draw(this, 0, page.ascent)
-    emit()
-    firstParagraph = true
-    page = pageFactory(this, pageWidth, pageHeight)
+  def draw(): Unit =
+    paragraph()
+    modeStack.top.asInstanceOf[DocumentMode].done()
+//    page.set()
+//    page.draw(this, 0, page.ascent)
+//    emit()
+//    page = pageFactory(this, pageWidth, pageHeight)
 
   def emit(): Unit
 

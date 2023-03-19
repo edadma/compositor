@@ -3,10 +3,30 @@ package io.github.edadma.compositor
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-class ParagraphMode(comp: Compositor) extends Mode:
+class ParagraphMode(comp: Compositor, page: PageBox) extends Mode:
+  var firstParagraph = true
+  var indent = true
   val boxes = new ArrayBuffer[Box]
 
-  def add(box: Box): Unit = boxes += box
+  def add(box: Box): Unit =
+    if boxes.nonEmpty then
+      val space =
+        boxes.last match
+          case b: CharBox
+              if b.text.nonEmpty &&
+                !(b.text.last == '.' && Abbreviation(b.text.dropRight(1))) &&
+                ".!?:;".contains(b.text.last) =>
+            comp.currentFont.space * 1.5
+          case _ => comp.currentFont.space
+
+      boxes += new HSpaceBox(
+        0,
+        space,
+      )
+    else if indent && !firstParagraph then boxes += new RigidBox(width = parindent)
+
+    boxes += box
+  end add
 
   def done(): Unit = {}
 
@@ -65,7 +85,7 @@ class ParagraphMode(comp: Compositor) extends Mode:
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
       if boxes.isEmpty then hbox add new HSpaceBox(2)
 
-      page add hbox
+      comp.modeStack.top add hbox
     end while
 
     indent = true

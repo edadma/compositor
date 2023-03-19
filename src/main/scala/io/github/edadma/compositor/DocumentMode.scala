@@ -1,10 +1,10 @@
 package io.github.edadma.compositor
 
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.ArrayBuffer
 
 class DocumentMode(comp: Compositor) extends Mode:
-  val pages = new ListBuffer[Box]
+  val pages = new ArrayBuffer[Box]
 
-  def add(box: Box): Unit = pages add box
+  def add(box: Box): Unit = pages += box
 
   def done(): Unit = sys.error("can't call DocumentMode.done()")
