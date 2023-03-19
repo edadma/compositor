@@ -104,7 +104,10 @@ abstract class Compositor private[compositor]:
 //  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
 
   protected[compositor] val modeStack = new mutable.Stack[Mode]
-  protected val document = new DocumentMode(this)
+  val pages = new ArrayBuffer[PageBox]
+
+  pages += pageFactory(this, pageWidth, pageHeight)
+  modeStack push new PageMode(this, pages.last)
 
   var indent: Boolean = true
   var parindent: Double = 20
@@ -313,11 +316,14 @@ abstract class Compositor private[compositor]:
   def output(): Unit =
     paragraph()
 
-    while !modeStack.top.isInstanceOf[DocumentMode] do modeStack.top.done()
+    while modeStack.nonEmpty do modeStack.pop.done()
 
-    document.done()
+    for (p, i) <- pages.zipWithIndex do
+      p.set()
+      p.draw(this, 0, p.ascent)
+      emit(i)
 
-  def emit(): Unit
+  def emit(idx: Int): Unit
 
   def destroy(): Unit =
     ctx.destroy()
@@ -335,7 +341,7 @@ class PDFCompositor private[compositor] (
 
   color("black")
 
-  def emit(): Unit = ctx.showPage()
+  def emit(idx: Int): Unit = ctx.showPage()
 
 class PNGCompositor private[compositor] (
     protected[compositor] val surface: Surface,
@@ -347,7 +353,7 @@ class PNGCompositor private[compositor] (
 ) extends Compositor:
   color("white")
 
-  def emit(): Unit = surface.writeToPNG(path)
+  def emit(idx: Int): Unit = surface.writeToPNG(path)
 
 object Compositor:
   def pdf(
