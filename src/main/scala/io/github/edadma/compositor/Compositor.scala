@@ -320,8 +320,11 @@ abstract class Compositor private[compositor]:
 
     for (p, i) <- pages.zipWithIndex do
       p.set()
+      paintBackground()
       p.draw(this, 0, p.ascent)
       emit(i)
+
+  def paintBackground(): Unit
 
   def emit(idx: Int): Unit
 
@@ -341,6 +344,8 @@ class PDFCompositor private[compositor] (
 
   color("black")
 
+  def paintBackground(): Unit = {}
+
   def emit(idx: Int): Unit = ctx.showPage()
 
 class PNGCompositor private[compositor] (
@@ -352,6 +357,11 @@ class PNGCompositor private[compositor] (
     val pageFactory: PageFactory,
 ) extends Compositor:
   color("white")
+
+  def paintBackground(): Unit =
+    color("black")
+    ctx.rectangle(0, 0, pageWidth, pageHeight)
+    ctx.fill()
 
   def emit(idx: Int): Unit = surface.writeToPNG(path)
 
