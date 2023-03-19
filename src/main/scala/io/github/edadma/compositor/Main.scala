@@ -18,16 +18,16 @@ case class Config(
     import builder._
     OParser.sequence(
       programName("compositor"),
-      head("compositor", "0.x"),
+      head("Compositor", "0.x"),
       help("help").text("prints this usage text"),
       arg[File]("<file>")
         .optional()
         .action((x, c) => c.copy(input = Some(x)))
-        .text("input file (omit for standard input)"),
+        .text("input file (defaults to standard input)"),
       opt[File]('o', "output")
         .valueName("<file>")
         .action((x, c) => c.copy(output = Some(x)))
-        .text("output file (omit for standard output)"),
+        .text("output file (defaults to out.(pdf|png))"),
       opt[Int]('s', "size")
         .valueName("<inches>")
         .action((x, c) => c.copy(size = x))
@@ -35,7 +35,7 @@ case class Config(
           if 0 < s then success
           else failure("only positive values are allowed as screen sizes"),
         )
-        .text("resolution"),
+        .text("screen size in inches for PNG file output (defaults to 13)"),
       opt[String]('r', "resolution")
         .valueName("<sd | hd | fhd>")
         .action((x, c) => c.copy(resolution = x))
@@ -43,7 +43,7 @@ case class Config(
           case "sd" | "hd" | "fhd" => success
           case _                   => failure("only 'sd' | 'hd' | 'fhd' are allowed as resolutions")
         })
-        .text("resolution"),
+        .text("resolution (defaults to hd)"),
       opt[String]('p', "paper")
         .valueName("<a4 | letter>")
         .action((x, c) => c.copy(paper = x))
@@ -51,7 +51,7 @@ case class Config(
           case "a4" | "letter" => success
           case _               => failure("only 'a4' or 'letter' are allowed as paper types")
         })
-        .text("paper size"),
+        .text("paper size (defaults to letter)"),
       opt[String]('t', "type")
         .valueName("<pdf | png>")
         .action((x, c) => c.copy(typ = x))
@@ -59,7 +59,7 @@ case class Config(
           case "png" | "pdf" => success
           case _             => failure("only 'png' or 'pdf' are allowed as output file types")
         })
-        .text("output file type"),
+        .text("output file type (defaults to pdf)"),
     )
   }
 
