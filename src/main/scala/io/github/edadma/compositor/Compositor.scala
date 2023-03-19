@@ -307,12 +307,14 @@ abstract class Compositor private[compositor]:
 
   def paragraph(): Unit =
     modeStack.top match
-      case p: ParagraphMode => p.paragraph()
+      case p: ParagraphMode => p.done()
       case _                =>
 
-  def draw(): Unit =
+  def output(): Unit =
     paragraph()
-    modeStack.top.asInstanceOf[DocumentMode].done()
+
+    while !modeStack.top.isInstanceOf[DocumentMode] do modeStack.top.done()
+
 //    page.set()
 //    page.draw(this, 0, page.ascent)
 //    emit()

@@ -28,9 +28,7 @@ class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
     boxes += box
   end add
 
-  def done(): Unit = {}
-
-  def paragraph(): Unit =
+  def done(): Unit =
     while boxes.nonEmpty do
       val hbox = new HBox
 
@@ -90,4 +88,4 @@ class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
 
     indent = true
     firstParagraph = false
-  end paragraph
+  end done

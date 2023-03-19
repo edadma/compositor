@@ -76,6 +76,8 @@ case class Config(
 //    simplePageFactory(),
 //  )
 
+  doc.add("hello")
+
 ////  doc add new FrameBox(new RigidBox(doc.pageWidth, doc.pageHeight * 2 / 3)) { background = Color.TRANSPARENT }
 ////  doc.startPage(new SimplePage(doc.pageWidth - 10, Some(doc.pageHeight * 3 - 5)))
 ////  verses(
@@ -123,5 +125,5 @@ case class Config(
 ////    rightPadding = 5
 ////    topPadding = 5
 ////  }
-//  doc.draw()
-//  doc.destroy()
+  doc.output()
+  doc.destroy()
