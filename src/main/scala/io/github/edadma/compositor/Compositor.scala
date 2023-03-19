@@ -103,13 +103,9 @@ abstract class Compositor private[compositor]:
 //  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BoldItalic.ttf", "bold", "italic")
 //  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
 
-  protected val boxes = new ArrayBuffer[Box]
-  protected var firstParagraph: Boolean = true
   protected val modeStack = new mutable.Stack[Mode]
   protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
   protected val document = new DocumentMode(this)
-
-  case class State(page: PageBox, firstParagraph: Boolean)
 
   var indent: Boolean = true
   var parindent: Double = 20
@@ -269,76 +265,15 @@ abstract class Compositor private[compositor]:
     if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight)
     else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace, baseline)
 
-  def center(text: String): Unit = line(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
+  def center(text: String): Unit = hbox(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
 
   def line(text: String): Unit = page add textBox(text)
 
-  def line(bs: Box*): Unit =
-    val hbox = new HBox
+  def hbox(bs: Box*): Unit =
+    val h = new HBox
 
-    bs foreach hbox.add
-    page add hbox
-
-  def paragraph(): Unit =
-    while boxes.nonEmpty do
-      val hbox = new HBox
-
-      @tailrec
-      def line(): Unit =
-        if boxes.nonEmpty then
-          if hbox.width + boxes.head.width <= page.lineWidth then
-            hbox add boxes.remove(0)
-            line()
-          else
-            boxes.head match
-              case b: CharBox =>
-                b.text indexOf '-' match
-                  case -1 =>
-                    Hyphenation(b.text) match
-                      case None =>
-                      case Some(hyphenation) =>
-                        var lastBefore: CharBox = null
-                        var lastAfter: String = null
-
-                        @tailrec
-                        def longest(): Unit =
-                          if hyphenation.hasNext then
-                            val (before, after) = hyphenation.next
-                            val beforeHyphen = b.newCharBox(before)
-
-                            if hbox.width + beforeHyphen.width <= page.lineWidth then
-                              lastBefore = beforeHyphen
-                              lastAfter = after
-                              longest()
-
-                        longest()
-
-                        if lastBefore ne null then
-                          hbox add lastBefore
-                          boxes.remove(0)
-                          boxes.insert(0, b.newCharBox(lastAfter))
-                    end match
-                  case idx =>
-                    val beforeHyphen = b.newCharBox(b.text.substring(0, idx + 1))
-
-                    if hbox.width + beforeHyphen.width <= page.lineWidth then
-                      hbox add beforeHyphen
-                      boxes.remove(0)
-                      boxes.insert(0, b.newCharBox(b.text.substring(idx + 1)))
-              case _ =>
-
-      line()
-
-      if hbox.boxes.last.isSpace then hbox.boxes.remove(hbox.boxes.length - 1)
-      if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
-      if boxes.isEmpty then hbox add new HSpaceBox(2)
-
-      page add hbox
-    end while
-
-    indent = true
-    firstParagraph = false
-  end paragraph
+    bs foreach h.add
+    page add h
 
   def noindent(): Unit = indent = false
 
