@@ -11,3 +11,4 @@ abstract class Box:
   def setToWidth(width: Double): Unit
   def setToHeight(height: Double): Unit
   def isSpace: Boolean = this.isInstanceOf[SpaceBox]
+  def isHorizontal: Boolean = false

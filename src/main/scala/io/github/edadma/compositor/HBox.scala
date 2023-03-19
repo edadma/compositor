@@ -13,6 +13,8 @@ class HBox extends ListBox:
 
   def width: Double = sum(_.width)
 
+  override val isHorizontal: Boolean = true
+
   def length: Double = width
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
