@@ -104,7 +104,6 @@ abstract class Compositor private[compositor]:
 //  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
 
   protected[compositor] val modeStack = new mutable.Stack[Mode]
-  protected var page: PageBox = pageFactory(this, pageWidth, pageHeight)
   protected val document = new DocumentMode(this)
 
   var indent: Boolean = true
@@ -115,20 +114,20 @@ abstract class Compositor private[compositor]:
   var ligatures: Boolean = true
   var representations: Boolean = false
 
-  def startPage(newpage: PageBox): Unit =
-    pageStack push State(page, firstParagraph)
-    page = newpage
-
-  def endPage: PageBox =
-    val res = page
-
-    if boxes.nonEmpty then paragraph()
-
-    page.set()
-    page = pageStack.top.page
-    firstParagraph = pageStack.top.firstParagraph
-    pageStack.pop
-    res
+//  def startPage(newpage: PageBox): Unit =
+//    pageStack push State(page, firstParagraph)
+//    page = newpage
+//
+//  def endPage: PageBox =
+//    val res = page
+//
+//    if boxes.nonEmpty then paragraph()
+//
+//    page.set()
+//    page = pageStack.top.page
+//    firstParagraph = pageStack.top.firstParagraph
+//    pageStack.pop
+//    res
 
   def loadTypeface(typeface: String, basepath: String, styles: (Product | String)*): Unit =
     for style <- styles do
@@ -168,7 +167,7 @@ abstract class Compositor private[compositor]:
 
   def add(box: Box): Unit = modeStack.top add box
 
-  def addWord(text: String): Unit = addBox(textBox(text))
+  def add(text: String): Unit = add(textBox(text))
 
   def textBox(text: String): CharBox =
     val rep = if representations then Ligatures.replace(text, Ligatures.REPRESENTATIONS) else text
@@ -178,7 +177,7 @@ abstract class Compositor private[compositor]:
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
 
-    words foreach addWord
+    words foreach add
 
   private def setFont(): Unit =
     currentFont match
@@ -247,13 +246,11 @@ abstract class Compositor private[compositor]:
 
   def center(text: String): Unit = hbox(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
 
-  def line(text: String): Unit = page add textBox(text)
-
   def hbox(bs: Box*): Unit =
     val h = new HBox
 
     bs foreach h.add
-    page add h
+    add(h)
 
   def noindent(): Unit = indent = false
 
@@ -302,7 +299,7 @@ abstract class Compositor private[compositor]:
     selectFont(f)
     hbox += new HSpaceBox(0, 1, 0)
     hbox += charBox(word)
-    addBox(hbox)
+    add(hbox)
 
   def charBox(s: String): CharBox = new CharBox(this, s)
 

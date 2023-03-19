@@ -3,7 +3,7 @@ package io.github.edadma.compositor
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-class ParagraphMode(comp: Compositor, page: PageBox) extends Mode:
+class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
   var firstParagraph = true
   var indent = true
   val boxes = new ArrayBuffer[Box]
@@ -23,7 +23,7 @@ class ParagraphMode(comp: Compositor, page: PageBox) extends Mode:
         0,
         space,
       )
-    else if indent && !firstParagraph then boxes += new RigidBox(width = parindent)
+    else if indent && !firstParagraph then boxes += new RigidBox(width = comp.parindent)
 
     boxes += box
   end add
