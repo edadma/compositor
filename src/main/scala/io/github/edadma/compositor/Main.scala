@@ -20,14 +20,14 @@ case class Config(
       programName("compositor"),
       head("Compositor", "0.x"),
       help("help").text("prints this usage text"),
-      arg[File]("<file>")
+      arg[File]("<input file>")
         .optional()
         .action((x, c) => c.copy(input = Some(x)))
         .text("input file (defaults to standard input)"),
       opt[File]('o', "output")
-        .valueName("<file>")
+        .valueName("<output file>")
         .action((x, c) => c.copy(output = Some(x)))
-        .text("output file (defaults to out.(pdf|png))"),
+        .text("output file"),
       opt[Int]('s', "size")
         .valueName("<inches>")
         .action((x, c) => c.copy(size = x))
