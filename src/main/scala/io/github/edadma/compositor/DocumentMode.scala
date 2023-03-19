@@ -12,6 +12,6 @@ class DocumentMode(protected val comp: Compositor) extends Mode:
   def done(): Unit =
     pages foreach { page =>
       page.set()
-      page.draw(this, 0, page.ascent)
+      page.draw(comp, 0, page.ascent)
       comp.emit()
     }
