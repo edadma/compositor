@@ -68,5 +68,19 @@ def app(args: Config): Unit =
     )
   val parser = new Parser(Command.builtins, actives, blanks = true)
   val renderer = new Renderer(parser, config, _.mkString)
+  var newlineCount: Int = 0
+  val out: PartialFunction[Any, Unit] = {
+    case "\n" if newlineCount == 0 => newlineCount += 1
+    case "\n" =>
+      doc.paragraph()
+      newlineCount = 0
+    case s: String if s.isBlank =>
+    case s: String =>
+      pprintln(s)
+      doc.add(s)
+      newlineCount = 0
+  }
 
-  renderer.render(parser.parse(input), assigns, x => pprintln(x))
+  renderer.render(parser.parse(input), assigns, out)
+  doc.output()
+  doc.destroy()

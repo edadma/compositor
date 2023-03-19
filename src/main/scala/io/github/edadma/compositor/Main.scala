@@ -8,67 +8,67 @@ case class Config(
     typ: String = "pdf",
     paper: String = "letter",
     resolution: String = "hd",
-    size: Double = 14,
+    size: Double = 13,
 )
 
 @main def run(args: String*): Unit =
-//  import scopt.OParser
-//  val builder = OParser.builder[Config]
-//  val parser = {
-//    import builder._
-//    OParser.sequence(
-//      programName("compositor"),
-//      head("compositor", "0.x"),
-//      help("help").text("prints this usage text"),
-//      arg[File]("<file>")
-//        .optional()
-//        .action((x, c) => c.copy(input = Some(x)))
-//        .text("input file (omit for standard input)"),
-//      opt[File]('o', "output")
-//        .valueName("<file>")
-//        .action((x, c) => c.copy(output = Some(x)))
-//        .text("output file (omit for standard output)"),
-//      opt[Int]('s', "size")
-//        .valueName("<inches>")
-//        .action((x, c) => c.copy(size = x))
-//        .validate(s =>
-//          if 0 < s then success
-//          else failure("only positive values are allowed as screen sizes"),
-//        )
-//        .text("resolution"),
-//      opt[String]('r', "resolution")
-//        .valueName("<sd | hd | fhd>")
-//        .action((x, c) => c.copy(resolution = x))
-//        .validate({
-//          case "sd" | "hd" | "fhd" => success
-//          case _                   => failure("only 'sd' | 'hd' | 'fhd' are allowed as resolutions")
-//        })
-//        .text("resolution"),
-//      opt[String]('p', "paper")
-//        .valueName("<a4 | letter>")
-//        .action((x, c) => c.copy(paper = x))
-//        .validate({
-//          case "a4" | "letter" => success
-//          case _               => failure("only 'a4' or 'letter' are allowed as paper types")
-//        })
-//        .text("paper size"),
-//      opt[String]('t', "type")
-//        .valueName("<pdf | png>")
-//        .action((x, c) => c.copy(typ = x))
-//        .validate({
-//          case "png" | "pdf" => success
-//          case _             => failure("only 'png' or 'pdf' are allowed as output file types")
-//        })
-//        .text("output file type"),
-//    )
-//  }
-//
-//  OParser.parse(parser, args, Config()) match {
-//    case Some(config) => app(config)
-//    case _            =>
-//  }
+  import scopt.OParser
+  val builder = OParser.builder[Config]
+  val parser = {
+    import builder._
+    OParser.sequence(
+      programName("compositor"),
+      head("compositor", "0.x"),
+      help("help").text("prints this usage text"),
+      arg[File]("<file>")
+        .optional()
+        .action((x, c) => c.copy(input = Some(x)))
+        .text("input file (omit for standard input)"),
+      opt[File]('o', "output")
+        .valueName("<file>")
+        .action((x, c) => c.copy(output = Some(x)))
+        .text("output file (omit for standard output)"),
+      opt[Int]('s', "size")
+        .valueName("<inches>")
+        .action((x, c) => c.copy(size = x))
+        .validate(s =>
+          if 0 < s then success
+          else failure("only positive values are allowed as screen sizes"),
+        )
+        .text("resolution"),
+      opt[String]('r', "resolution")
+        .valueName("<sd | hd | fhd>")
+        .action((x, c) => c.copy(resolution = x))
+        .validate({
+          case "sd" | "hd" | "fhd" => success
+          case _                   => failure("only 'sd' | 'hd' | 'fhd' are allowed as resolutions")
+        })
+        .text("resolution"),
+      opt[String]('p', "paper")
+        .valueName("<a4 | letter>")
+        .action((x, c) => c.copy(paper = x))
+        .validate({
+          case "a4" | "letter" => success
+          case _               => failure("only 'a4' or 'letter' are allowed as paper types")
+        })
+        .text("paper size"),
+      opt[String]('t', "type")
+        .valueName("<pdf | png>")
+        .action((x, c) => c.copy(typ = x))
+        .validate({
+          case "png" | "pdf" => success
+          case _             => failure("only 'png' or 'pdf' are allowed as output file types")
+        })
+        .text("output file type"),
+    )
+  }
 
-  val doc = Compositor.png("test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
+  OParser.parse(parser, args, Config()) match {
+    case Some(config) => app(config)
+    case _            =>
+  }
+
+//  val doc = Compositor.png("test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
 
 //  val doc = Compositor.pdf(
 //    "test.pdf",
@@ -76,7 +76,7 @@ case class Config(
 //    simplePageFactory(),
 //  )
 
-  doc.add("hello")
+//  doc.add("hello")
 
 ////  doc add new FrameBox(new RigidBox(doc.pageWidth, doc.pageHeight * 2 / 3)) { background = Color.TRANSPARENT }
 ////  doc.startPage(new SimplePage(doc.pageWidth - 10, Some(doc.pageHeight * 3 - 5)))
@@ -125,5 +125,5 @@ case class Config(
 ////    rightPadding = 5
 ////    topPadding = 5
 ////  }
-  doc.output()
-  doc.destroy()
+//  doc.output()
+//  doc.destroy()
