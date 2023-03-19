@@ -3,9 +3,7 @@ package io.github.edadma.compositor
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
-  var firstParagraph = true
-  var indent = true
+class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends Mode:
   val boxes = new ArrayBuffer[Box]
 
   def add(box: Box): Unit =
@@ -23,7 +21,7 @@ class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
         0,
         space,
       )
-    else if indent && !firstParagraph then boxes += new RigidBox(width = comp.parindent)
+    else if comp.indent && !pageMode.firstParagraph then boxes += new RigidBox(width = comp.parindent)
 
     boxes += box
   end add
@@ -35,7 +33,7 @@ class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.width + boxes.head.width <= page.lineWidth then
+          if hbox.width + boxes.head.width <= pageMode.page.lineWidth then
             hbox add boxes.remove(0)
             line()
           else
@@ -55,7 +53,7 @@ class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
                             val (before, after) = hyphenation.next
                             val beforeHyphen = b.newCharBox(before)
 
-                            if hbox.width + beforeHyphen.width <= page.lineWidth then
+                            if hbox.width + beforeHyphen.width <= pageMode.page.lineWidth then
                               lastBefore = beforeHyphen
                               lastAfter = after
                               longest()
@@ -70,7 +68,7 @@ class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
                   case idx =>
                     val beforeHyphen = b.newCharBox(b.text.substring(0, idx + 1))
 
-                    if hbox.width + beforeHyphen.width <= page.lineWidth then
+                    if hbox.width + beforeHyphen.width <= pageMode.page.lineWidth then
                       hbox add beforeHyphen
                       boxes.remove(0)
                       boxes.insert(0, b.newCharBox(b.text.substring(idx + 1)))
@@ -86,6 +84,6 @@ class ParagraphMode(protected val comp: Compositor, page: PageBox) extends Mode:
       comp.modeStack.top add hbox
     end while
 
-    indent = true
-    firstParagraph = false
+    comp.indent = true
+    pageMode.firstParagraph = false
   end done
