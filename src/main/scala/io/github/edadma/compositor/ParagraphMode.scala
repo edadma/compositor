@@ -81,7 +81,7 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
       if boxes.isEmpty then hbox add new HSpaceBox(2)
 
-      comp.modeStack.top add hbox
+      pageMode.page add hbox
     end while
 
     comp.indent = true
