@@ -1,7 +1,7 @@
 package io.github.edadma.compositor
 
 import io.github.edadma.char_reader.CharReader
-import io.github.edadma.texish.{Active, Command, Parser, Renderer}
+import io.github.edadma.texish.{Active, Command, Parser, Renderer, problem}
 
 val commands =
   List(
@@ -11,10 +11,10 @@ val commands =
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
-          context: AnyRef,
+          context: Any,
       ): Any =
         args match
-          case List(a: String) =>
-          case List(a, b)      => problem(pos, s"expected arguments <number> <number>: $a, $b")
-          case _               => problem(pos, "expected arguments <number> <number>"),
+          case List(a: String) => verses(context.asInstanceOf[Compositor], a)
+          case List(a)         => problem(pos, s"expected arguments <string>: $a")
+          case _               => problem(pos, "expected arguments <string>"),
   )

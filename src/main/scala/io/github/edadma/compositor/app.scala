@@ -50,7 +50,6 @@ def app(args: Config): Unit =
 
         Compositor.png(output.toString, width, height, ppi(width, height, size), simplePageFactory())
       case _ => sys.error("error")
-
   val config =
     Map(
       "today" -> "MMMM d, y",
@@ -66,8 +65,8 @@ def app(args: Config): Unit =
 //        }
 //      },
     )
-  val parser = new Parser(Command.builtins, actives, blanks = true)
-  val renderer = new Renderer(parser, config, _.mkString)
+  val parser = new Parser(Command.builtins ++ commands, actives, blanks = true)
+  val renderer = new Renderer(parser, config, _.mkString, doc)
   var newlineCount: Int = 0
   val out: PartialFunction[Any, Unit] = {
     case "\n" if newlineCount == 0 => newlineCount += 1
