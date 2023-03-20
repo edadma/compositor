@@ -3,9 +3,11 @@ package io.github.edadma.compositor
 import io.github.edadma.char_reader.CharReader
 import io.github.edadma.texish.{Active, Command, Parser, Renderer, problem}
 
+import pprint.pprintln
+
 val commands =
   List(
-    new Command("verses", 0):
+    new Command("verses", 1):
       def apply(
           pos: CharReader,
           renderer: Renderer,
@@ -13,6 +15,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
+        pprintln(args)
         args match
           case List(a: String) => verses(context.asInstanceOf[Compositor], a)
           case List(a)         => problem(pos, s"expected arguments <string>: $a")

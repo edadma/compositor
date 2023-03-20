@@ -74,12 +74,14 @@ def app(args: Config): Unit =
       doc.paragraph()
       newlineCount = 0
     case s: String if s.isBlank =>
-    case s: String              =>
-//      pprintln(s)
+    case s: String =>
+      pprintln(s)
       doc.add(s)
       newlineCount = 0
   }
+  val ast = parser.parse(input)
 
-  renderer.render(parser.parse(input), assigns, out)
+  pprintln(ast)
+  renderer.render(ast, assigns, out)
   doc.output()
   doc.destroy()
