@@ -314,8 +314,6 @@ abstract class Compositor private[compositor]:
       case _                =>
 
   def output(): Unit =
-    paragraph()
-
     while modeStack.nonEmpty do modeStack.pop.done()
 
     for (p, i) <- pages.zipWithIndex do
