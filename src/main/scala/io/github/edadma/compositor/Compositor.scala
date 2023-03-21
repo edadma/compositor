@@ -170,6 +170,8 @@ abstract class Compositor private[compositor]:
 
   def add(box: Box): Unit = modeStack.top add box
 
+  def done(): Unit = modeStack.top.done()
+
   def add(text: String): Unit = add(textBox(text))
 
   def textBox(text: String): CharBox =
@@ -247,7 +249,11 @@ abstract class Compositor private[compositor]:
     if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight)
     else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace, baseline)
 
-  def center(text: String): Unit = hbox(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
+  def center(text: String): Unit =
+    hbox()
+    add(new HSpaceBox(1))
+    add(textBox(text))
+    add(new HSpaceBox(1))
 
   def hbox(): Unit = modeStack push new HorizontalMode(this)
 

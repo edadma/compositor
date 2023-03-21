@@ -31,6 +31,7 @@ val commands =
           case List(a: AST) =>
             context.asInstanceOf[Compositor].hbox()
             renderer.render(a)
+            context.asInstanceOf[Compositor].done()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>"),
   )
