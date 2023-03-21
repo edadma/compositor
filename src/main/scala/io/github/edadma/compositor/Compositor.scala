@@ -249,11 +249,7 @@ abstract class Compositor private[compositor]:
 
   def center(text: String): Unit = hbox(new HSpaceBox(1), textBox(text), new HSpaceBox(1))
 
-  def hbox(bs: Box*): Unit =
-    val h = new HBox
-
-    bs foreach h.add
-    add(h)
+  def hbox(): Unit = modeStack push new HorizontalMode(this)
 
   def noindent(): Unit = indent = false
 

@@ -7,3 +7,7 @@ abstract class Mode:
   def add(box: Box): Unit
 
   def done(): Unit
+
+  def pop: Mode = comp.modeStack.pop
+
+  def top: Mode = comp.modeStack.top

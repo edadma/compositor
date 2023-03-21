@@ -8,7 +8,7 @@ class PageMode(protected val comp: Compositor, protected[compositor] val page: P
       val paragraphMode = new ParagraphMode(comp, this)
 
       comp.modeStack push paragraphMode
-      paragraphMode.add(box)
+      paragraphMode add box
     else page add box
 
   def done(): Unit = {}

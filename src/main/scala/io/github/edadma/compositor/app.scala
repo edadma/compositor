@@ -56,7 +56,6 @@ def app(args: Config): Unit =
       "include" -> ".",
       "rounding" -> "HALF_EVEN",
     )
-  val assigns = new mutable.HashMap[String, Any]
   val actives =
     List(
 //      new Active("<") {
@@ -81,6 +80,6 @@ def app(args: Config): Unit =
   val ast = parser.parse(input)
 
   pprintln(ast)
-  renderer.render(ast, assigns, out)
+  renderer.render(ast, out)
   doc.output()
   doc.destroy()
