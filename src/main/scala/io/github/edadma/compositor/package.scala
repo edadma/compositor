@@ -30,8 +30,6 @@ def verses(comp: Compositor, text: String): Unit =
   comp.paragraph()
 end verses
 
-def setColor(ct: Context, c: Color): Unit = ct.setSourceRGBA(c.red, c.green, c.blue, c.alpha)
-
 def problem(msg: String): Nothing =
   Console.err.println(msg)
   sys.exit(1)

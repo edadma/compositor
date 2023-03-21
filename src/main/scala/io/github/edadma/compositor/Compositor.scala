@@ -280,11 +280,9 @@ abstract class Compositor private[compositor]:
   def color(c: Color): Color =
     if currentColor != c then
       currentColor = c
-      setColor(c)
+      ctx.setSourceRGBA(c.red, c.green, c.blue, c.alpha)
 
     c
-
-  def setColor(c: Color): Unit = io.github.edadma.compositor.setColor(ctx, c)
 
   def color(r: Double, g: Double, b: Double, a: Double = 1): Color = color(new Color(r, g, b, a))
 

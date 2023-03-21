@@ -6,7 +6,7 @@ class UnderlineBox(comp: Compositor, box: Box, thickness: Double = 0.8, color: C
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     box.draw(comp, x, y)
     comp.ctx.setLineWidth(thickness)
-    comp.setColor(underlineColor)
+    comp.color(underlineColor)
     comp.ctx.moveTo(x, y + 1)
     comp.ctx.lineTo(x + width, y + 1)
     comp.ctx.stroke()
