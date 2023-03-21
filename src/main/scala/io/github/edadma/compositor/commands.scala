@@ -30,6 +30,7 @@ val commands =
         args match
           case List(a: AST) =>
             context.asInstanceOf[Compositor].hbox()
+            pprint.pprintln(a)
             renderer.render(a)
             context.asInstanceOf[Compositor].done()
           case List(a) => problem(pos, s"expected arguments <text>: $a")

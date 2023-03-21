@@ -8,6 +8,9 @@ class PageMode(protected val comp: Compositor, protected[compositor] val page: P
       val paragraphMode = new ParagraphMode(comp, this)
 
       comp.modeStack push paragraphMode
+
+      if comp.indent && !firstParagraph then paragraphMode add new RigidBox(width = comp.parindent)
+
       paragraphMode add box
     else page add box
 

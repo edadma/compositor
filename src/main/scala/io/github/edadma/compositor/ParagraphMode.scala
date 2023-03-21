@@ -21,7 +21,6 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
         0,
         space,
       )
-    else if comp.indent && !pageMode.firstParagraph then boxes += new RigidBox(width = comp.parindent)
 
     boxes += box
   end add
