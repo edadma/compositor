@@ -15,7 +15,6 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        pprintln(args)
         args match
           case List(a: String) => verses(context.asInstanceOf[Compositor], a)
           case List(a)         => problem(pos, s"expected arguments <string>: $a")
