@@ -13,6 +13,7 @@ private val footnoteRegex = "[^[]+\\[[a-z]]".r
 
 def verses(comp: Compositor, text: String): Unit =
   val words = text.split("\\s+")
+  pprint.pprintln(words)
   var i = 0
 
   while i < words.length do
@@ -23,7 +24,7 @@ def verses(comp: Compositor, text: String): Unit =
       i += 2
     else
       if footnoteRegex matches word then comp add word.dropRight(3)
-      else comp add word
+      else if word.nonEmpty then comp add word
 
       i += 1
 
