@@ -7,4 +7,6 @@ class DocumentMode(protected val comp: Compositor) extends Mode:
 
   def add(box: Box): Unit = pages += box.asInstanceOf[PageBox]
 
+  override def done(): Unit = {}
+
   def result: Box = ???
