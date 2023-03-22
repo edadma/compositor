@@ -255,7 +255,7 @@ abstract class Compositor private[compositor]:
     add(textBox(text))
     add(new HSpaceBox(1))
 
-  def hbox(): Unit = modeStack push new HorizontalMode(this)
+  def hbox(): Unit = modeStack push new HBoxMode(this)
 
   def noindent(): Unit = indent = false
 

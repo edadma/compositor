@@ -1,8 +1,6 @@
 package io.github.edadma.compositor
 
 abstract class HorizontalMode extends Mode:
-  protected[compositor] val hbox: HBox = new HBox
-
   protected def addBox(box: Box): Unit
 
   protected def nonEmpty: Boolean
@@ -29,7 +27,3 @@ abstract class HorizontalMode extends Mode:
 
     addBox(box)
   end add
-
-  def done(): Unit =
-    pop
-    top add hbox
