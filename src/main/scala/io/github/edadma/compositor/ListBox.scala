@@ -7,6 +7,10 @@ abstract class ListBox extends AddableBox:
 
   protected[compositor] val boxes = new ArrayBuffer[Box]
 
+  def nonEmpty: Boolean = boxes.nonEmpty
+
+  def last: Box = boxes.last
+
   protected def sum(measure: Box => Double): Double = boxes map measure sum
 
   protected def max(measure: Box => Double): Double = boxes map measure max

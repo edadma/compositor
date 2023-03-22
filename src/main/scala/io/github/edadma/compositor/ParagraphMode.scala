@@ -3,27 +3,14 @@ package io.github.edadma.compositor
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends Mode:
+class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends HorizontalMode:
   val boxes = new ArrayBuffer[Box]
 
-  def add(box: Box): Unit =
-    if boxes.nonEmpty then
-      val space =
-        boxes.last match
-          case b: CharBox
-              if b.text.nonEmpty &&
-                !(b.text.last == '.' && Abbreviation(b.text.dropRight(1))) &&
-                ".!?:;".contains(b.text.last) =>
-            comp.currentFont.space * 1.5
-          case _ => comp.currentFont.space
+  protected def addBox(box: Box): Unit = boxes += box
 
-      boxes += new HSpaceBox(
-        0,
-        space,
-      )
+  protected def nonEmpty: Boolean = boxes.nonEmpty
 
-    boxes += box
-  end add
+  protected def last: Box = boxes.last
 
   def done(): Unit =
     while boxes.nonEmpty do
