@@ -259,13 +259,13 @@ abstract class Compositor private[compositor]:
 
   def noindent(): Unit = indent = false
 
-  def italic(): Font = addStyle("italic")
+  def italic(): Unit = addStyle("italic")
 
-  def noitalic(): Font = removeStyle("italic")
+  def noitalic(): Unit = removeStyle("italic")
 
-  def bold(): Font = addStyle("bold")
+  def bold(): Unit = addStyle("bold")
 
-  def nobold(): Font = removeStyle("bold")
+  def nobold(): Unit = removeStyle("bold")
 
   def setStyle(style: Set[String]): Font = selectFont(currentFont.family, currentFont.size, style)
 

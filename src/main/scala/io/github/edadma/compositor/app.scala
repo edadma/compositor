@@ -79,7 +79,7 @@ def app(args: Config): Unit =
   val renderer = new Renderer(parser, config, _.mkString, doc, out)
   val ast = parser.parse(input)
 
-  pprintln(ast)
+  // pprintln(ast)
   renderer.render(ast)
   doc.output()
   doc.destroy()
