@@ -12,14 +12,16 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
 
   protected def last: Box = boxes.last
 
-  def done(): Unit =
+  def result: Box = ???
+
+  override def done(): Unit =
     while boxes.nonEmpty do
       val hbox = new HBox
 
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.width + boxes.head.width <= pageMode.page.lineWidth then
+          if hbox.width + boxes.head.width <= pageMode.result.lineWidth then
             hbox add boxes.remove(0)
             line()
           else
@@ -39,7 +41,7 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
                             val (before, after) = hyphenation.next
                             val beforeHyphen = b.newCharBox(before)
 
-                            if hbox.width + beforeHyphen.width <= pageMode.page.lineWidth then
+                            if hbox.width + beforeHyphen.width <= pageMode.result.lineWidth then
                               lastBefore = beforeHyphen
                               lastAfter = after
                               longest()
@@ -54,7 +56,7 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
                   case idx =>
                     val beforeHyphen = b.newCharBox(b.text.substring(0, idx + 1))
 
-                    if hbox.width + beforeHyphen.width <= pageMode.page.lineWidth then
+                    if hbox.width + beforeHyphen.width <= pageMode.result.lineWidth then
                       hbox add beforeHyphen
                       boxes.remove(0)
                       boxes.insert(0, b.newCharBox(b.text.substring(idx + 1)))
@@ -67,7 +69,7 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
       if boxes.isEmpty then hbox add new HSpaceBox(2)
 
-      pageMode.page add hbox
+      pageMode.result add hbox
     end while
 
     comp.indent = true

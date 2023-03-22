@@ -1,12 +1,8 @@
 package io.github.edadma.compositor
 
-class HBoxMode(protected val comp: Compositor, val hbox: HBox) extends HorizontalMode:
-  protected def addBox(box: Box): Unit = hbox add box
+class HBoxMode(protected val comp: Compositor, val result: HBox) extends HorizontalMode:
+  protected def addBox(box: Box): Unit = result add box
 
-  protected def nonEmpty: Boolean = hbox.nonEmpty
+  protected def nonEmpty: Boolean = result.nonEmpty
 
-  protected def last: Box = hbox.last
-
-  def done(): Unit =
-    pop
-    top add hbox
+  protected def last: Box = result.last

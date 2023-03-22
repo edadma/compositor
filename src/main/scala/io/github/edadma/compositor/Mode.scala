@@ -3,10 +3,11 @@ package io.github.edadma.compositor
 abstract class Mode:
   protected val comp: Compositor
 
-//  protected def material: List[Box]
   def add(box: Box): Unit
 
-  def done(): Unit
+  def result: Box
+
+  def done(): Unit = comp.add(result)
 
   def pop: Mode = comp.modeStack.pop
 

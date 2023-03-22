@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-class PageMode(protected val comp: Compositor, protected[compositor] val page: PageBox) extends Mode:
+class PageMode(protected val comp: Compositor, val result: PageBox) extends Mode:
   protected[compositor] var firstParagraph: Boolean = true
 
   def add(box: Box): Unit =
@@ -12,6 +12,4 @@ class PageMode(protected val comp: Compositor, protected[compositor] val page: P
       if comp.indent && !firstParagraph then paragraphMode add new RigidBox(width = comp.parindent)
 
       paragraphMode add box
-    else page add box
-
-  def done(): Unit = {}
+    else result add box
