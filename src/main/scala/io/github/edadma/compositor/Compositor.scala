@@ -104,9 +104,9 @@ abstract class Compositor private[compositor]:
 //  loadFont("playfair", "PlayfairDisplay/static/PlayfairDisplay-BlackItalic.ttf", "black", "italic")
 
   protected[compositor] val modeStack = new mutable.Stack[Mode]
-  protected[compositor] val document = new DocumentMode(this)
+  protected[compositor] val pages = new ArrayBuffer[PageBox]
 
-  modeStack push document
+  modeStack push new DocumentMode(this)
   modeStack push new PageMode(this, pageFactory(this, pageWidth, pageHeight))
 
   var indent: Boolean = true
@@ -316,7 +316,7 @@ abstract class Compositor private[compositor]:
   def output(): Unit =
     while modeStack.nonEmpty do modeStack.pop.done()
 
-    for (p, i) <- document.pages.zipWithIndex do
+    for (p, i) <- pages.zipWithIndex do
       p.set()
       paintBackground()
       p.draw(this, 0, p.ascent)
