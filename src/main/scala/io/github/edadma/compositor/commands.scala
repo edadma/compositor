@@ -51,6 +51,22 @@ val commands =
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
+    new Command("italic", 1, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(a: AST) =>
+            context.asInstanceOf[Compositor].italic()
+            renderer.render(a)
+            context.asInstanceOf[Compositor].noitalic()
+          case List(a) => problem(pos, s"expected arguments <text>: $a")
+          case _       => problem(pos, "expected arguments <text>")
+    ,
     new Command("underline", 1, false):
       def apply(
           pos: CharReader,
@@ -68,5 +84,23 @@ val commands =
             context.asInstanceOf[Compositor].modeStack.pop()
             context.asInstanceOf[Compositor].add(new UnderlineBox(context.asInstanceOf[Compositor], hbox))
           case List(a) => problem(pos, s"expected arguments <text>: $a")
-          case _       => problem(pos, "expected arguments <text>"),
+          case _       => problem(pos, "expected arguments <text>")
+    ,
+    new Command("frame", 2, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(c: AST, a: AST) =>
+            val hbox = new HBox
+
+            context.asInstanceOf[Compositor].hbox(hbox)
+            renderer.render(a)
+            context.asInstanceOf[Compositor].modeStack.pop()
+            context.asInstanceOf[Compositor].add(new FrameBox(hbox) { border = Color(renderer.eval(c).toString) })
+          case _ => problem(pos, "expected arguments <color> <text>"),
   )

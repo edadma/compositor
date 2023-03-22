@@ -1,1 +1,1 @@
-\hbox{\underline{this \bold{is a}} test}
+\hbox{\underline{this \frame{red}{\bold{is a} test}}}
