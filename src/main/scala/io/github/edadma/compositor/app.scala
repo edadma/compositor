@@ -81,5 +81,6 @@ def app(args: Config): Unit =
 
   // pprintln(ast)
   renderer.render(ast)
+  pprintln(doc.pages)
   doc.output()
   doc.destroy()
