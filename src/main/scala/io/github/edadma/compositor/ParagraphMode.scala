@@ -73,6 +73,5 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
     end while
 
     comp.indent = true
-    pageMode.firstParagraph = false
     pop
   end done
