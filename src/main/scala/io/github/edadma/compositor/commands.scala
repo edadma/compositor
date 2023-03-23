@@ -122,7 +122,7 @@ val commands =
             context.asInstanceOf[Compositor].add(new FrameBox(hbox) { border = Color(renderer.eval(c).toString) })
           case _ => problem(pos, "expected arguments <color> <text>")
     ,
-    new Command("background", 2, false):
+    new Command("background", 4, false):
       def apply(
           pos: CharReader,
           renderer: Renderer,
@@ -131,16 +131,21 @@ val commands =
           context: Any,
       ): Any =
         args match
-          case List(c: AST, a: AST) =>
+          case List(c: AST, a: AST, p: AST, material: AST) =>
+            val color = renderer.eval(c).toString
+            val alpha = renderer.eval(a).asInstanceOf[Number].doubleValue()
+            val pad = renderer.eval(a).asInstanceOf[Number].doubleValue()
             val hbox = new HBox
 
             context.asInstanceOf[Compositor].hbox(hbox)
-            renderer.render(a)
+            renderer.render(material)
             context.asInstanceOf[Compositor].modeStack.pop()
             context
               .asInstanceOf[Compositor]
               .add(new FrameBox(hbox) {
-                border = Color(renderer.eval(c).toString)
+                background = Color(color, alpha)
+                rounded = false
+                padding(pad)
               })
           case _ => problem(pos, "expected arguments <color> <text>"),
   )
