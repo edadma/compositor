@@ -313,10 +313,10 @@ abstract class Compositor private[compositor]:
       case p: ParagraphMode => p.done()
       case _                =>
 
+  def page(width: Double): Unit = modeStack push new PageMode(this, new SimplePage(width))
+
   def output(): Unit =
-    while modeStack.nonEmpty do
-      println(modeStack)
-      done()
+    while modeStack.nonEmpty do done()
 
     for (p, i) <- pages.zipWithIndex do
       p.set()
