@@ -49,6 +49,7 @@ val commands =
 
             context.asInstanceOf[Compositor].page(width)
             renderer.render(page)
+            context.asInstanceOf[Compositor].paragraph()
             context.asInstanceOf[Compositor].done()
           case _ => problem(pos, "expected arguments <width> <text>")
     ,
