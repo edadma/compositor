@@ -85,6 +85,16 @@ val commands =
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
+    new Command("vfil", 0, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        context.asInstanceOf[Compositor].add(new VSpaceBox(1))
+    ,
     new Command("underline", 1, false):
       def apply(
           pos: CharReader,
