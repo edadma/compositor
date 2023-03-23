@@ -95,6 +95,16 @@ val commands =
       ): Any =
         context.asInstanceOf[Compositor].add(new VSpaceBox(1))
     ,
+    new Command("par", 0, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        context.asInstanceOf[Compositor].paragraph()
+    ,
     new Command("underline", 1, false):
       def apply(
           pos: CharReader,
