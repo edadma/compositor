@@ -313,7 +313,8 @@ abstract class Compositor private[compositor]:
       case p: ParagraphMode => p.done()
       case _                =>
 
-  def page(width: Double): Unit = modeStack push new PageMode(this, new SimplePage(width))
+  def page(width: Double, height: Option[Double] = None): Unit =
+    modeStack push new PageMode(this, new SimplePage(width, height))
 
   def output(): Unit =
     while modeStack.nonEmpty do done()
