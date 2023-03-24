@@ -170,7 +170,9 @@ abstract class Compositor private[compositor]:
 
   def add(box: Box): Unit = modeStack.top add box
 
-  def done(): Unit = modeStack.top.done()
+  def done(): Unit =
+    paragraph()
+    modeStack.top.done()
 
   def add(text: String): Unit = add(textBox(text))
 

@@ -6,6 +6,7 @@ class SimplePage(val lineWidth: Double, pageHeight: Option[Double] = None) exten
     pageHeight foreach setToHeight
 
   override def height: Double =
+    println((pageHeight, super.height))
     pageHeight.getOrElse(super.height) // todo: seems hacky; setToHeight isn't called if inside a FrameBox
 
   override def setToWidth(width: Double): Unit = super.setToWidth(lineWidth)
