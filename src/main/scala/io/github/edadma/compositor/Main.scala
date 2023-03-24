@@ -68,16 +68,6 @@ case class Config(
     case _            =>
   }
 
-//  val doc = Compositor.png("test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
-
-//  val doc = Compositor.pdf(
-//    "test.pdf",
-//    Paper.LETTER,
-//    simplePageFactory(),
-//  )
-
-//  doc.add("hello")
-
 ////  doc add new FrameBox(new RigidBox(doc.pageWidth, doc.pageHeight * 2 / 3)) { background = Color.TRANSPARENT }
 ////  doc.startPage(new SimplePage(doc.pageWidth - 10, Some(doc.pageHeight * 3 - 5)))
 ////  verses(
@@ -125,5 +115,3 @@ case class Config(
 ////    rightPadding = 5
 ////    topPadding = 5
 ////  }
-//  doc.output()
-//  doc.destroy()

@@ -1,6 +1,7 @@
 package io.github.edadma.compositor
 
 class SimplePage(val lineWidth: Double, pageHeight: Option[Double] = None) extends VTop with PageBox:
+  println(pageHeight)
   def set(): Unit =
     setToWidth(lineWidth)
     pageHeight foreach setToHeight
