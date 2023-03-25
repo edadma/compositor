@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-abstract class Box:
+trait Box:
   def height: Double
   def ascent: Double
   def ascender: Double
@@ -10,5 +10,6 @@ abstract class Box:
   def draw(comp: Compositor, x: Double, y: Double): Unit
   def setToWidth(width: Double): Unit
   def setToHeight(height: Double): Unit
+  def set(): Unit
   def isSpace: Boolean = this.isInstanceOf[SpaceBox]
   def isHorizontal: Boolean = false

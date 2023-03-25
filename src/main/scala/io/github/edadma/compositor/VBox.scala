@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-class VBox extends ListBox:
+class VBox(toWidth: Option[Double] = None, toHeight: Option[Double] = None) extends ListBox:
   def height: Double = sum(_.height)
 
   def length: Double = height
