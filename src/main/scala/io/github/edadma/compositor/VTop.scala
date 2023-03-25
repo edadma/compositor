@@ -5,9 +5,17 @@ class VTop extends ListBox:
 
   def naturalWidth: Double = max(_.width)
 
+  def ascent: Double = naturalAscent
+
   def naturalAscent: Double = if boxes.nonEmpty then boxes.head.ascent else 0
 
+  def descent: Double = height - ascent
+
   def naturalDescent: Double = if boxes.nonEmpty then boxes.head.descent + boxes.tail.map(_.height).sum else 0
+
+  def baselineAscent: Double = boxes.headOption map (_.baselineAscent) getOrElse 0
+
+  def baselineHeight: Double = max(_.baselineHeight) // todo: this is probably not correct
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
@@ -23,6 +31,6 @@ class VTop extends ListBox:
 
           cy += next.height - (next.descent - b.descent) // todo: this is wrong. baseline?
 
-  def setToWidth(width: Double): Unit = boxes foreach (_.setToWidth(width))
-
-  def setToHeight(height: Double): Unit = set(height)
+  def set(): Unit =
+    boxes foreach (_.setToWidth(width))
+    _height foreach set

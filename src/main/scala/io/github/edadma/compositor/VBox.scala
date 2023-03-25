@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-class VBox(toWidth: Option[Double] = None, toHeight: Option[Double] = None) extends ListBox:
+class VBox() extends ListBox:
   def height: Double = sum(_.height)
 
   def length: Double = height
@@ -26,6 +26,6 @@ class VBox(toWidth: Option[Double] = None, toHeight: Option[Double] = None) exte
 
         b.draw(comp, x, cy)
 
-  def setToWidth(width: Double): Unit = boxes foreach (_.setToWidth(width))
-
-  def setToHeight(height: Double): Unit = set(height)
+  def set(): Unit =
+    boxes foreach (_.setToWidth(width))
+    _height foreach set

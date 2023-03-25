@@ -12,7 +12,7 @@ class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
   private var y2 = Double.MinValue
 
   def width: Double = x2 - x1
-  def height: Double = y2 - y1
+  def ascent: Double = y2 - y1
 
   def point(x: Double, y: Double): Unit =
     if x < x1 then x1 = x

@@ -1,8 +1,8 @@
 package io.github.edadma.compositor
 
 abstract class AbstractBox extends Box:
-  var _width: Option[Double] = None
-  var _height: Option[Double] = None
+  protected var _width: Option[Double] = None
+  protected var _height: Option[Double] = None
 
   def setToWidth(width: Double): Unit = _width = Some(width)
 
@@ -16,4 +16,4 @@ abstract class AbstractBox extends Box:
 
   def width: Double = _width getOrElse naturalWidth
 
-  def height: Double = _height getOrElse (naturalAscent + naturalDescent)
+  override def height: Double = _height getOrElse (naturalAscent + naturalDescent)
