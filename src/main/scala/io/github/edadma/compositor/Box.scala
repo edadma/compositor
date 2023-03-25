@@ -1,7 +1,7 @@
 package io.github.edadma.compositor
 
 trait Box:
-  def height: Double
+  def height: Double = ascent + descent
   def ascent: Double
   def descent: Double
   def width: Double

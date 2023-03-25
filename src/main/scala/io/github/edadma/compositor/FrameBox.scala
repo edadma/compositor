@@ -10,7 +10,6 @@ class FrameBox(box: Box) extends Box:
   var bottomPadding: Double = 2
   var leftPadding: Double = 2
   var rightPadding: Double = 2
-  var tight: Boolean = true
 
   def padding(pts: Double): Unit =
     topPadding = pts
@@ -24,17 +23,17 @@ class FrameBox(box: Box) extends Box:
         util.roundedRectanglePath(
           comp.ctx,
           x,
-          y - (if tight then ascender else ascent),
+          y - ascent,
           width,
-          if tight then ascender + descender else height,
+          height,
           cornerRadius,
         )
       else
         comp.ctx.rectangle(
           x,
-          y - (if tight then ascender else ascent),
+          y - ascent,
           width,
-          if tight then ascender + descender else height,
+          height,
         )
 
     if background ne null then
@@ -50,25 +49,15 @@ class FrameBox(box: Box) extends Box:
 
   def width: Double = box.width + leftPadding + rightPadding
 
-  def height: Double =
-    if tight then box.height max box.ascent + box.descender + topPadding + bottomPadding
-    else box.height + topPadding + bottomPadding
+  def height: Double = box.height + topPadding + bottomPadding
 
-  def ascender: Double = box.ascender + topPadding
+  def ascent: Double = box.ascent + topPadding
 
-  def ascent: Double =
-    if tight then box.ascent max box.ascender + topPadding
-    else box.ascent + topPadding
+  def descent: Double = box.descent + bottomPadding
 
-  def descent: Double =
-    if tight then box.descent max box.descender + bottomPadding
-    else box.descent + bottomPadding
+  def setToWidth(width: Double): Unit = box.setToWidth(width - leftPadding - rightPadding)
 
-  def descender: Double = box.descender + bottomPadding
-
-  def setToWidth(width: Double): Unit = box.setToWidth(width)
-
-  def setToHeight(height: Double): Unit = box.setToHeight(height)
+  def setToHeight(height: Double): Unit = box.setToHeight(height - topPadding - bottomPadding)
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     paint(comp, x, y)

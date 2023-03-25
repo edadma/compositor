@@ -1,21 +1,15 @@
 package io.github.edadma.compositor
 
 class HBox extends ListBox:
-  def height: Double = max(_.height)
+  def naturalWidth: Double = sum(_.width)
 
-  def ascent: Double = max(_.ascent)
+  def naturalAscent: Double = max(_.ascent)
 
-  def ascender: Double = max(_.ascender)
-
-  def descent: Double = max(_.descent)
-
-  def descender: Double = max(_.descender)
-
-  def width: Double = sum(_.width)
+  def naturalDescent: Double = max(_.descent)
 
   override val isHorizontal: Boolean = true
 
-  def length: Double = width
+  def length: Double = naturalWidth
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then

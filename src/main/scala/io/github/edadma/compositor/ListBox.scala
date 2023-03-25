@@ -2,7 +2,7 @@ package io.github.edadma.compositor
 
 import scala.collection.mutable.ArrayBuffer
 
-abstract class ListBox extends AddableBox:
+abstract class ListBox extends AbstractBox with AddableBox:
   def length: Double
 
   protected[compositor] val boxes = new ArrayBuffer[Box]

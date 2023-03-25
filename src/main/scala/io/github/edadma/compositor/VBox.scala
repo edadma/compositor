@@ -7,11 +7,7 @@ class VBox(toWidth: Option[Double] = None, toHeight: Option[Double] = None) exte
 
   def ascent: Double = height // todo: not really correct
 
-  def ascender: Double = height // todo: not really correct
-
   def descent: Double = if boxes.nonEmpty then boxes.last.descent else 0
-
-  def descender: Double = if boxes.nonEmpty then boxes.last.descender else 0
 
   def width: Double = max(_.width)
 

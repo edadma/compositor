@@ -16,4 +16,4 @@ abstract class AbstractBox extends Box:
 
   def width: Double = _width getOrElse naturalWidth
 
-  def height: Double = _height getOrElse (naturalHeight + naturalDescent)
+  def height: Double = _height getOrElse (naturalAscent + naturalDescent)

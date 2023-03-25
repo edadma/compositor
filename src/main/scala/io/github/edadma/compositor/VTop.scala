@@ -1,25 +1,13 @@
 package io.github.edadma.compositor
 
-class VTop(toWidth: Option[Double] = None, toHeight: Option[Double] = None) extends ListBox:
-  def height: Double = toHeight getOrElse sum(_.height)
+class VTop extends ListBox:
+  def length: Double = naturalAscent + naturalDescent
 
-  def length: Double = height
+  def naturalWidth: Double = max(_.width)
 
-  def ascent: Double = if boxes.nonEmpty then boxes.head.ascent else 0
+  def naturalAscent: Double = if boxes.nonEmpty then boxes.head.ascent else 0
 
-  def ascender: Double = if boxes.nonEmpty then boxes.head.ascender else 0
-
-  def descent: Double =
-    toHeight match
-      case None    => if boxes.nonEmpty then boxes.head.descent + boxes.tail.map(_.height).sum else 0
-      case Some(h) => h - ascent
-
-  def descender: Double =
-    toHeight match
-      case None    => if boxes.nonEmpty then boxes.head.descender + boxes.tail.map(_.height).sum else 0
-      case Some(h) => h - ascender
-
-  def width: Double = toWidth getOrElse max(_.width)
+  def naturalDescent: Double = if boxes.nonEmpty then boxes.head.descent + boxes.tail.map(_.height).sum else 0
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
@@ -33,7 +21,7 @@ class VTop(toWidth: Option[Double] = None, toHeight: Option[Double] = None) exte
         if i < boxes.length - 1 then
           val next = boxes(i + 1)
 
-          cy += next.height - (next.descent - b.descent)
+          cy += next.height - (next.descent - b.descent) // todo: this is wrong. baseline?
 
   def setToWidth(width: Double): Unit = boxes foreach (_.setToWidth(width))
 
