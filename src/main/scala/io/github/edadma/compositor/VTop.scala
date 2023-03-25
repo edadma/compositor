@@ -32,5 +32,5 @@ class VTop extends ListBox:
           cy += next.height - (next.descent - b.descent) // todo: this is wrong. baseline?
 
   def set(): Unit =
-    boxes foreach (_.setToWidth(width))
+    boxes foreach (_.set())
     _height foreach set
