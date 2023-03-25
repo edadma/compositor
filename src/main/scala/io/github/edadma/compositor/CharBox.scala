@@ -6,10 +6,9 @@ class CharBox(comp: Compositor, val text: String, val font: Font, val color: Col
   def this(comp: Compositor, text: String) = this(comp, text, comp.currentFont, comp.currentColor)
 
   val extents: TextExtents = comp.ctx.textExtents(text)
-  val height: Double = font.height
+  val baselineHeight: Double = font.height
   val baselineAscent: Double = font.extents.ascent
   val ascent: Double = -extents.yBearing
-  val baselineHeight: Double = font.extents.descent
   val descent: Double = extents.height + extents.yBearing
   val width: Double = extents.xAdvance
   override val isHorizontal: Boolean = true

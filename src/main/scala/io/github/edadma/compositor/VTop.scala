@@ -9,7 +9,7 @@ class VTop extends ListBox:
 
   def naturalAscent: Double = if boxes.nonEmpty then boxes.head.ascent else 0
 
-  def descent: Double = height - ascent
+  def descent: Double = _height.map(_ - naturalAscent) getOrElse naturalDescent
 
   def naturalDescent: Double = if boxes.nonEmpty then boxes.head.descent + boxes.tail.map(_.height).sum else 0
 

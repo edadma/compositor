@@ -1,15 +1,21 @@
 package io.github.edadma.compositor
 
 class VBox() extends ListBox:
-  def height: Double = sum(_.height)
+  def length: Double = naturalAscent + naturalDescent
 
-  def length: Double = height
+  def naturalWidth: Double = max(_.width)
 
-  def ascent: Double = height // todo: not really correct
+  def ascent: Double = _height.map(_ - naturalDescent) getOrElse naturalAscent
 
-  def descent: Double = if boxes.nonEmpty then boxes.last.descent else 0
+  def naturalAscent: Double = if boxes.nonEmpty then boxes.init.map(_.height).sum + boxes.last.ascent else 0
 
-  def width: Double = max(_.width)
+  def descent: Double = naturalDescent
+
+  def naturalDescent: Double = boxes.lastOption map (_.descent) getOrElse 0
+
+  def baselineAscent: Double = if boxes.nonEmpty then boxes.init.map(_.height).sum + boxes.last.baselineAscent else 0
+
+  def baselineHeight: Double = max(_.baselineHeight) // todo: this is probably not correct
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
