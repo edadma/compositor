@@ -27,6 +27,8 @@ class VTop extends ListBox:
         if i < boxes.length - 1 then
           val next = boxes(i + 1)
 
+          println(b)
+          println((b.descent, b.height))
           cy += next.height - (next.descent - b.descent)
 
   def setToWidth(width: Double): Unit = boxes foreach (_.setToWidth(width))
