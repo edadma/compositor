@@ -3,9 +3,17 @@ package io.github.edadma.compositor
 class HBox extends ListBox:
   def naturalWidth: Double = sum(_.width)
 
+  def ascent: Double = naturalAscent
+
   def naturalAscent: Double = max(_.ascent)
 
+  def descent: Double = naturalDescent
+
   def naturalDescent: Double = max(_.descent)
+
+  def baselineAscent: Double = max(_.baselineAscent)
+
+  def baselineHeight: Double = max(_.baselineHeight)
 
   override val isHorizontal: Boolean = true
 
@@ -20,8 +28,6 @@ class HBox extends ListBox:
         cx += b.width
       }
 
-  def setToWidth(width: Double): Unit = set(width)
-
-  def setToHeight(height: Double): Unit = {}
+  def set(): Unit = set(width)
 
   override def toString: String = s"HBox($height, $descent, ${boxes.mkString("[", ", ", "]")})"

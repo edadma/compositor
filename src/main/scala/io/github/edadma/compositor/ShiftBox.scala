@@ -4,15 +4,13 @@ class ShiftBox(box: Box, shift: Double) extends SetBox:
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     box.draw(comp, x, y + shift)
 
-  def height: Double = 0 // todo: fix this if possible
+  def ascent: Double = 0 // todo: fix
 
-  def ascent: Double = 0
+  def descent: Double = 0 // todo: fix
 
-  def ascender: Double = 0
+  def baselineAscent: Double = 0 // todo: fix
 
-  def descent: Double = 0
-
-  def descender: Double = 0
+  def baselineHeight: Double = 0 // todo: fix
 
   def width: Double = box.width
 

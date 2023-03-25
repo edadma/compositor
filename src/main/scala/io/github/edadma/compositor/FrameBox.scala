@@ -49,15 +49,19 @@ class FrameBox(box: Box) extends Box:
 
   def width: Double = box.width + leftPadding + rightPadding
 
-  def height: Double = box.height + topPadding + bottomPadding
-
   def ascent: Double = box.ascent + topPadding
 
   def descent: Double = box.descent + bottomPadding
 
+  def baselineAscent: Double = box.baselineAscent + topPadding
+
+  override def baselineHeight: Double = box.baselineHeight // todo: left out topPadding + bottomPadding
+
   def setToWidth(width: Double): Unit = box.setToWidth(width - leftPadding - rightPadding)
 
   def setToHeight(height: Double): Unit = box.setToHeight(height - topPadding - bottomPadding)
+
+  def set(): Unit = box.set()
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     paint(comp, x, y)

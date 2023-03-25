@@ -6,3 +6,7 @@ trait SameBox(box: Box) extends SetBox:
   def descent: Double = box.descent
 
   def width: Double = box.width
+
+  def baselineAscent: Double = box.baselineAscent
+
+  def baselineHeight: Double = box.baselineHeight

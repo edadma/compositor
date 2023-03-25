@@ -21,8 +21,6 @@ abstract class ListBox extends AbstractBox with AddableBox:
 
   def +=(box: Box): Unit = add(box)
 
-  def clear(): Unit = boxes.clear()
-
   def set(size: Double): Unit =
     val allSpaces = boxes.filter(_.isSpace).asInstanceOf[ArrayBuffer[SpaceBox]]
 
