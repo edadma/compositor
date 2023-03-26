@@ -133,12 +133,16 @@ val commands =
       ): Any =
         args match
           case List(a: AST) =>
-            val hbox = new HBox
-
-            context.asInstanceOf[Compositor].hbox(hbox)
+            context.asInstanceOf[Compositor].hbox()
             renderer.render(a)
-            context.asInstanceOf[Compositor].modeStack.pop()
-            context.asInstanceOf[Compositor].add(new UnderlineBox(context.asInstanceOf[Compositor], hbox))
+            context
+              .asInstanceOf[Compositor]
+              .add(
+                new UnderlineBox(
+                  context.asInstanceOf[Compositor],
+                  context.asInstanceOf[Compositor].modeStack.pop.result,
+                ),
+              )
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -152,12 +156,13 @@ val commands =
       ): Any =
         args match
           case List(c: AST, a: AST) =>
-            val hbox = new HBox
-
-            context.asInstanceOf[Compositor].hbox(hbox)
+            context.asInstanceOf[Compositor].hbox()
             renderer.render(a)
-            context.asInstanceOf[Compositor].modeStack.pop
-            context.asInstanceOf[Compositor].add(new FrameBox(hbox) { border = Color(renderer.eval(c).toString) })
+            context
+              .asInstanceOf[Compositor]
+              .add(new FrameBox(context.asInstanceOf[Compositor].modeStack.pop.result) {
+                border = Color(renderer.eval(c).toString)
+              })
           case _ => problem(pos, "expected arguments <color> <text>")
     ,
     new Command("background", 4, false):
