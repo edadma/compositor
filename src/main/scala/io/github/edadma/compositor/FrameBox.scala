@@ -71,3 +71,5 @@ class FrameBox(box: Box) extends Box:
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     paint(comp, x, y)
     box.draw(comp, x + leftPadding, y)
+
+  override def toString: String = s"FrameBox($height)"

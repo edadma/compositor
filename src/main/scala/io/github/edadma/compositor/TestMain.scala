@@ -1,7 +1,6 @@
 package io.github.edadma.compositor
 
-/*@main*/
-def runTest(): Unit =
+@main def runTest(): Unit =
   val doc = Compositor.png("test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
 
 //  doc.modeStack.push(new PageMode(doc, new SimplePage(300, Some(200))))
