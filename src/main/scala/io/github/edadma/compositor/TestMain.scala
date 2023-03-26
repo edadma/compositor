@@ -1,6 +1,7 @@
 package io.github.edadma.compositor
 
-@main def runTest(): Unit =
+/*@main*/
+def runTest(): Unit =
   val doc = Compositor.png("test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
 
 //  doc.modeStack.push(new PageMode(doc, new SimplePage(300, Some(200))))
@@ -16,11 +17,11 @@ package io.github.edadma.compositor
 
   doc.add(new VSpaceBox(1))
   doc.modeStack push new BoxMode(doc)
-  doc.hbox()
+  doc.page(doc.pageWidth, Some(doc.pageHeight / 3))
   doc.add("hello")
   doc.done()
   doc.add(new FrameBox(doc.modeStack.pop.result) {
-    background = Color("black", 0.5)
+    background = Color("blue", 0.5)
     rounded = false
     padding(5)
   })

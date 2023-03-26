@@ -5,4 +5,4 @@ trait SimpleBox extends SetBox:
 
   def baselineAscent: Double = ascent
 
-  def baselineHeight: Double = ascent
+  def baselineHeight: Double = 0 // todo: was ascent, but didn't work for VSpaceBox

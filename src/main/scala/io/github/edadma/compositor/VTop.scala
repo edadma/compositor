@@ -1,5 +1,7 @@
 package io.github.edadma.compositor
 
+import pprint.pprintln
+
 class VTop extends ListBox:
   def length: Double = naturalAscent + naturalDescent
 
@@ -11,11 +13,13 @@ class VTop extends ListBox:
 
   def descent: Double = _height.map(_ - naturalAscent) getOrElse naturalDescent
 
-  def naturalDescent: Double = if boxes.nonEmpty then boxes.head.descent + boxes.tail.map(_.baselineHeight).sum else 0
+  def naturalDescent: Double =
+    if boxes.nonEmpty then boxes.head.descent + boxes.tail.map(b => b.baselineHeight max b.height).sum else 0
 
   def baselineAscent: Double = boxes.headOption map (_.baselineAscent) getOrElse 0
 
-  def baselineHeight: Double = _height getOrElse sum(_.baselineHeight) // todo: this is probably not correct
+  def baselineHeight: Double =
+    _height getOrElse sum(b => b.baselineHeight max b.height) // todo: this is probably not correct
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
@@ -24,14 +28,22 @@ class VTop extends ListBox:
       for i <- boxes.indices do
         val b = boxes(i)
 
+        println(("VTop.draw", b, cy))
         b.draw(comp, x, cy)
 
         if i < boxes.length - 1 then
           val next = boxes(i + 1)
 
 //          cy += next.height - (next.descent - b.descent) // todo: this is wrong. baseline?
-          cy += b.baselineHeight
+          cy += {
+            val skip = b.descent + next.ascent
+            val baselines = List(b.baselineHeight, next.baselineHeight) filterNot (_ == 0)
+            val baseline = baselines.sum / baselines.length
+
+            skip max baseline
+          }
 
   def set(): Unit =
+    pprintln("VTop set")
     boxes foreach (_.set())
     _height foreach set

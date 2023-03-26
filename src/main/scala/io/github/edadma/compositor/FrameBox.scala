@@ -1,5 +1,7 @@
 package io.github.edadma.compositor
 
+import pprint.pprintln
+
 class FrameBox(box: Box) extends Box:
   var rounded: Boolean = true
   var background: Color | Null = null
@@ -61,7 +63,10 @@ class FrameBox(box: Box) extends Box:
 
   def setToHeight(height: Double): Unit = box.setToHeight(height - topPadding - bottomPadding)
 
-  def set(): Unit = box.set()
+  def set(): Unit =
+    println("FrameBox set")
+    pprintln(box)
+    box.set()
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     paint(comp, x, y)

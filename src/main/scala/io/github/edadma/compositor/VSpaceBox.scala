@@ -4,3 +4,5 @@ class VSpaceBox(val order: Int, min: Double = 0, val stretchable: Double = 1) ex
   val width: Double = 0
 
   def ascent: Double = min + stretch
+
+  override def toString: String = s"VSpaceBox(order = $order, ascent = $ascent)"

@@ -19,6 +19,8 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
+import pprint.pprintln
+
 abstract class Compositor private[compositor]:
   import Unicode.*
 
