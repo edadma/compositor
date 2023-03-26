@@ -66,7 +66,6 @@ val commands =
             val width = renderer.eval(w).asInstanceOf[Number].doubleValue()
             val height = renderer.eval(h).asInstanceOf[Number].doubleValue()
 
-            println(("pagebox", height))
             context.asInstanceOf[Compositor].page(width, Some(height))
             renderer.render(page)
             context.asInstanceOf[Compositor].done()
