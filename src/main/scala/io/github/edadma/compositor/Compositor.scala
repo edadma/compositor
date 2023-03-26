@@ -324,7 +324,7 @@ abstract class Compositor private[compositor]:
     for (p, i) <- pages.zipWithIndex do
       p.set()
       paintBackground()
-      p.draw(this, 0, p.ascent)
+      p.draw(this, 0, p.baselineAscent)
       emit(i)
 
   def paintBackground(): Unit
