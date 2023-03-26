@@ -14,6 +14,7 @@ package io.github.edadma.compositor
 //  doc.output()
 //  doc.destroy()
 
+  doc.add(new VSpaceBox(1))
   doc.modeStack push new BoxMode(doc)
   doc.hbox()
   doc.add("hello")
