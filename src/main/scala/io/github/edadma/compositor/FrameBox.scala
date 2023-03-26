@@ -30,7 +30,7 @@ class FrameBox(box: Box) extends Box:
         )
       else
         comp.ctx.rectangle(
-          x,
+          x, // todo: maybe subtract leftPadding
           y - ascent,
           width,
           height,
@@ -53,9 +53,9 @@ class FrameBox(box: Box) extends Box:
 
   def descent: Double = box.descent + bottomPadding
 
-  def baselineAscent: Double = box.baselineAscent + topPadding
+  def baselineAscent: Double = box.baselineAscent // todo: left out + topPadding
 
-  override def baselineHeight: Double = box.baselineHeight // todo: left out topPadding + bottomPadding
+  override def baselineHeight: Double = box.baselineHeight // todo: left out + topPadding + bottomPadding
 
   def setToWidth(width: Double): Unit = box.setToWidth(width - leftPadding - rightPadding)
 

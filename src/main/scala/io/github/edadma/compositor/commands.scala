@@ -156,7 +156,7 @@ val commands =
 
             context.asInstanceOf[Compositor].hbox(hbox)
             renderer.render(a)
-            context.asInstanceOf[Compositor].modeStack.pop()
+            context.asInstanceOf[Compositor].modeStack.pop
             context.asInstanceOf[Compositor].add(new FrameBox(hbox) { border = Color(renderer.eval(c).toString) })
           case _ => problem(pos, "expected arguments <color> <text>")
     ,
@@ -173,14 +173,12 @@ val commands =
             val color = renderer.eval(c).toString
             val alpha = renderer.eval(a).asInstanceOf[Number].doubleValue()
             val pad = renderer.eval(a).asInstanceOf[Number].doubleValue()
-            val hbox = new HBox
 
-            context.asInstanceOf[Compositor].hbox(hbox)
+            context.asInstanceOf[Compositor].modeStack push new BoxMode(context.asInstanceOf[Compositor])
             renderer.render(material)
-            context.asInstanceOf[Compositor].modeStack.pop()
             context
               .asInstanceOf[Compositor]
-              .add(new FrameBox(hbox) {
+              .add(new FrameBox(context.asInstanceOf[Compositor].modeStack.pop.result) {
                 background = Color(color, alpha)
                 rounded = false
                 padding(pad)
