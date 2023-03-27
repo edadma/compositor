@@ -211,7 +211,9 @@ val commands =
         args match
           case List(a: AST) =>
             context.asInstanceOf[Compositor].hbox()
+            context.asInstanceOf[Compositor].bold()
             renderer.render(a)
+            context.asInstanceOf[Compositor].nobold()
             context.asInstanceOf[Compositor].done()
             context.asInstanceOf[Compositor].add(new VSpaceBox(0, min = 5, stretchable = 0))
           case List(a) => problem(pos, s"expected arguments <text>: $a")
