@@ -177,7 +177,7 @@ val commands =
           case List(c: AST, a: AST, p: AST, material: AST) =>
             val color = renderer.eval(c).toString
             val alpha = renderer.eval(a).asInstanceOf[Number].doubleValue()
-            val pad = renderer.eval(a).asInstanceOf[Number].doubleValue()
+            val pad = renderer.eval(p).asInstanceOf[Number].doubleValue()
 
             context.asInstanceOf[Compositor].modeStack push new BoxMode(context.asInstanceOf[Compositor])
             renderer.render(material)

@@ -24,12 +24,8 @@ abstract class ListBox extends AbstractBox with AddableBox:
   def +=(box: Box): Unit = add(box)
 
   def set(size: Double): Unit =
-    pprintln(this)
-    pprintln((size, length))
-
     val allSpaces = boxes.filter(_.isSpace).asInstanceOf[ArrayBuffer[SpaceBox]]
 
-    pprintln(allSpaces)
     if allSpaces.nonEmpty then
       val maxOrder = allSpaces.map(_.order).max
       val spaces = allSpaces.filter(_.order == maxOrder)
@@ -39,6 +35,5 @@ abstract class ListBox extends AbstractBox with AddableBox:
 
       val diff = size - length
 
-      if totalStretchable > 0 then spaces foreach (s => s.stretch = diff * s.stretchable / totalStretchable)
-
-    pprintln(allSpaces)
+       if totalStretchable > 0 then
+        spaces foreach (s => s.stretch = diff * s.stretchable / totalStretchable)

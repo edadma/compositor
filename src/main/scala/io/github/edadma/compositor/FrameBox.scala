@@ -32,7 +32,7 @@ class FrameBox(box: Box) extends Box:
         )
       else
         comp.ctx.rectangle(
-          x, // todo: maybe subtract leftPadding
+          x,
           y - ascent,
           width,
           height,
@@ -57,19 +57,16 @@ class FrameBox(box: Box) extends Box:
 
   def baselineAscent: Double = box.baselineAscent // todo: left out + topPadding
 
-  override def baselineHeight: Double = box.baselineHeight // todo: left out + topPadding + bottomPadding
+  override def baselineHeight: Double = box.baselineHeight + topPadding // todo: left out + topPadding + bottomPadding
 
   def setToWidth(width: Double): Unit = box.setToWidth(width - leftPadding - rightPadding)
 
   def setToHeight(height: Double): Unit = box.setToHeight(height - topPadding - bottomPadding)
 
-  def set(): Unit =
-    println("FrameBox set")
-    pprintln(box)
-    box.set()
+  def set(): Unit = box.set()
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     paint(comp, x, y)
     box.draw(comp, x + leftPadding, y)
 
-  override def toString: String = s"FrameBox($height)"
+  override def toString: String = s"FrameBox(height = $height, baselineHeight = $baselineHeight)"

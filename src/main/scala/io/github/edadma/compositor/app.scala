@@ -80,6 +80,7 @@ def app(args: Config): Unit =
   val ast = parser.parse(input)
 
   // pprintln(ast)
+  println(s"page width = ${doc.pageWidth}")
   renderer.render(ast)
   doc.output()
   doc.destroy()

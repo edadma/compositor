@@ -3,7 +3,7 @@ package io.github.edadma.compositor
 import pprint.pprintln
 
 class VTop extends ListBox:
-  def length: Double = naturalAscent + naturalDescent
+  def length: Double = /*_height getOrElse*/ (naturalAscent + naturalDescent)
 
   def naturalWidth: Double = max(_.width)
 
@@ -18,8 +18,8 @@ class VTop extends ListBox:
 
   def baselineAscent: Double = boxes.headOption map (_.baselineAscent) getOrElse 0
 
-  def baselineHeight: Double =
-    _height getOrElse sum(b => b.baselineHeight max b.height) // todo: this is probably not correct
+  def baselineHeight: Double = 0
+//    _height getOrElse sum(b => b.baselineHeight max b.height) // todo: this is probably not correct
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
@@ -28,7 +28,6 @@ class VTop extends ListBox:
       for i <- boxes.indices do
         val b = boxes(i)
 
-        println(("VTop.draw", b, cy))
         b.draw(comp, x, cy)
 
         if i < boxes.length - 1 then
@@ -44,6 +43,5 @@ class VTop extends ListBox:
           }
 
   def set(): Unit =
-    pprintln("VTop set")
     boxes foreach (_.set())
     _height foreach set

@@ -363,10 +363,10 @@ class PNGCompositor private[compositor] (
 ) extends Compositor:
   color("white")
 
-  def paintBackground(): Unit =
-    color("black")
-    ctx.rectangle(0, 0, pageWidth, pageHeight)
-    ctx.fill()
+  def paintBackground(): Unit = {}
+//    color("black")
+//    ctx.rectangle(0, 0, pageWidth, pageHeight)
+//    ctx.fill()
 
   def emit(idx: Int): Unit = surface.writeToPNG(path)
 
