@@ -15,8 +15,6 @@ class HBox extends ListBox:
 
   def baselineHeight: Double = max(_.baselineHeight)
 
-  override val isHorizontal: Boolean = true
-
   def length: Double = naturalWidth
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =

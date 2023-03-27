@@ -188,5 +188,22 @@ val commands =
                 rounded = false
                 padding(pad)
               })
-          case _ => problem(pos, "expected arguments <color> <text>"),
+          case _ => problem(pos, "expected arguments <color> <text>")
+    ,
+    new Command("heading", 1, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(a: AST) =>
+            context.asInstanceOf[Compositor].hbox()
+            renderer.render(a)
+            context.asInstanceOf[Compositor].done()
+            context.asInstanceOf[Compositor].add(new VSpaceBox(0, min = 5, stretchable = 0))
+          case List(a) => problem(pos, s"expected arguments <text>: $a")
+          case _       => problem(pos, "expected arguments <text>"),
   )
