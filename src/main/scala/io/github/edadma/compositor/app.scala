@@ -81,6 +81,7 @@ def app(args: Config): Unit =
 
   // pprintln(ast)
   println(s"page width = ${doc.pageWidth}")
+  println(s"page height = ${doc.pageHeight}")
   renderer.render(ast)
   doc.output()
   doc.destroy()
