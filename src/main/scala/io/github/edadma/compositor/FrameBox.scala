@@ -49,6 +49,8 @@ class FrameBox(box: Box) extends Box:
       frame()
       comp.ctx.stroke()
 
+  val typ: Type = box.typ
+
   def width: Double = box.width + leftPadding + rightPadding
 
   def ascent: Double = box.ascent + topPadding

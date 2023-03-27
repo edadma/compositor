@@ -1,6 +1,8 @@
 package io.github.edadma.compositor
 
 class VBox() extends ListBox:
+  val typ: Type = Type.Vertical
+
   def length: Double = naturalAscent + naturalDescent
 
   def naturalWidth: Double = max(_.width)

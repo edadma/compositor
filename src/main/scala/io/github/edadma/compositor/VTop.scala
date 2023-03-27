@@ -3,6 +3,8 @@ package io.github.edadma.compositor
 import pprint.pprintln
 
 class VTop extends ListBox:
+  val typ: Type = Type.Vertical
+
   def length: Double = /*_height getOrElse*/ (naturalAscent + naturalDescent)
 
   def naturalWidth: Double = max(_.width)

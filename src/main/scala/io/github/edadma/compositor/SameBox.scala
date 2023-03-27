@@ -1,6 +1,8 @@
 package io.github.edadma.compositor
 
 trait SameBox(box: Box) extends SetBox:
+  val typ: Type = box.typ
+
   def ascent: Double = box.ascent
 
   def descent: Double = box.descent

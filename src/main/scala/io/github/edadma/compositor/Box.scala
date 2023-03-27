@@ -12,4 +12,7 @@ trait Box:
   def setToHeight(height: Double): Unit
   def set(): Unit
   def isSpace: Boolean = this.isInstanceOf[SpaceBox]
-  def isHorizontal: Boolean = false
+  def typ: Type
+
+enum Type:
+  case Start, Horizontal, Vertical

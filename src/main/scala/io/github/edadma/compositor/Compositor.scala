@@ -312,6 +312,13 @@ abstract class Compositor private[compositor]:
 
   def glyphBox(s: String): GlyphBox = new GlyphBox(this, s)
 
+  def start(): Unit =
+    paragraph()
+
+    modeStack.top match
+      case p: PageMode => p.start
+      case _           =>
+
   def paragraph(): Unit =
     modeStack.top match
       case p: ParagraphMode => p.done()

@@ -15,7 +15,7 @@ class HBox extends ListBox:
 
   def baselineHeight: Double = max(_.baselineHeight)
 
-  override val isHorizontal: Boolean = true
+  val typ: Type = Type.Horizontal
 
   def length: Double = naturalWidth
 

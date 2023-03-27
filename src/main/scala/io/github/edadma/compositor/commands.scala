@@ -188,5 +188,15 @@ val commands =
                 rounded = false
                 padding(pad)
               })
-          case _ => problem(pos, "expected arguments <color> <text>"),
+          case _ => problem(pos, "expected arguments <color> <text>")
+    ,
+    new Command("start", 0):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        context.asInstanceOf[Compositor].start(),
   )

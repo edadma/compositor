@@ -3,6 +3,8 @@ package io.github.edadma.compositor
 import io.github.edadma.libcairo.{LineCap, LineJoin}
 
 class CanvasBox(comp: Compositor, painting: List[Paint]) extends SimpleBox:
+  val typ: Type = Type.Horizontal
+
   import Paint._
 
   private val color = comp.currentColor

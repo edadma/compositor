@@ -12,6 +12,8 @@ private val numberRegex = "[0-9]+".r
 private val footnoteRegex = "[^[]+\\[[a-z]]".r
 
 def verses(comp: Compositor, text: String): Unit =
+  comp.start()
+
   val words = text.split("\\s+")
   var i = 0
 

@@ -8,6 +8,7 @@ class GlyphBox(comp: Compositor, val text: String, val font: Font, val color: Co
   val extents: TextExtents = comp.ctx.textExtents(text)
   val ascent: Double = extents.height
   val width: Double = extents.xAdvance - extents.xBearing
+  val typ: Type = Type.Horizontal
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if text.nonEmpty then
