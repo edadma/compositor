@@ -4,8 +4,8 @@ import java.io.File
 
 case class Config(
     input: Option[File] = None,
-    output: Option[File] = None,
-    typ: String = "pdf",
+    output: String = null,
+    typ: String = null,
     paper: String = "letter",
     resolution: String = "hd",
     size: Double = 13,
@@ -28,9 +28,9 @@ case class Config(
       opt[Unit]('m', "multi")
         .action((_, c) => c.copy(multi = true))
         .text("multi"),
-      opt[File]('o', "output")
+      opt[String]('o', "output")
         .valueName("<output file>")
-        .action((x, c) => c.copy(output = Some(x)))
+        .action((x, c) => c.copy(output = x))
         .text("output file"),
       opt[String]('p', "paper")
         .valueName("<a4 | letter>")
@@ -63,13 +63,20 @@ case class Config(
           case "png" | "pdf" => success
           case _             => failure("only 'png' or 'pdf' are allowed as output file types")
         })
-        .text("output file type (defaults to pdf)"),
+        .text("output file type (defaults to pdf, or png for multi mode)"),
     )
   }
 
+  def config: PartialFunction[Config, Unit] = {
+    case c @ Config(_, null, _, _, _, _, _)     => config(c.copy(output = "out"))
+    case c @ Config(_, _, null, _, _, _, false) => config(c.copy(typ = "pdf"))
+    case c @ Config(_, _, null, _, _, _, true)  => config(c.copy(typ = "png"))
+    case c                                      => app(c)
+  }
+
   OParser.parse(parser, args, Config()) match {
-    case Some(config) => app(config)
-    case _            =>
+    case Some(c) => config(c)
+    case _       =>
   }
 
 ////  doc add new FrameBox(new RigidBox(doc.pageWidth, doc.pageHeight * 2 / 3)) { background = Color.TRANSPARENT }

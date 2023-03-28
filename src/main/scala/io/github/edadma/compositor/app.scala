@@ -23,7 +23,7 @@ def app(args: Config): Unit =
         else new String(Files.readAllBytes(file.toPath))
   val output =
     args match
-      case Config(None, None, typ, _, _, _) => Paths.get(s"out.$typ").normalize.toAbsolutePath
+      case Config(None, out, typ, _, _, _) => Paths.get(s"$out.$typ").normalize.toAbsolutePath
       case Config(Some(file), None, typ, _, _, _) =>
         val path = file.toPath.normalize.toAbsolutePath
 
