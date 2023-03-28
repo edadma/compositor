@@ -23,7 +23,7 @@ def app(args: Config): Unit =
         else new String(Files.readAllBytes(file.toPath))
   val output =
     args match
-      case Config(None, out, typ, _, _, _) => Paths.get(s"$out.$typ").normalize.toAbsolutePath
+      case Config(None, None, typ, _, _, _) => Paths.get(s"$out.$typ").normalize.toAbsolutePath
       case Config(Some(file), None, typ, _, _, _) =>
         val path = file.toPath.normalize.toAbsolutePath
 
@@ -34,14 +34,14 @@ def app(args: Config): Unit =
 
   val doc =
     args match
-      case Config(_, _, "pdf", paper, _, _) =>
+      case Config(_, _, "pdf", paper, _, _, _) =>
         val p =
           paper match
             case "a4"     => Paper.A4
             case "letter" => Paper.LETTER
 
         Compositor.pdf(output.toString, p, simplePageFactory())
-      case Config(_, _, "png", _, resolution, size) =>
+      case Config(_, _, "png", _, resolution, size, _) =>
         val (width, height) =
           resolution match
             case "sd"  => (720, 480)
@@ -56,15 +56,7 @@ def app(args: Config): Unit =
       "include" -> ".",
       "rounding" -> "HALF_EVEN",
     )
-  val actives =
-    List(
-//      new Active("<") {
-//        def apply(pos: CharReader, r: Renderer): String = {
-//          "lt"
-//        }
-//      },
-    )
-  val parser = new Parser(Command.builtins ++ commands, actives, blanks = true)
+  val parser = new Parser(Command.builtins ++ commands, Nil, blanks = true)
   var newlineCount: Int = 0
   val out: PartialFunction[Any, Unit] = {
     case "\n" if newlineCount == 0 => newlineCount += 1
