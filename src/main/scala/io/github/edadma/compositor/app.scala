@@ -10,9 +10,9 @@ import scala.collection.mutable
 
 import pprint._
 
-def app(config: Config): Unit =
+def app(args: Config): Unit =
   val input =
-    config match
+    args match
       case Config(None, _, _, _, _, _, _) => scala.io.Source.stdin.mkString
       case Config(Some(file), _, _, _, _, _, _) =>
         val path = file.toPath.normalize.toAbsolutePath
@@ -22,24 +22,17 @@ def app(config: Config): Unit =
         else if !Files.isRegularFile(path) then problem(s"'$path' is not a file")
         else new String(Files.readAllBytes(file.toPath))
 
-  if config.multi then
-    val inputs = input.split("---")
-  else process(input, 0)
+  if args.multi then
+    input.split("---").zipWithIndex.foreach { case (in, idx) => process(in, f"${idx + 1}% 3d".replace(' ', '_')) }
+  else process(input, "")
 
-  def process(in: String, n: Int): Unit =
-    val output =
-      config match
-        case Config(None, out, typ, _, _, _, _) => Paths.get(s"$out.$typ").normalize.toAbsolutePath
-        case Config(Some(file), None, typ, _, _, _, _) =>
-          val path = file.toPath.normalize.toAbsolutePath
-
-          path.getParent.resolve(s"${path.getFileName.toString}.$typ")
-        case Config(_, Some(file), _, _, _, _, _) => file.toPath.normalize.toAbsolutePath
+  def process(in: String, suffix: String): Unit =
+    val output = Paths.get(s"${args.output}.${args.typ}").normalize.toAbsolutePath
 
     if !Files.isWritable(output.getParent) then problem(s"'$output' is not writable")
 
     val doc =
-      config match
+      args match
         case Config(_, _, "pdf", paper, _, _, _) =>
           val p =
             paper match
