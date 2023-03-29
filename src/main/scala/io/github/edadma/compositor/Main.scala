@@ -68,10 +68,11 @@ case class Config(
   }
 
   def config: PartialFunction[Config, Unit] = {
-    case c @ Config(_, null, _, _, _, _, _)     => config(c.copy(output = "out"))
-    case c @ Config(_, _, null, _, _, _, false) => config(c.copy(typ = "pdf"))
-    case c @ Config(_, _, null, _, _, _, true)  => config(c.copy(typ = "png"))
-    case c                                      => app(c)
+    case c @ Config(None, null, _, _, _, _, _)       => config(c.copy(output = "out"))
+    case c @ Config(Some(file), null, _, _, _, _, _) => config(c.copy(output = file.getName))
+    case c @ Config(_, _, null, _, _, _, false)      => config(c.copy(typ = "pdf"))
+    case c @ Config(_, _, null, _, _, _, true)       => config(c.copy(typ = "png"))
+    case c                                           => app(c)
   }
 
   OParser.parse(parser, args, Config()) match {
