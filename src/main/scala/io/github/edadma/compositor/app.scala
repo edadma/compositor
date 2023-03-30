@@ -23,11 +23,14 @@ def app(args: Config): Unit =
         else new String(Files.readAllBytes(file.toPath))
 
   if args.multi then
-    input.split("---").zipWithIndex.foreach { case (in, idx) => process(in, f"${idx + 1}% 3d".replace(' ', '_')) }
+    input.split("---.*\n").filterNot(_.matches("\\s*")).zipWithIndex.foreach { case (in, idx) =>
+      process(in, f"${idx + 1}% 3d".replace(' ', '_'))
+    }
   else process(input, "")
 
   def process(in: String, suffix: String): Unit =
-    val output = Paths.get(s"${args.output}.${args.typ}").normalize.toAbsolutePath
+    pprintln((in, suffix))
+    val output = Paths.get(s"${args.output}$suffix.${args.typ}").normalize.toAbsolutePath
 
     if !Files.isWritable(output.getParent) then problem(s"'$output' is not writable")
 
@@ -68,11 +71,11 @@ def app(args: Config): Unit =
         newlineCount = 0
     }
     val renderer = new Renderer(parser, config, _.mkString, doc, out)
-    val ast = parser.parse(input)
+    val ast = parser.parse(in)
 
     // pprintln(ast)
-    println(s"page width = ${doc.pageWidth}")
-    println(s"page height = ${doc.pageHeight}")
+//    println(s"page width = ${doc.pageWidth}")
+//    println(s"page height = ${doc.pageHeight}")
     renderer.render(ast)
     doc.output()
     doc.destroy()
