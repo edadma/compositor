@@ -29,7 +29,6 @@ def app(args: Config): Unit =
   else process(input, "")
 
   def process(in: String, suffix: String): Unit =
-    pprintln((in, suffix))
     val output = Paths.get(s"${args.output}$suffix.${args.typ}").normalize.toAbsolutePath
 
     if !Files.isWritable(output.getParent) then problem(s"'$output' is not writable")
