@@ -229,5 +229,26 @@ val commands =
         args match
           case List(family: String, size: Number, style: String) =>
             context.asInstanceOf[Compositor].selectFont(family, size.doubleValue, style.split("\\s+").toSet)
-          case _ => problem(pos, "expected arguments <family> <size> <style>"),
+            ()
+          case _ => problem(pos, "expected arguments <family> <size> <style>")
+    ,
+    new Command("indent", 0):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        context.asInstanceOf[Compositor].indent()
+    ,
+    new Command("noindent", 0):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        context.asInstanceOf[Compositor].noindent(),
   )

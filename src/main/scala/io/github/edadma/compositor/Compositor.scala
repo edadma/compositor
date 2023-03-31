@@ -111,7 +111,7 @@ abstract class Compositor private[compositor]:
   modeStack push new DocumentMode(this)
   modeStack push new PageMode(this, pageFactory(this, pageWidth, pageHeight))
 
-  var indent: Boolean = true
+  var indentParagraph: Boolean = true
   var parindent: Double = 20
   var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
   var currentFont: Font = makeFont("notoserif", 12)
@@ -234,7 +234,7 @@ abstract class Compositor private[compositor]:
         (true, None)
       case Some(Typeface(fonts, baseline)) =>
         val face = fonts.getOrElse(
-          styleSet,
+          styleSet map (_.toLowerCase) filterNot (_ == "regular"),
           sys.error(
             s"font for typeface '$family' with style '${styleSet.mkString(", ")}' has not been loaded",
           ),
@@ -261,7 +261,13 @@ abstract class Compositor private[compositor]:
 
   def hbox(): Unit = modeStack push new HBoxMode(this)
 
-  def noindent(): Unit = indent = false
+  def indent(): Unit =
+    indentParagraph = true
+    start()
+
+  def noindent(): Unit =
+    indentParagraph = false
+    start()
 
   def italic(): Unit = addStyle("italic")
 

@@ -73,6 +73,6 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
       pageMode.result add hbox
     end while
 
-    comp.indent = true
+    comp.indentParagraph = true
     pop
   end done
