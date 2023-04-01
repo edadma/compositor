@@ -25,7 +25,12 @@ def verses(comp: Compositor, text: String): Unit =
       i += 2
     else
       if footnoteRegex matches word then comp add word.dropRight(3)
-      else if word.nonEmpty then comp add word
+      else if word.nonEmpty then
+        if word == "LORD" then
+          comp.smallcaps()
+          comp add "Lord"
+          comp.nosmallcaps()
+        else comp add word
 
       i += 1
 

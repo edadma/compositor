@@ -103,6 +103,22 @@ val commands =
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
+    new Command("smallcaps", 1, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(a: AST) =>
+            context.asInstanceOf[Compositor].smallcaps()
+            renderer.render(a)
+            context.asInstanceOf[Compositor].nosmallcaps()
+          case List(a) => problem(pos, s"expected arguments <text>: $a")
+          case _       => problem(pos, "expected arguments <text>")
+    ,
     new Command("vfil", 0, false):
       def apply(
           pos: CharReader,

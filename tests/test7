@@ -1,4 +1,5 @@
-\font pt 12 "regular"
-office file waffle flux cliff
+\font alegreya 12 "regular"
+This is a test of the Alegreya typeface
 
-This is a test
+\font alegreya 12 "smallcaps" \noindent
+This is a test of the Alegreya typeface

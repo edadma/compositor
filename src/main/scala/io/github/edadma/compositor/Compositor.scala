@@ -163,7 +163,7 @@ abstract class Compositor private[compositor]:
   var indentParagraph: Boolean = true
   var parindent: Double = 20
   var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
-  var currentFont: Font = makeFont("notoserif", 12)
+  var currentFont: Font = makeFont("alegreya", 12)
   var currentColor: Color = Color(0, 0, 0, 1)
   var ligatures: Boolean = true
   var representations: Boolean = false
@@ -335,6 +335,10 @@ abstract class Compositor private[compositor]:
   def bold(): Unit = addStyle("bold")
 
   def nobold(): Unit = removeStyle("bold")
+
+  def smallcaps(): Unit = addStyle("smallcaps")
+
+  def nosmallcaps(): Unit = removeStyle("smallcaps")
 
   def setStyle(style: Set[String]): Font = selectFont(currentFont.family, currentFont.size, style)
 
