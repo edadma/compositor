@@ -46,5 +46,8 @@ class VTop extends ListBox:
           }
 
   def set(): Unit =
-    boxes foreach (_.set())
+    boxes foreach { l =>
+      l.setToWidth(width)
+      l.set()
+    }
     _height foreach set

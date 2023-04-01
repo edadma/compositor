@@ -1,1 +1,1 @@
-\font alegreya 50 regular \background #1a2441 1 0 {\pagebox 815.7947 458.8845 {\vfil \hbox{\hfil this is a test}\vfil}}
+\font alegreya 50 regular \background #1a2441 1 0 {\pagebox 815.7947 458.8845 {\vfil \center{this is a test 1}\center{this is a test 2}\vfil}}
