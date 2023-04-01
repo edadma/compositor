@@ -35,9 +35,10 @@ abstract class Compositor private[compositor]:
   // all ligatures: "\uFB03\uFB04\uFB01\uFB02\uFB00"
 
   loadTypeface(
-    "notoserif",
+    "noto",
     "fonts/NotoSerif/NotoSerif",
     "\uFB03\uFB04\uFB01\uFB02",
+    Set(),
     "Regular",
     "Bold",
     "Italic",
@@ -48,9 +49,10 @@ abstract class Compositor private[compositor]:
 //  loadFont("galatia", "fonts/GalSIL21/GalSILR.ttf")
 //  loadFont("galatia", "fonts/GalSIL21/GalSILB.ttf", "bold")
   loadTypeface(
-    "notosans",
+    "noto",
     "fonts/NotoSans/NotoSans",
     "\uFB03\uFB04\uFB01\uFB02\uFB00",
+    Set("sans"),
     "Black",
     ("Black", "Italic"),
     "Bold",
@@ -74,17 +76,19 @@ abstract class Compositor private[compositor]:
     "gentium",
     "fonts/GentiumPlus-6.200/GentiumPlus",
     "\uFB03\uFB04\uFB01\uFB02\uFB00",
+    Set(),
     "Regular",
     "Bold",
     "Italic",
     ("Bold", "Italic"),
   )
   overrideBaseline("gentium", 0.8)
-  loadTypeface("pt", "fonts/PTSansNarrow/PTSansNarrow", "Regular", "Bold")
+  loadTypeface("pt", "fonts/PTSansNarrow/PTSansNarrow", "\uFB03\uFB04\uFB01\uFB02\uFB00", Set(), "Regular", "Bold")
   loadTypeface(
     "mono",
     "fonts/JetBrainsMono/static/JetBrainsMono",
     "",
+    Set(),
     "Bold",
     ("Bold", "Italic"),
     "ExtraBold",
@@ -106,6 +110,7 @@ abstract class Compositor private[compositor]:
     "alegreya",
     "fonts/Alegreya/static/Alegreya",
     "\uFB01\uFB02",
+    Set(),
     "Black",
     ("Black", "Italic"),
     "Bold",
@@ -123,6 +128,7 @@ abstract class Compositor private[compositor]:
     "alegreya",
     "fonts/AlegreyaSC/AlegreyaSC",
     "\uFB01\uFB02",
+    Set("smallcaps"),
     "Black",
     ("Black", "Italic"),
     "Bold",
@@ -177,7 +183,13 @@ abstract class Compositor private[compositor]:
 //    pageStack.pop
 //    res
 
-  def loadTypeface(typeface: String, basepath: String, ligatures: String, styles: (Product | String)*): Unit =
+  def loadTypeface(
+      typeface: String,
+      basepath: String,
+      ligatures: String,
+      every: Set[String],
+      styles: (Product | String)*,
+  ): Unit =
     for style <- styles do
       val (styleName, styleSet) =
         style match
@@ -188,7 +200,7 @@ abstract class Compositor private[compositor]:
         typeface,
         s"$basepath-$styleName.ttf",
         ligatures map (_.toString) toSet,
-        styleSet,
+        styleSet ++ every.map(_.toLowerCase),
       )
 
   def loadFont(typeface: String, path: String, ligatures: Set[String], style: String*): Unit =
