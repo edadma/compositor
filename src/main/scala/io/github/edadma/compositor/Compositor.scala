@@ -14,7 +14,6 @@ import io.github.edadma.libcairo.{
   imageSurfaceCreate,
   pdfSurfaceCreate,
 }
-
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
@@ -28,7 +27,7 @@ abstract class Compositor private[compositor]:
   val pageHeight: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
-  case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double], ligatures: Set[Char])
+  case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double], ligatures: Set[String])
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
@@ -161,9 +160,9 @@ abstract class Compositor private[compositor]:
         styleSet,
       )
 
-  def loadFont(typeface: String, path: String, style: String*): Unit = loadFont(typeface, path, style.toSet)
+  def loadFont(typeface: String, path: String, ligatures: Set[String], style: String*): Unit = loadFont(typeface, path, style.toSet)
 
-  def loadFont(typeface: String, path: String, styleSet: Set[String]): Unit =
+  def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val face = fontFaceCreateForFTFace(
       freetype
         .newFace(path, 0)
@@ -173,16 +172,16 @@ abstract class Compositor private[compositor]:
     )
 
     typefaces get typeface match
-      case None => typefaces(typeface) = Typeface(mutable.HashMap(styleSet -> face), None)
-      case Some(Typeface(fonts, _)) =>
+      case None => typefaces(typeface) = Typeface(mutable.HashMap(styleSet -> face), None, ligatures)
+      case Some(Typeface(fonts, _, ligatures)) =>
         if fonts contains styleSet then
           sys.error(s"font for typeface '$typeface' with style '${styleSet.mkString(", ")}' has already been loaded")
         else fonts(styleSet) = face
 
   def overrideBaseline(typeface: String, baseline: Double): Unit =
     typefaces get typeface match
-      case None                     => sys.error(s"typeface '$typeface' not found")
-      case Some(Typeface(fonts, _)) => typefaces(typeface) = Typeface(fonts, Some(baseline))
+      case None                                => sys.error(s"typeface '$typeface' not found")
+      case Some(Typeface(fonts, _, ligatures)) => typefaces(typeface) = Typeface(fonts, Some(baseline), ligatures)
 
   def add(box: Box): Unit = modeStack.top add box
 
@@ -239,7 +238,7 @@ abstract class Compositor private[compositor]:
     var slant = FontSlant.NORMAL
     var weight = FontWeight.NORMAL
     var fontFace: FontFace = null.asInstanceOf[FontFace]
-    val (toy, baseline) = typefaces get family match
+    val (toy, baseline, ligatures) = typefaces get family match
       case None =>
         if styleSet("italic") then slant = FontSlant.ITALIC
         else if styleSet("oblique") then slant = FontSlant.OBLIQUE
@@ -247,7 +246,7 @@ abstract class Compositor private[compositor]:
         if styleSet("bold") then weight = FontWeight.BOLD
 
         ctx.selectFontFace(family, slant, weight)
-        (true, None)
+        (true, None, null)
       case Some(Typeface(fonts, baseline, ligatures)) =>
         val face = fonts.getOrElse(
           styleSet map (_.toLowerCase) filterNot (_ == "regular"),
@@ -258,7 +257,7 @@ abstract class Compositor private[compositor]:
 
         fontFace = face
         ctx.setFontFace(fontFace)
-        (false, baseline)
+        (false, baseline, ligatures)
 
     ctx.setFontSize(size)
 
@@ -267,7 +266,7 @@ abstract class Compositor private[compositor]:
     val extents = ctx.fontExtents
 
     if toy then new ToyFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, slant, weight)
-    else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace, baseline)
+    else new LoadedFont(family, size, extents, _sWithSpaceWidth - 2 * _Width, styleSet, fontFace, baseline, ligatures)
 
   def center(text: String): Unit =
     hbox()
