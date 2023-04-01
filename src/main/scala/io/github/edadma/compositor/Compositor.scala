@@ -27,6 +27,9 @@ abstract class Compositor private[compositor]:
   val pageHeight: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
+  println(pageWidth)
+  println(pageHeight)
+
   case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double], ligatures: Set[String])
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
@@ -317,6 +320,7 @@ abstract class Compositor private[compositor]:
     add(new HSpaceBox(1))
     add(textBox(text))
     add(new HSpaceBox(1))
+    done()
 
   def hbox(): Unit = modeStack push new HBoxMode(this)
 

@@ -234,6 +234,23 @@ val commands =
             context.asInstanceOf[Compositor].add(new VSpaceBox(0, min = 5, stretchable = 0))
           case _ => problem(pos, "expected arguments <text>")
     ,
+    new Command("center", 1, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(a: AST) =>
+            context.asInstanceOf[Compositor].hbox()
+            context.asInstanceOf[Compositor].add(new HSpaceBox(1))
+            renderer.render(a)
+            context.asInstanceOf[Compositor].add(new HSpaceBox(1))
+            context.asInstanceOf[Compositor].done()
+          case _ => problem(pos, "expected arguments <text>")
+    ,
     new Command("font", 3, true):
       def apply(
           pos: CharReader,
