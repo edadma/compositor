@@ -287,6 +287,8 @@ abstract class Compositor private[compositor]:
 
   def regular(): Font = selectFont(currentFont.family, currentFont.size)
 
+  def typeface(name: String): Font = selectFont(name, currentFont.size, currentFont.style)
+
   def size(points: Double): Font = selectFont(currentFont.family, points, currentFont.style)
 
   def color(c: Color): Color =

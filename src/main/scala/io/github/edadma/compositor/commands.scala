@@ -232,6 +232,18 @@ val commands =
             ()
           case _ => problem(pos, "expected arguments <family> <size> <style>")
     ,
+    new Command("typeface", 1, true):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(family: String) => context.asInstanceOf[Compositor].typeface(family)
+          case _                    => problem(pos, "expected arguments <family>")
+    ,
     new Command("indent", 0):
       def apply(
           pos: CharReader,
