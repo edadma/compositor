@@ -50,6 +50,7 @@ abstract class Compositor private[compositor]:
   loadTypeface(
     "notosans",
     "fonts/NotoSans/NotoSans",
+    "\uFB03\uFB04\uFB01\uFB02\uFB00",
     "Black",
     ("Black", "Italic"),
     "Bold",
@@ -72,6 +73,7 @@ abstract class Compositor private[compositor]:
   loadTypeface(
     "gentium",
     "fonts/GentiumPlus-6.200/GentiumPlus",
+    "\uFB03\uFB04\uFB01\uFB02\uFB00",
     "Regular",
     "Bold",
     "Italic",
@@ -82,6 +84,7 @@ abstract class Compositor private[compositor]:
   loadTypeface(
     "mono",
     "fonts/JetBrainsMono/static/JetBrainsMono",
+    "",
     "Bold",
     ("Bold", "Italic"),
     "ExtraBold",
@@ -116,7 +119,23 @@ abstract class Compositor private[compositor]:
     "SemiBold",
     ("SemiBold", "Italic"),
   )
-//  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf", "smallcaps")
+  loadTypeface(
+    "alegreya",
+    "fonts/AlegreyaSC/AlegreyaSC",
+    "\uFB01\uFB02",
+    "Black",
+    ("Black", "Italic"),
+    "Bold",
+    ("Bold", "Italic"),
+    "ExtraBold",
+    ("ExtraBold", "Italic"),
+    "Italic",
+    "Medium",
+    ("Medium", "Italic"),
+    "Regular",
+  )
+
+  //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf", "smallcaps")
 //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Italic.ttf", "italic", "smallcaps")
 //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Bold.ttf", "bold", "smallcaps")
 //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Black.ttf", "black", "smallcaps")
