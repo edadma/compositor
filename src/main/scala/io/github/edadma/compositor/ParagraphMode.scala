@@ -70,6 +70,7 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
       if boxes.isEmpty then hbox add new HSpaceBox(2)
 
       // hbox.setToWidth(pageMode.result.lineWidth)
+
       pageMode.result add hbox
     end while
 
