@@ -9,21 +9,14 @@ abstract class HorizontalMode extends Mode:
 
   def add(box: Box): Unit =
     if nonEmpty then
-      val space =
-        last match
-          case b: CharBox
-              if b.text.nonEmpty &&
-                !(b.text.last == '.' && Abbreviation(b.text.dropRight(1))) &&
-                ".!?:;".contains(b.text.last) =>
-            comp.currentFont.space * 1.5
-          case _ => comp.currentFont.space
-
-      addBox(
-        new HSpaceBox(
-          0,
-          space,
-        ),
-      )
+      last match
+        case b: CharBox
+            if b.text.nonEmpty &&
+              !(b.text.last == '.' && Abbreviation(b.text.dropRight(1))) &&
+              ".!?:;".contains(b.text.last) =>
+          addBox(new HSpaceBox(0, comp.currentFont.space * 1.5))
+        case _: CharBox => addBox(new HSpaceBox(0, comp.currentFont.space))
+        case _          =>
 
     addBox(box)
   end add

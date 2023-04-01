@@ -29,6 +29,7 @@ class VTop extends ListBox:
 
       for i <- boxes.indices do
         val b = boxes(i)
+        pprintln(b)
 
         b.draw(comp, x, cy)
 
