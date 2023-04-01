@@ -22,15 +22,13 @@ import scala.collection.mutable.ArrayBuffer
 import pprint.pprintln
 
 abstract class Compositor private[compositor]:
-  import Unicode.*
-
   protected[compositor] val surface: Surface
   protected[compositor] val ctx: Context
   val pageWidth: Double
   val pageHeight: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
-  case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double])
+  case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double], ligatures: Set[Char])
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
@@ -92,7 +90,23 @@ abstract class Compositor private[compositor]:
     "Thin",
     ("Thin", "Italic"),
   )
-  //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf", "smallcaps")
+  loadTypeface(
+    "alegreya",
+    "fonts/Alegreya/static/Alegreya",
+    "Black",
+    ("Black", "Italic"),
+    "Bold",
+    ("Bold", "Italic"),
+    "ExtraBold",
+    ("ExtraBold", "Italic"),
+    "Italic",
+    "Medium",
+    ("Medium", "Italic"),
+    "Regular",
+    "SemiBold",
+    ("SemiBold", "Italic"),
+  )
+//  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Regular.ttf", "smallcaps")
 //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Italic.ttf", "italic", "smallcaps")
 //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Bold.ttf", "bold", "smallcaps")
 //  loadFont("playfair", "PlayfairDisplaySC/PlayfairDisplaySC-Black.ttf", "black", "smallcaps")
@@ -179,9 +193,10 @@ abstract class Compositor private[compositor]:
   def add(text: String): Unit = add(textBox(text))
 
   def textBox(text: String): CharBox =
-    val rep = if representations then Ligatures.replace(text, Ligatures.REPRESENTATIONS) else text
+    val rep =
+      if representations then Ligatures.replace(text, Ligatures.REPRESENTATIONS, currentFont.ligatures) else text
 
-    charBox(if ligatures then Ligatures(rep) else rep)
+    charBox(if ligatures then Ligatures(rep, currentFont.ligatures) else rep)
 
   def addText(text: String): Unit =
     val words = text.split(' ').filterNot(_ == "")
@@ -217,7 +232,8 @@ abstract class Compositor private[compositor]:
     setFont()
     res
 
-  private def makeFont(family: String, size: Double, style: String*): Font = makeFont(family, size, style.toSet)
+  private def makeFont(family: String, size: Double, style: String*): Font =
+    makeFont(family, size, style.toSet)
 
   private def makeFont(family: String, size: Double, styleSet: Set[String]): Font =
     var slant = FontSlant.NORMAL
@@ -232,7 +248,7 @@ abstract class Compositor private[compositor]:
 
         ctx.selectFontFace(family, slant, weight)
         (true, None)
-      case Some(Typeface(fonts, baseline)) =>
+      case Some(Typeface(fonts, baseline, ligatures)) =>
         val face = fonts.getOrElse(
           styleSet map (_.toLowerCase) filterNot (_ == "regular"),
           sys.error(

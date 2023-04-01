@@ -3,22 +3,21 @@ package io.github.edadma.compositor
 import scala.annotation.tailrec
 
 object Ligatures:
-  import Unicode.*
-
   @tailrec
-  def replace(s: String, replacements: List[(String, String)]): String =
+  def replace(s: String, replacements: List[(String, String)], allowed: Set[String]): String =
     replacements match
-      case Nil                        => s
-      case (target, replacement) :: t => replace(s.replace(target, replacement), t)
+      case Nil                                                => s
+      case (target, replacement) :: t if allowed(replacement) => replace(s.replace(target, replacement), t, allowed)
+      case _ :: t                                             => replace(s, t, allowed)
 
-  def apply(s: String): String =
+  def apply(s: String, allowed: Set[String]): String =
     if EXCEPTIONS.exists(e => s endsWith e) then s
-    else replace(s, LIGATURES)
+    else replace(s, LIGATURES, allowed)
 
   private val LIGATURES = List(
     "ffi" -> `LATIN SMALL LIGATURE FFI`,
     "ffl" -> `LATIN SMALL LIGATURE FFL`,
-//    "ff" -> `LATIN SMALL LIGATURE FF`, // noto serif didn't have this one
+    "ff" -> `LATIN SMALL LIGATURE FF`, // noto serif didn't have this one
     "fi" -> `LATIN SMALL LIGATURE FI`,
     "fl" -> `LATIN SMALL LIGATURE FL`,
   )
