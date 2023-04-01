@@ -257,8 +257,10 @@ val commands =
           context: Any,
       ): Any =
         args match
-          case List(family: String) => context.asInstanceOf[Compositor].typeface(family)
-          case _                    => problem(pos, "expected arguments <family>")
+          case List(family: String) =>
+            context.asInstanceOf[Compositor].typeface(family)
+            ()
+          case _ => problem(pos, "expected arguments <family>")
     ,
     new Command("indent", 0):
       def apply(
