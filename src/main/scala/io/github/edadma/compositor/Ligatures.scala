@@ -17,7 +17,7 @@ object Ligatures:
   private val LIGATURES = List(
     "ffi" -> `LATIN SMALL LIGATURE FFI`,
     "ffl" -> `LATIN SMALL LIGATURE FFL`,
-    "ff" -> `LATIN SMALL LIGATURE FF`, // noto serif didn't have this one
+    "ff" -> `LATIN SMALL LIGATURE FF`,
     "fi" -> `LATIN SMALL LIGATURE FI`,
     "fl" -> `LATIN SMALL LIGATURE FL`,
   )

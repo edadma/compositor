@@ -32,7 +32,17 @@ abstract class Compositor private[compositor]:
   protected val typefaces = new mutable.HashMap[String, Typeface]
   private val freetype = initFreeType.getOrElse(sys.error("error initializing FreeType"))
 
-  loadTypeface("notoserif", "fonts/NotoSerif/NotoSerif", "Regular", "Bold", "Italic", ("Bold", "Italic"))
+  // all ligatures: "\uFB03\uFB04\uFB01\uFB02\uFB00"
+
+  loadTypeface(
+    "notoserif",
+    "fonts/NotoSerif/NotoSerif",
+    "\uFB03\uFB04\uFB01\uFB02",
+    "Regular",
+    "Bold",
+    "Italic",
+    ("Bold", "Italic"),
+  )
   //  loadTypeface("charis", "fonts/CharisSIL-6.200/CharisSIL", "Regular", "Bold", "Italic", ("Bold", "Italic"))
 //  overrideBaseline("charis", 0.8)
 //  loadFont("galatia", "fonts/GalSIL21/GalSILR.ttf")
@@ -92,6 +102,7 @@ abstract class Compositor private[compositor]:
   loadTypeface(
     "alegreya",
     "fonts/Alegreya/static/Alegreya",
+    "\uFB01\uFB02",
     "Black",
     ("Black", "Italic"),
     "Bold",
@@ -147,7 +158,7 @@ abstract class Compositor private[compositor]:
 //    pageStack.pop
 //    res
 
-  def loadTypeface(typeface: String, basepath: String, styles: (Product | String)*): Unit =
+  def loadTypeface(typeface: String, basepath: String, ligatures: String, styles: (Product | String)*): Unit =
     for style <- styles do
       val (styleName, styleSet) =
         style match
@@ -157,10 +168,12 @@ abstract class Compositor private[compositor]:
       loadFont(
         typeface,
         s"$basepath-$styleName.ttf",
+        ligatures map (_.toString) toSet,
         styleSet,
       )
 
-  def loadFont(typeface: String, path: String, ligatures: Set[String], style: String*): Unit = loadFont(typeface, path, style.toSet)
+  def loadFont(typeface: String, path: String, ligatures: Set[String], style: String*): Unit =
+    loadFont(typeface, path, ligatures, style.toSet)
 
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val face = fontFaceCreateForFTFace(
