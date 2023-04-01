@@ -13,7 +13,7 @@ class HBox extends ListBox:
 
   def baselineAscent: Double = max(_.baselineAscent)
 
-  def baselineHeight: Double = max(_.baselineHeight)
+  def baselineHeight: Option[Double] = max(_.baselineHeight)
 
   val typ: Type = Type.Horizontal
 

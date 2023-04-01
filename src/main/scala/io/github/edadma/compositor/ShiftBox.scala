@@ -12,7 +12,7 @@ class ShiftBox(box: Box, shift: Double) extends SetBox:
 
   def baselineAscent: Double = 0 // todo: fix
 
-  def baselineHeight: Double = 0 // todo: fix
+  def baselineHeight: Option[Double] = None
 
   def width: Double = box.width
 

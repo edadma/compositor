@@ -6,7 +6,7 @@ trait Box:
   def ascent: Double
   def descent: Double
   def baselineAscent: Double
-  def baselineHeight: Double
+  def baselineHeight: Option[Double]
   def draw(comp: Compositor, x: Double, y: Double): Unit
   def setToWidth(width: Double): Unit
   def setToHeight(height: Double): Unit

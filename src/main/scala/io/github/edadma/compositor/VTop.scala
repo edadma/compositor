@@ -20,7 +20,7 @@ class VTop extends ListBox:
 
   def baselineAscent: Double = boxes.headOption map (_.baselineAscent) getOrElse 0
 
-  def baselineHeight: Double = 0
+  def baselineHeight: Option[Double] = 0
 //    _height getOrElse sum(b => b.baselineHeight max b.height) // todo: this is probably not correct
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =

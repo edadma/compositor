@@ -11,4 +11,4 @@ trait SameBox(box: Box) extends SetBox:
 
   def baselineAscent: Double = box.baselineAscent
 
-  def baselineHeight: Double = box.baselineHeight
+  def baselineHeight: Option[Double] = box.baselineHeight
