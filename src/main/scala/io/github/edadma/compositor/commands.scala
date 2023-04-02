@@ -240,6 +240,7 @@ val commands =
             context.asInstanceOf[Compositor].bold()
             renderer.render(a)
             context.asInstanceOf[Compositor].nobold()
+            context.asInstanceOf[Compositor] add new HSpaceBox(2)
             context.asInstanceOf[Compositor].done()
             context.asInstanceOf[Compositor].add(new VSpaceBox(0, min = 5, stretchable = 0))
           case _ => problem(pos, "expected arguments <text>")
