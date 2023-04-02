@@ -35,5 +35,4 @@ abstract class ListBox extends AbstractBox with AddableBox:
 
       val diff = size - length
 
-       if totalStretchable > 0 then
-        spaces foreach (s => s.stretch = diff * s.stretchable / totalStretchable)
+      if totalStretchable > 0 then spaces foreach (s => s.stretch = diff * s.stretchable / totalStretchable)

@@ -71,6 +71,13 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
 
       // hbox.setToWidth(pageMode.result.lineWidth)
 
+      val last = pageMode.result.last
+      val baselines = List(last.baselineHeight, hbox.baselineHeight) filterNot (_ == None) map (_.get)
+      val baseline = if baselines.nonEmpty then baselines.sum / baselines.length else 0
+      val skip = baseline - last.descent - hbox.ascent
+
+      if skip > 0 then pageMode.result add new VSpaceBox(0, skip, 0)
+
       pageMode.result add hbox
     end while
 

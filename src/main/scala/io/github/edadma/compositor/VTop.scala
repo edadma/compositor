@@ -16,15 +16,14 @@ class VTop extends ListBox:
   def descent: Double = _height.map(_ - naturalAscent) getOrElse naturalDescent
 
   def naturalDescent: Double =
-    if boxes.nonEmpty then boxes.head.descent + boxes.tail.map(b => b.baselineHeight max b.height).sum else 0
+    if nonEmpty then boxes.head.descent + boxes.tail.map(_.height).sum else 0
 
   def baselineAscent: Double = boxes.headOption map (_.baselineAscent) getOrElse 0
 
-  def baselineHeight: Option[Double] = 0
-//    _height getOrElse sum(b => b.baselineHeight max b.height) // todo: this is probably not correct
+  def baselineHeight: Option[Double] = if nonEmpty then boxes.last.baselineHeight else None
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
-    if boxes.nonEmpty then
+    if nonEmpty then
       var cy = y
 
       for i <- boxes.indices do
@@ -32,17 +31,7 @@ class VTop extends ListBox:
 
         b.draw(comp, x, cy)
 
-        if i < boxes.length - 1 then
-          val next = boxes(i + 1)
-
-//          cy += next.height - (next.descent - b.descent) // todo: this is wrong. baseline?
-          cy += {
-            val skip = b.descent + next.ascent
-            val baselines = List(b.baselineHeight, next.baselineHeight) filterNot (_ == 0)
-            val baseline = baselines.sum / baselines.length
-
-            skip max baseline
-          }
+        if i < boxes.length - 1 then cy += b.descent + boxes(i + 1).ascent
 
   def set(): Unit =
     boxes foreach { l =>

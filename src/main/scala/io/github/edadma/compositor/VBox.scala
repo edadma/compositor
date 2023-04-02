@@ -17,7 +17,7 @@ class VBox() extends ListBox:
 
   def baselineAscent: Double = if boxes.nonEmpty then boxes.init.map(_.height).sum + boxes.last.baselineAscent else 0
 
-  def baselineHeight: Option[Double] = max(_.baselineHeight) // todo: this is probably not correct
+  def baselineHeight: Option[Double] = if nonEmpty then boxes.last.baselineHeight else None
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then
