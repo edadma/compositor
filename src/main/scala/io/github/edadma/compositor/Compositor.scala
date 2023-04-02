@@ -256,8 +256,8 @@ abstract class Compositor private[compositor]:
 
     ctx.setFontSize(currentFont.size)
 
-  def rule(width: Double, height: Double): Unit =
-    add(new FrameBox(new RigidBox(width, height)) { background = currentColor })
+//  def rule(width: Double, height: Double): Unit =
+//    add(new FrameBox(new RigidBox(width, height)) { background = currentColor })
 
   def selectFont(f: Font): Unit =
     if currentFont ne f then

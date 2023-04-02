@@ -14,7 +14,7 @@ class PageMode(protected val comp: Compositor, val result: PageBox) extends Mode
 
     comp.modeStack push paragraphMode
 
-    if comp.indentParagraph && !firstParagraph then paragraphMode add new RigidBox(width = comp.parindent)
+    if comp.indentParagraph && !firstParagraph then paragraphMode add new HSpaceBox(0, comp.parindent, 0)
     else firstParagraph = false
 
     paragraphMode
