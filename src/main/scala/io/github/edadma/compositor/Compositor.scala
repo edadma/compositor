@@ -165,8 +165,8 @@ abstract class Compositor private[compositor]:
 
   var indentParagraph: Boolean = true
   var parindent: Double = 20
-  var currentSupFont: Font = makeFont("pt", 12 * .583, "bold")
-  var currentFont: Font = makeFont("alegreya", 12)
+  var currentSupFont: Font = makeFont("pt", 14 * .583, "bold")
+  var currentFont: Font = makeFont("alegreya", 14)
   var currentColor: Color = Color(0, 0, 0, 1)
   var ligatures: Boolean = true
   var representations: Boolean = false
