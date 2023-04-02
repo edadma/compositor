@@ -1,6 +1,11 @@
 package io.github.edadma.compositor
 
-class HBox extends ListBox:
+enum HBoxSize:
+  case Natural
+  case To(size: Double)
+  case Stretch
+
+class HBox(size: HBoxSize = HBoxSize.Natural) extends ListBox:
   def naturalWidth: Double = sum(_.width)
 
   def ascent: Double = naturalAscent

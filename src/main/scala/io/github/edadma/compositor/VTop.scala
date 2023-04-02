@@ -33,9 +33,6 @@ class VTop extends ListBox:
 
         if i < boxes.length - 1 then cy += b.descent + boxes(i + 1).ascent
 
-  def set(): Unit =
-    boxes foreach { l =>
-      l.setToWidth(width)
-      l.set()
-    }
+  def set(width: Double): Unit =
+    boxes foreach (_.set(width))
     _height foreach set
