@@ -85,6 +85,16 @@ abstract class Compositor private[compositor]:
     "Italic",
     ("Bold", "Italic"),
   )
+  loadTypeface(
+    "gentiumbook",
+    "fonts/GentiumBookPlus/GentiumBookPlus",
+    "\uFB03\uFB04\uFB01\uFB02\uFB00",
+    Set(),
+    "Regular",
+    "Bold",
+    "Italic",
+    ("Bold", "Italic"),
+  )
   overrideBaseline("gentium", 0.8)
   loadTypeface("pt", "fonts/PTSansNarrow/PTSansNarrow", "\uFB01\uFB02", Set(), "Regular", "Bold")
   loadTypeface(
