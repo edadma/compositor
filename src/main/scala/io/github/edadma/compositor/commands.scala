@@ -289,6 +289,19 @@ val commands =
             ()
           case _ => problem(pos, "expected arguments <family>")
     ,
+    new Command("vspace", 1, true):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(space: Number) =>
+            context.asInstanceOf[Compositor].add(new VSpaceBox(0, space.doubleValue, 0))
+          case _ => problem(pos, "expected arguments <space>")
+    ,
     new Command("indent", 0):
       def apply(
           pos: CharReader,
