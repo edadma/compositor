@@ -1,6 +1,12 @@
 package io.github.edadma.compositor
 
-class ImageBox(path: String, width: Option[Double] = None, height: Option[Double] = None) extends SimpleBox:
+import io.github.edadma.libcairo.imageSurfaceCreateFromPNG
+
+class ImageBox(comp: Compositor, path: String, width: Option[Double] = None, height: Option[Double] = None)
+    extends SimpleBox:
+  val image = imageSurfaceCreateFromPNG(path)
+  val imageWidth = image.getWidth
+  val imageHeight = image.getHeight
 
   def ascent: Double = ???
   def draw(comp: io.github.edadma.compositor.Compositor, x: Double, y: Double): Unit = ???
