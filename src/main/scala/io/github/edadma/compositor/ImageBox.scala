@@ -9,6 +9,6 @@ class ImageBox(comp: Compositor, path: String, scaledWidth: Option[Double] = Non
   val imageHeight = image.getHeight
 
   def draw(comp: io.github.edadma.compositor.Compositor, x: Double, y: Double): Unit = ???
-  def typ: io.github.edadma.compositor.Type = ???
+  def typ: io.github.edadma.compositor.Type = Type.Horizontal
   def width: Double = scaledWidth getOrElse pixelsToPoints(imageWidth, ppi(1280, 720, 14))
   def ascent: Double = scaledHeight getOrElse pixelsToPoints(imageHeight, ppi(1280, 720, 14))
