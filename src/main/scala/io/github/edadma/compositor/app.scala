@@ -41,7 +41,7 @@ def app(args: Config): Unit =
               case "a4"     => Paper.A4
               case "letter" => Paper.LETTER
 
-          Compositor.pdf(output.toString, p, simplePageFactory())
+          Compositor.pdf(output.toString, p, 1, simplePageFactory()) // todo: image scaling
         case Config(_, _, "png", _, resolution, size, _) =>
           val (width, height) =
             resolution match

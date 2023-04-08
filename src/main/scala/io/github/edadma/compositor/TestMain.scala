@@ -2,8 +2,8 @@ package io.github.edadma.compositor
 
 @main
 def runTest(): Unit =
-  //  val doc = Compositor.png("tests/test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
-  val doc = Compositor.pdf("tests/test.pdf", Paper.LETTER, simplePageFactory())
+//  val doc = Compositor.png("tests/test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
+  val doc = Compositor.pdf("tests/test.pdf", Paper.LETTER, .5, simplePageFactory())
 
 //  doc.modeStack.push(new PageMode(doc, new SimplePage(300, Some(200))))
 //  doc.addText(

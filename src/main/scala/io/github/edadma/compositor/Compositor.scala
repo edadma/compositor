@@ -25,7 +25,7 @@ abstract class Compositor private[compositor]:
   protected[compositor] val ctx: Context
   val pageWidth: Double
   val pageHeight: Double
-  val scale: Double
+  val imageScaling: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
   println(pageWidth)
@@ -436,10 +436,9 @@ class PDFCompositor private[compositor] (
     protected[compositor] val ctx: Context,
     val pageWidth: Double,
     val pageHeight: Double,
+    val imageScaling: Double,
     val pageFactory: (Compositor, Double, Double) => PageBox,
 ) extends Compositor:
-  val scale: Double = 1
-
   color("black")
 
   def paintBackground(): Unit = {}
@@ -452,7 +451,7 @@ class PNGCompositor private[compositor] (
     path: String,
     val pageWidth: Double,
     val pageHeight: Double,
-    val scale: Double,
+    val imageScaling: Double,
     val pageFactory: PageFactory,
 ) extends Compositor:
   color("white")
@@ -468,12 +467,13 @@ object Compositor:
   def pdf(
       path: String,
       paper: Paper,
+      imageScaling: Double,
       pageFactory: PageFactory = simplePageFactory(),
   ): Compositor =
     val surface = pdfSurfaceCreate(path, paper.width, paper.height)
     val context = surface.create
 
-    new PDFCompositor(surface, context, paper.width, paper.height, pageFactory)
+    new PDFCompositor(surface, context, paper.width, paper.height, imageScaling, pageFactory)
 
   def png(
       path: String,
@@ -493,7 +493,7 @@ object Compositor:
       path,
       widthPx / pixelsPerPoint,
       heightPx / pixelsPerPoint,
-      pixelsPerPoint,
+      1 / pixelsPerPoint,
       pageFactory,
     )
 end Compositor
