@@ -8,7 +8,7 @@ case class Config(
     typ: String = null,
     paper: String = "letter",
     resolution: String = "hd",
-    size: Double = 13,
+    size: Double = 14,
     multi: Boolean = false,
 )
 
