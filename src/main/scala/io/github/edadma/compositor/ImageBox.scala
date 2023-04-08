@@ -8,7 +8,17 @@ class ImageBox(comp: Compositor, path: String, scaledWidth: Option[Double] = Non
   val imageWidth = image.getWidth
   val imageHeight = image.getHeight
 
-  def draw(comp: io.github.edadma.compositor.Compositor, x: Double, y: Double): Unit = ???
-  def typ: io.github.edadma.compositor.Type = Type.Horizontal
-  def width: Double = scaledWidth getOrElse pixelsToPoints(imageWidth, ppi(1280, 720, 14))
-  def ascent: Double = scaledHeight getOrElse pixelsToPoints(imageHeight, ppi(1280, 720, 14))
+  def draw(comp: Compositor, x: Double, y: Double): Unit =
+    comp.ctx.save()
+//    comp.ctx.identityMatrix()
+    // todo: each box should set it's own source, and then save()/restore() don't have to be used
+    comp.ctx.setSourceSurface(image, x, y - ascent)
+    comp.ctx.paint()
+    comp.ctx.restore()
+  // image.destroy()
+
+  val typ: Type = Type.Horizontal
+
+  val width: Double = scaledWidth getOrElse imageWidth
+
+  val ascent: Double = scaledHeight getOrElse imageHeight

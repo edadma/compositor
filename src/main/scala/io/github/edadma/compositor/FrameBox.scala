@@ -57,9 +57,9 @@ class FrameBox(box: Box) extends Box:
 
   def descent: Double = box.descent + bottomPadding
 
-  def baselineAscent: Double = box.baselineAscent // todo: left out + topPadding
+  def baselineAscent: Double = box.baselineAscent + topPadding
 
-  override def baselineHeight: Option[Double] = box.baselineHeight
+  override def baselineHeight: Option[Double] = None
 
   def setToWidth(width: Double): Unit = box.setToWidth(width - leftPadding - rightPadding)
 

@@ -25,6 +25,7 @@ abstract class Compositor private[compositor]:
   protected[compositor] val ctx: Context
   val pageWidth: Double
   val pageHeight: Double
+  val scale: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
   println(pageWidth)
@@ -437,7 +438,7 @@ class PDFCompositor private[compositor] (
     val pageHeight: Double,
     val pageFactory: (Compositor, Double, Double) => PageBox,
 ) extends Compositor:
-  val scale: Option[Double] = None
+  val scale: Double = 1
 
   color("black")
 
@@ -451,6 +452,7 @@ class PNGCompositor private[compositor] (
     path: String,
     val pageWidth: Double,
     val pageHeight: Double,
+    val scale: Double,
     val pageFactory: PageFactory,
 ) extends Compositor:
   color("white")
@@ -491,6 +493,7 @@ object Compositor:
       path,
       widthPx / pixelsPerPoint,
       heightPx / pixelsPerPoint,
+      pixelsPerPoint,
       pageFactory,
     )
 end Compositor

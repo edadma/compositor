@@ -1,8 +1,8 @@
 package io.github.edadma.compositor
 
-/*@main*/
+@main
 def runTest(): Unit =
-  val doc = Compositor.png("test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
+  val doc = Compositor.png("tests/test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
 
 //  doc.modeStack.push(new PageMode(doc, new SimplePage(300, Some(200))))
 //  doc.addText(
@@ -15,13 +15,17 @@ def runTest(): Unit =
 //  doc.output()
 //  doc.destroy()
 
-  doc.add(new VSpaceBox(1))
+//  doc.add(new VSpaceBox(1))
   doc.modeStack push new BoxMode(doc)
-  doc.page(doc.pageWidth, Some(doc.pageHeight / 3))
-  doc.add("hello")
+  doc.hbox()
+  doc.add("asdf")
+  doc.add(new ImageBox(doc, "tests/sample-272x170.png"))
+  doc.add("zxcv")
+  doc.add(new HSpaceBox(1))
   doc.done()
   doc.add(new FrameBox(doc.modeStack.pop.result) {
     background = Color("blue", 0.5)
+    border = Color("red")
     rounded = false
     padding(5)
   })
