@@ -72,8 +72,8 @@ def app(args: Config): Unit =
     val renderer = new Renderer(parser, config, _.mkString, doc, out)
     val ast = parser.parse(in)
 
-    // pprintln(ast)
-//    println(s"page width = ${doc.pageWidth}")
+//    pprintln(ast)
+////    println(s"page width = ${doc.pageWidth}")
 //    println(s"page height = ${doc.pageHeight}")
     renderer.render(ast)
     doc.output()
