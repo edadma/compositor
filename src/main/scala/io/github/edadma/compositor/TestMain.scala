@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-//@main
+@main
 def runTest(): Unit =
 //  val doc = Compositor.png("tests/test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
   val doc = Compositor.pdf("tests/test.pdf", Paper.LETTER, .5, simplePageFactory())
@@ -17,18 +17,20 @@ def runTest(): Unit =
 //  doc.destroy()
 
 //  doc.add(new VSpaceBox(1))
-  doc.modeStack push new BoxMode(doc)
-  doc.hbox()
-  doc.add("asdf")
-  doc.add(new ImageBox(doc, "tests/sample-272x170.png"))
-  doc.add("zxcv")
-  doc.add(new HSpaceBox(1))
-  doc.done()
-  doc.add(new FrameBox(doc.modeStack.pop.result) {
-    background = Color("blue", 0.5)
-    border = Color("red")
-    rounded = false
-    padding(5)
-  })
+//  doc.modeStack push new BoxMode(doc)
+//  doc.hbox()
+//  doc.add("asdf")
+//  doc.add(new ImageBox(doc, "tests/sample-272x170.png"))
+//  doc.add("zxcv")
+//  doc.add(new HSpaceBox(1))
+//  doc.done()
+//  doc.add(new FrameBox(doc.modeStack.pop.result) {
+//    background = Color("blue", 0.5)
+//    border = Color("red")
+//    rounded = false
+//    padding(5)
+//  })
+
+  USFX.fromFile(doc, "test/john1:1.xml")
   doc.output()
   doc.destroy()

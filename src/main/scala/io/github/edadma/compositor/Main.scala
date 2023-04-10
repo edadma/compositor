@@ -12,7 +12,7 @@ case class Config(
     multi: Boolean = false,
 )
 
-@main
+//@main
 def run(args: String*): Unit =
   import scopt.OParser
   val builder = OParser.builder[Config]

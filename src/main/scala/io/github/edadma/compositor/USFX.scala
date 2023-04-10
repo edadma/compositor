@@ -9,18 +9,21 @@ object USFX:
       case Elem(prefix, label, attribs, scope, child @ _*) =>
         def body(): Unit = child foreach (c => fromXML(comp, c))
 
-        (label, attribs.asAttrMap.headOption) match
+        (label, attribs.asAttrMap.headOption.orNull) match
           case ("book", _) => body()
           case ("h", _)    => body()
           case ("toc", "level" -> "1") =>
             comp.bold()
             body()
             comp.nobold()
-          case ("toc", _)            =>
-          case ("c", _)              =>
-          case ("wj", _)             => body()
-          case ("p", "sfm" -> "mt")  =>
-          case ("p", "style" -> "p") => body()
+            comp.paragraph()
+          case ("toc", _)           =>
+          case ("c", _)             =>
+          case ("wj", _)            => body()
+          case ("p", "sfm" -> "mt") =>
+          case ("p", "style" -> "p") =>
+            body()
+            comp.paragraph()
           case _ => sys.error(s"don't know what to do with element <$label> with attributes $attribs")
       case Text(text) => if !text.isBlank then comp.add(text.trim)
       case _          => sys.error(s"don't know what to do with '$node' (${node.getClass})")
