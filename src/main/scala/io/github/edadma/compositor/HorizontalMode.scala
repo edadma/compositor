@@ -15,7 +15,7 @@ abstract class HorizontalMode extends Mode:
     if nonEmpty then
       (last, box) match
         case (_: SpaceBox, _) => addBox(box)
-        case (l: CharBox, b: CharBox) if b.text.nonEmpty && !b.text.head.isLetterOrDigit =>
+        case (l: CharBox, b: CharBox) if b.text.nonEmpty && !b.text.exists(_.isLetterOrDigit) =>
           update(length - 1, l.newCharBox(l.text ++ b.text))
         case (b: CharBox, _)
             if b.text.nonEmpty &&

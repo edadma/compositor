@@ -5,4 +5,5 @@ trait AddableBox extends Box:
   def nonEmpty: Boolean
   def last: Box
   def lastOption: Option[Box]
+  def length: Int
   def update(index: Int, elem: Box): Unit

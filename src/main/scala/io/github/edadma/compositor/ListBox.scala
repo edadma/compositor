@@ -5,7 +5,7 @@ import pprint.pprintln
 import scala.collection.mutable.ArrayBuffer
 
 abstract class ListBox extends AbstractBox with AddableBox:
-  def length: Double
+  def pointLength: Double
 
   protected[compositor] val boxes = new ArrayBuffer[Box]
 
@@ -14,6 +14,8 @@ abstract class ListBox extends AbstractBox with AddableBox:
   def last: Box = boxes.last
 
   def lastOption: Option[Box] = boxes.lastOption
+
+  def length: Int = boxes.length
 
   def update(index: Int, elem: Box): Unit = boxes.update(index, elem)
 
@@ -37,6 +39,6 @@ abstract class ListBox extends AbstractBox with AddableBox:
 
       spaces foreach (s => s.stretch = 0)
 
-      val diff = size - length
+      val diff = size - pointLength
 
       if totalStretchable > 0 then spaces foreach (s => s.stretch = diff * s.stretchable / totalStretchable)
