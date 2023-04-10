@@ -17,6 +17,7 @@ object USFX:
             body()
             comp.nobold()
           case ("toc", _)            =>
+          case ("c", _)              =>
           case ("wj", _)             => body()
           case ("p", "sfm" -> "mt")  =>
           case ("p", "style" -> "p") => body()
