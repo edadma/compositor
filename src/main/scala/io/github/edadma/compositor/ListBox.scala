@@ -13,6 +13,10 @@ abstract class ListBox extends AbstractBox with AddableBox:
 
   def last: Box = boxes.last
 
+  def lastOption: Option[Box] = boxes.lastOption
+
+  def update(index: Int, elem: Box): Unit = boxes.update(index, elem)
+
   protected def sum(measure: Box => Double): Double = boxes map measure sum
 
   protected def max(measure: Box => Double): Double = boxes map measure max

@@ -12,6 +12,10 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
 
   protected def last: Box = boxes.last
 
+  protected def length: Int = boxes.length
+
+  protected def update(index: Int, elem: Box): Unit = boxes.update(index, elem)
+
   def result: Box = ???
 
   override def done(): Unit =
