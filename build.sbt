@@ -43,6 +43,7 @@ libraryDependencies ++= Seq(
   "io.github.edadma" %%% "libcairo" % "0.0.6",
   "io.github.edadma" %%% "freetype" % "0.0.2",
   "io.github.edadma" %%% "texish" % "0.0.8",
+  "io.github.edadma" %%% "char-reader" % "0.1.11",
   "com.github.scopt" %%% "scopt" % "4.1.0",
   "com.lihaoyi" %%% "pprint" % "0.8.1",
   "org.scala-lang.modules" %%% "scala-xml" % "2.1.0",
