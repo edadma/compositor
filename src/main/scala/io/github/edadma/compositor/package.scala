@@ -6,12 +6,6 @@ import math.sqrt
 
 def ppi(width: Int, height: Int, diagonal: Double): Double = sqrt(width * width + height * height) / diagonal
 
-/*
-  pixelx px * in  * pt
-              ---   ---
-              px    in
- */
-
 def pixelsToPoints(pixels: Double, ppi: Double): Double = pixels * (1 / ppi) * Units.POINTS_PER_INCH
 
 type PageFactory = (Compositor, Double, Double) => PageBox
