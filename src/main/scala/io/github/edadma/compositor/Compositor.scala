@@ -260,34 +260,23 @@ abstract class Compositor private[compositor]:
 
     words foreach add
 
-  private def setFont(): Unit =
-    currentFont match
-      case t: ToyFont    => ctx.selectFontFace(t.family, t.slant, t.weight)
-      case l: LoadedFont => ctx.setFontFace(l.fontFace)
-
-    ctx.setFontSize(currentFont.size)
-
 //  def rule(width: Double, height: Double): Unit =
 //    add(new FrameBox(new RigidBox(width, height)) { background = currentColor })
 
   def selectFont(f: Font): Unit =
     if currentFont ne f then
       currentFont = f
-      setFont()
+      currentFont match
+        case t: ToyFont    => ctx.selectFontFace(t.family, t.slant, t.weight)
+        case l: LoadedFont => ctx.setFontFace(l.fontFace)
+
+      ctx.setFontSize(currentFont.size)
 
   def selectFont(family: String, size: Double, style: String*): Font = selectFont(family, size, style.toSet)
 
   def selectFont(family: String, size: Double, styleSet: Set[String]): Font =
     currentFont = makeFont(family, size, styleSet)
     currentFont
-
-  def font(family: String, size: Double, style: String*): Font = font(family, size, style.toSet)
-
-  def font(family: String, size: Double, styleSet: Set[String]): Font =
-    val res = makeFont(family, size, styleSet)
-
-    setFont()
-    res
 
   private def makeFont(family: String, size: Double, style: String*): Font =
     makeFont(family, size, style.toSet)
@@ -334,6 +323,8 @@ abstract class Compositor private[compositor]:
     done()
 
   def hbox(): Unit = modeStack push new HBoxMode(this)
+
+  def vspace(space: Double): Unit = add(new VSpaceBox(0, space, 0))
 
   def indent(): Unit =
     indentParagraph = true
@@ -412,6 +403,10 @@ abstract class Compositor private[compositor]:
 
   def page(width: Double, height: Option[Double] = None): Unit =
     modeStack push new PageMode(this, new SimplePage(width, height))
+
+  def hfil(): Unit = add(new HSpaceBox(1))
+
+  def vfil(): Unit = add(new VSpaceBox(1))
 
   def output(): Unit =
     while modeStack.nonEmpty do done()

@@ -127,7 +127,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        context.asInstanceOf[Compositor].add(new HSpaceBox(1))
+        context.asInstanceOf[Compositor].hfil()
     ,
     new Command("vfil", 0, false):
       def apply(
@@ -137,7 +137,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        context.asInstanceOf[Compositor].add(new VSpaceBox(1))
+        context.asInstanceOf[Compositor].vfil()
     ,
     new Command("par", 0, false):
       def apply(
@@ -256,9 +256,9 @@ val commands =
         args match
           case List(a: AST) =>
             context.asInstanceOf[Compositor].hbox()
-            context.asInstanceOf[Compositor].add(new HSpaceBox(1))
+            context.asInstanceOf[Compositor].hfil()
             renderer.render(a)
-            context.asInstanceOf[Compositor].add(new HSpaceBox(1))
+            context.asInstanceOf[Compositor].hfil()
             context.asInstanceOf[Compositor].done()
           case _ => problem(pos, "expected arguments <text>")
     ,
@@ -300,7 +300,7 @@ val commands =
       ): Any =
         args match
           case List(space: Number) =>
-            context.asInstanceOf[Compositor].add(new VSpaceBox(0, space.doubleValue, 0))
+            context.asInstanceOf[Compositor].vspace(space.doubleValue)
           case _ => problem(pos, "expected arguments <space>")
     ,
     new Command("indent", 0):

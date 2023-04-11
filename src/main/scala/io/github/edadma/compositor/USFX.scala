@@ -11,12 +11,29 @@ object USFX:
 
         (label, attrs.headOption.orNull) match
           case ("book", _) => processBody()
-          case ("h", _)    => processBody()
-          case ("toc", "level" -> "1") =>
-            comp.bold()
+          case ("h", _) =>
+            val f = comp.currentFont
+
+            comp.selectFont("noto", 20)
+            comp.hbox()
+            comp.hfil()
             processBody()
+            comp.hfil()
+            comp.done()
+            comp.selectFont(f)
+            comp.vspace(10)
+          case ("toc", "level" -> "1") =>
+            val f = comp.currentFont
+
+            comp.selectFont("noto", 16)
+            comp.hbox()
+            comp.hfil()
+            processBody()
+            comp.hfil()
+            comp.done()
             comp.nobold()
-            comp.paragraph()
+            comp.selectFont(f)
+            comp.vspace(15)
           case ("toc", _)           =>
           case ("c", _)             =>
           case ("wj", _)            => processBody()
