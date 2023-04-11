@@ -12,6 +12,10 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
 
   protected def last: Box = boxes.last
 
+  protected def length: Int = boxes.length
+
+  protected def update(index: Int, elem: Box): Unit = boxes.update(index, elem)
+
   def result: Box = ???
 
   override def done(): Unit =
@@ -71,7 +75,7 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
 
       // hbox.setToWidth(pageMode.result.lineWidth)
 
-      if pageMode.result.nonEmpty then
+      if pageMode.result.nonEmpty && !pageMode.result.last.isSpace then
         val last = pageMode.result.last
         val baselines = List(last.baselineHeight, hbox.baselineHeight) filterNot (_ == None) map (_.get)
         val baseline = if baselines.nonEmpty then baselines.sum / baselines.length else 0

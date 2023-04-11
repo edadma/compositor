@@ -18,7 +18,7 @@ class HBox extends ListBox:
 
   val typ: Type = Type.Horizontal
 
-  def length: Double = naturalWidth
+  def pointLength: Double = naturalWidth
 
   def draw(comp: Compositor, x: Double, y: Double): Unit =
     if boxes.nonEmpty then

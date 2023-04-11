@@ -25,10 +25,11 @@ abstract class Compositor private[compositor]:
   protected[compositor] val ctx: Context
   val pageWidth: Double
   val pageHeight: Double
+  val imageScaling: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
-  println(pageWidth)
-  println(pageHeight)
+//  println(pageWidth)
+//  println(pageHeight)
 
   case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double], ligatures: Set[String])
 
@@ -259,34 +260,23 @@ abstract class Compositor private[compositor]:
 
     words foreach add
 
-  private def setFont(): Unit =
-    currentFont match
-      case t: ToyFont    => ctx.selectFontFace(t.family, t.slant, t.weight)
-      case l: LoadedFont => ctx.setFontFace(l.fontFace)
-
-    ctx.setFontSize(currentFont.size)
-
 //  def rule(width: Double, height: Double): Unit =
 //    add(new FrameBox(new RigidBox(width, height)) { background = currentColor })
 
   def selectFont(f: Font): Unit =
     if currentFont ne f then
       currentFont = f
-      setFont()
+      currentFont match
+        case t: ToyFont    => ctx.selectFontFace(t.family, t.slant, t.weight)
+        case l: LoadedFont => ctx.setFontFace(l.fontFace)
+
+      ctx.setFontSize(currentFont.size)
 
   def selectFont(family: String, size: Double, style: String*): Font = selectFont(family, size, style.toSet)
 
   def selectFont(family: String, size: Double, styleSet: Set[String]): Font =
     currentFont = makeFont(family, size, styleSet)
     currentFont
-
-  def font(family: String, size: Double, style: String*): Font = font(family, size, style.toSet)
-
-  def font(family: String, size: Double, styleSet: Set[String]): Font =
-    val res = makeFont(family, size, styleSet)
-
-    setFont()
-    res
 
   private def makeFont(family: String, size: Double, style: String*): Font =
     makeFont(family, size, style.toSet)
@@ -333,6 +323,8 @@ abstract class Compositor private[compositor]:
     done()
 
   def hbox(): Unit = modeStack push new HBoxMode(this)
+
+  def vspace(space: Double): Unit = add(new VSpaceBox(0, space, 0))
 
   def indent(): Unit =
     indentParagraph = true
@@ -412,6 +404,10 @@ abstract class Compositor private[compositor]:
   def page(width: Double, height: Option[Double] = None): Unit =
     modeStack push new PageMode(this, new SimplePage(width, height))
 
+  def hfil(): Unit = add(new HSpaceBox(1))
+
+  def vfil(): Unit = add(new VSpaceBox(1))
+
   def output(): Unit =
     while modeStack.nonEmpty do done()
 
@@ -435,10 +431,9 @@ class PDFCompositor private[compositor] (
     protected[compositor] val ctx: Context,
     val pageWidth: Double,
     val pageHeight: Double,
+    val imageScaling: Double,
     val pageFactory: (Compositor, Double, Double) => PageBox,
 ) extends Compositor:
-  val scale: Option[Double] = None
-
   color("black")
 
   def paintBackground(): Unit = {}
@@ -451,6 +446,7 @@ class PNGCompositor private[compositor] (
     path: String,
     val pageWidth: Double,
     val pageHeight: Double,
+    val imageScaling: Double,
     val pageFactory: PageFactory,
 ) extends Compositor:
   color("white")
@@ -466,12 +462,13 @@ object Compositor:
   def pdf(
       path: String,
       paper: Paper,
+      imageScaling: Double,
       pageFactory: PageFactory = simplePageFactory(),
   ): Compositor =
     val surface = pdfSurfaceCreate(path, paper.width, paper.height)
     val context = surface.create
 
-    new PDFCompositor(surface, context, paper.width, paper.height, pageFactory)
+    new PDFCompositor(surface, context, paper.width, paper.height, imageScaling, pageFactory)
 
   def png(
       path: String,
@@ -491,6 +488,7 @@ object Compositor:
       path,
       widthPx / pixelsPerPoint,
       heightPx / pixelsPerPoint,
+      1 / pixelsPerPoint,
       pageFactory,
     )
 end Compositor

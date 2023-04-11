@@ -8,3 +8,7 @@ class HBoxMode(protected val comp: Compositor) extends HorizontalMode:
   protected def nonEmpty: Boolean = result.nonEmpty
 
   protected def last: Box = result.last
+
+  protected def length: Int = result.length
+
+  protected def update(index: Int, elem: Box): Unit = result.update(index, elem)

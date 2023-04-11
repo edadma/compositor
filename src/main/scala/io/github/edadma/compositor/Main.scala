@@ -8,11 +8,12 @@ case class Config(
     typ: String = null,
     paper: String = "letter",
     resolution: String = "hd",
-    size: Double = 13,
+    size: Double = 14,
     multi: Boolean = false,
 )
 
-@main def run(args: String*): Unit =
+//@main
+def run(args: String*): Unit =
   import scopt.OParser
   val builder = OParser.builder[Config]
   val parser = {
