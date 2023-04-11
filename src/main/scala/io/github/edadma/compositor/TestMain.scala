@@ -31,6 +31,6 @@ def runTest(): Unit =
 //    padding(5)
 //  })
 
-  USFX.fromFile(doc, "test/john1:1.xml")
+  USFX.fromFile(doc, "tests/john1:1.xml")
   doc.output()
   doc.destroy()

@@ -46,7 +46,7 @@ libraryDependencies ++= Seq(
   "io.github.edadma" %%% "char-reader" % "0.1.11",
   "com.github.scopt" %%% "scopt" % "4.1.0",
   "com.lihaoyi" %%% "pprint" % "0.8.1",
-  "org.scala-lang.modules" %%% "scala-xml" % "2.1.0",
+  "io.github.edadma" %%% "xml" % "0.0.1",
 )
 
 publishMavenStyle := true
