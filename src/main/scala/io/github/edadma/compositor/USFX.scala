@@ -61,7 +61,7 @@ object USFX:
           if verse.isDefined then
             comp.prefixSup(verse.get, text)
             verse = None
-          else comp.add(text.trim)
+          else comp.addText(text.trim)
       case _ => sys.error(s"don't know what to do with '$node' (${node.getClass})")
 
   def fromString(comp: Compositor, s: String): Unit = fromXML(comp, XML(scala.io.Source.fromString(s)))
