@@ -28,8 +28,8 @@ abstract class Compositor private[compositor]:
   val imageScaling: Double
   val pageFactory: (Compositor, Double, Double) => PageBox
 
-  println(pageWidth)
-  println(pageHeight)
+//  println(pageWidth)
+//  println(pageHeight)
 
   case class Typeface(fonts: mutable.HashMap[Set[String], FontFace], baseline: Option[Double], ligatures: Set[String])
 

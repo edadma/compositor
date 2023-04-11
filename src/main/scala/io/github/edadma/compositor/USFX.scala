@@ -13,21 +13,11 @@ object USFX:
 
         (label, attrs.headOption.orNull) match
           case ("book", _) => processBody()
-          case ("h", _) =>
-            val f = comp.currentFont
-
-            comp.selectFont("noto", 20, "sans")
-            comp.hbox()
-            comp.hfil()
-            processBody()
-            comp.hfil()
-            comp.done()
-            comp.selectFont(f)
-            comp.vspace(10)
+          case ("h", _)    =>
           case ("toc", "level" -> "1") =>
             val f = comp.currentFont
 
-            comp.selectFont("noto", 16, "sans")
+            comp.selectFont("noto", 18, "sans")
             comp.hbox()
             comp.hfil()
             processBody()
