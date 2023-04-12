@@ -14,9 +14,11 @@ abstract class HorizontalMode extends Mode:
   def add(box: Box): Unit =
     if nonEmpty then
       (last, box) match
-        case (_: SpaceBox, _) => addBox(box)
+        case (_: SpaceBox, _)                 => addBox(box)
+        case (_, b: CharBox) if b.text == "," => addBox(box)
         case (l: CharBox, b: CharBox)
-            if b.text.nonEmpty && !l.text.endsWith(",") && (!l.text
+            if b.text.nonEmpty && !l.text.endsWith(",") && !l.text
+              .endsWith(")") && !b.text.startsWith("(") && (!l.text
               .exists(_.isLetterOrDigit) || !b.text.exists(_.isLetterOrDigit)) =>
           update(length - 1, l.newCharBox(l.text ++ b.text))
         case (b: CharBox, _)
