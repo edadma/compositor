@@ -81,9 +81,9 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
         val baseline = if baselines.nonEmpty then baselines.sum / baselines.length else 0
         val skip = baseline - last.descent - hbox.ascent
 
-        if skip > 0 then pageMode.result add new VSpaceBox(0, skip, 0)
+        if skip > 0 then pageMode addLine new VSpaceBox(0, skip, 0)
 
-      pageMode.result add hbox
+      pageMode addLine hbox
     end while
 
     comp.indentParagraph = true

@@ -7,7 +7,9 @@ class PageMode(protected val comp: Compositor, val result: PageBox) extends Mode
 
   def add(box: Box): Unit =
     if box.typ == Type.Start then start add box
-    else result add box
+    else addLine(box)
+
+  def addLine(box: Box): Unit = result add box
 
   def start: ParagraphMode =
     val paragraphMode = new ParagraphMode(comp, this)
