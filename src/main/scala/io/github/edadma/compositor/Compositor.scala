@@ -172,7 +172,7 @@ abstract class Compositor private[compositor]:
   protected[compositor] val pages = new ArrayBuffer[PageBox]
 
   modeStack push new DocumentMode(this)
-  modeStack push new PageMode(this, pageFactory(this, pageWidth, pageHeight))
+  modeStack push new PageMode(this, pageFactory)
 
   var indentParagraph: Boolean = true
   var parindent: Double = 20
