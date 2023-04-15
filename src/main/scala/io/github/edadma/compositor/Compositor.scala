@@ -401,8 +401,8 @@ abstract class Compositor private[compositor]:
       case p: ParagraphMode => p.done()
       case _                =>
 
-  def page(width: Double, height: Option[Double] = None): Unit =
-    modeStack push new PageMode(this, new SimplePage(width, height))
+  def pagebox(width: Double, height: Double): Unit =
+    modeStack push new PageMode(this, (_, _, _) => pageFactory(this, width, height))
 
   def hfil(): Unit = add(new HSpaceBox(1))
 

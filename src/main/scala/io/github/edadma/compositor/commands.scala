@@ -35,24 +35,24 @@ val commands =
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
-    new Command("page", 2, false):
-      def apply(
-          pos: CharReader,
-          renderer: Renderer,
-          args: List[Any],
-          optional: Map[String, Any],
-          context: Any,
-      ): Any =
-        args match
-          case List(w: AST, page: AST) =>
-            val width = renderer.eval(w).asInstanceOf[Number].doubleValue()
-
-            context.asInstanceOf[Compositor].page(width)
-            renderer.render(page)
-            context.asInstanceOf[Compositor].paragraph()
-            context.asInstanceOf[Compositor].done()
-          case _ => problem(pos, "expected arguments <width> <text>")
-    ,
+//    new Command("page", 2, false):
+//      def apply(
+//          pos: CharReader,
+//          renderer: Renderer,
+//          args: List[Any],
+//          optional: Map[String, Any],
+//          context: Any,
+//      ): Any =
+//        args match
+//          case List(w: AST, page: AST) =>
+//            val width = renderer.eval(w).asInstanceOf[Number].doubleValue()
+//
+//            context.asInstanceOf[Compositor].page(width)
+//            renderer.render(page)
+//            context.asInstanceOf[Compositor].paragraph()
+//            context.asInstanceOf[Compositor].done()
+//          case _ => problem(pos, "expected arguments <width> <text>")
+//    ,
     new Command("pagebox", 3, false):
       def apply(
           pos: CharReader,
@@ -66,7 +66,7 @@ val commands =
             val width = renderer.eval(w).asInstanceOf[Number].doubleValue()
             val height = renderer.eval(h).asInstanceOf[Number].doubleValue()
 
-            context.asInstanceOf[Compositor].page(width, Some(height))
+            context.asInstanceOf[Compositor].pagebox(width, height)
             renderer.render(page)
             context.asInstanceOf[Compositor].done()
           case _ => problem(pos, "expected arguments <width> <text>")
