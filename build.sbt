@@ -44,9 +44,12 @@ libraryDependencies ++= Seq(
   "io.github.edadma" %%% "freetype" % "0.0.2",
   "io.github.edadma" %%% "texish" % "0.0.8",
   "io.github.edadma" %%% "char-reader" % "0.1.11",
+  "io.github.edadma" %%% "xml" % "0.0.6",
+)
+
+libraryDependencies ++= Seq(
   "com.github.scopt" %%% "scopt" % "4.1.0",
   "com.lihaoyi" %%% "pprint" % "0.8.1",
-  "io.github.edadma" %%% "xml" % "0.0.1",
 )
 
 publishMavenStyle := true
