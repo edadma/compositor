@@ -7,8 +7,8 @@ object USFX:
 
   def fromXML(comp: Compositor, node: XML): Unit =
     node match
-      case Element(pos, "id" | "ide" | "ve" | "f" | "ft" | "fr" | "x", attrs, body) =>
-      case Element(pos, label, attrs, body) =>
+      case Element("id" | "ide" | "ve" | "f" | "ft" | "fr" | "x", attrs, body) =>
+      case Element(label, attrs, body) =>
         def processBody(): Unit = body foreach (c => fromXML(comp, c))
 
         (label, attrs.headOption.orNull) match
@@ -46,7 +46,7 @@ object USFX:
           case ("w", _) => processBody()
           case ("v", _) => verse = Some(attrs.find({ case (k, _) => k == "id" }).get._2)
           case _        => sys.error(s"don't know what to do with element <$label> with attributes $attrs")
-      case Text(pos, text) =>
+      case Text(text) =>
         if !text.isBlank then
           if verse.isDefined then
             comp.prefixSup(verse.get, text)
