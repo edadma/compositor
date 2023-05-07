@@ -402,7 +402,7 @@ abstract class Compositor private[compositor]:
       case _                =>
 
   def pagebox(width: Double, height: Double): Unit =
-    modeStack push new PageMode(this, (_, _, _) => pageFactory(this, width, height))
+    modeStack push new PageMode(this, modeStack.top, (_, _, _) => pageFactory(this, width, height))
 
   def hfil(): Unit = add(new HSpaceBox(1))
 
