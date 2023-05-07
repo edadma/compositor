@@ -32,7 +32,7 @@ def run(args: String*): Unit =
       opt[String]('o', "output")
         .valueName("<output file>")
         .action((x, c) => c.copy(output = x))
-        .text("output file"),
+        .text("output file (defaults to <input>.<type>)"),
       opt[String]('p', "paper")
         .valueName("<a4 | letter>")
         .action((x, c) => c.copy(paper = x))
