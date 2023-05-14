@@ -14,8 +14,9 @@ class PageMode(protected val comp: Compositor, book: Mode, val pageFactory: Page
     else addLine(box)
 
   def addLine(box: Box): Unit =
-    if page.height + box.height > comp.pageHeight then
+    if page.pointLength + box.height > comp.pageHeight then
       // todo: check for vertical space at the end of a page
+      println((page.pointLength + box.height, comp.pageHeight))
       book.add(page)
       page = newPage
       // todo: whether vertical space is being added at the beginning of a page
