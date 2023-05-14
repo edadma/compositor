@@ -13,8 +13,8 @@ import pprint._
 def app(args: Config): Unit =
   val input =
     args match
-      case Config(None, _, _, _, _, _, _) => scala.io.Source.stdin.mkString
-      case Config(Some(file), _, _, _, _, _, _) =>
+      case Config(None, _, _, _, _, _, _, _) => scala.io.Source.stdin.mkString
+      case Config(Some(file), _, _, _, _, _, _, _) =>
         val path = file.toPath.normalize.toAbsolutePath
 
         if !Files.exists(path) then problem(s"'$path' not found")
@@ -35,14 +35,14 @@ def app(args: Config): Unit =
 
     val doc =
       args match
-        case Config(_, _, "pdf", paper, _, _, _) =>
+        case Config(_, _, "pdf", paper, _, _, _, _) =>
           val p =
             paper match
               case "a4"     => Paper.A4
               case "letter" => Paper.LETTER
 
           Compositor.pdf(output.toString, p, 1, simplePageFactory()) // todo: image scaling
-        case Config(_, _, "png", _, resolution, size, _) =>
+        case Config(_, _, "png", _, resolution, size, _, _) =>
           val (width, height) =
             resolution match
               case "sd"  => (720, 480)
@@ -51,31 +51,36 @@ def app(args: Config): Unit =
 
           Compositor.png(output.toString, width, height, ppi(width, height, size), simplePageFactory())
         case _ => sys.error("error")
-    val config =
-      Map(
-        "today" -> "MMMM d, y",
-        "include" -> ".",
-        "rounding" -> "HALF_EVEN",
-      )
-    val parser = new Parser(Command.builtins ++ commands, Nil, blanks = true)
-    var newlineCount: Int = 0
-    val out: PartialFunction[Any, Unit] = {
-      case "\n" if newlineCount == 0 => newlineCount += 1
-      case "\n" =>
-        doc.paragraph()
-        newlineCount = 0
-      case s: String if s.isBlank =>
-      case s: String =>
-        doc.add(s)
-        newlineCount = 0
-    }
-    val renderer = new Renderer(parser, config, _.mkString, doc, out)
-    val ast = parser.parse(in)
 
-//    pprintln(ast)
-////    println(s"page width = ${doc.pageWidth}")
-//    println(s"page height = ${doc.pageHeight}")
-    renderer.render(ast)
+    if args.usfx then USFX.fromString(doc, in)
+    else
+      val config =
+        Map(
+          "today" -> "MMMM d, y",
+          "include" -> ".",
+          "rounding" -> "HALF_EVEN",
+        )
+      val parser = new Parser(Command.builtins ++ commands, Nil, blanks = true)
+      var newlineCount: Int = 0
+      val out: PartialFunction[Any, Unit] = {
+        case "\n" if newlineCount == 0 => newlineCount += 1
+        case "\n" =>
+          doc.paragraph()
+          newlineCount = 0
+        case s: String if s.isBlank =>
+        case s: String =>
+          doc.add(s)
+          newlineCount = 0
+      }
+      val renderer = new Renderer(parser, config, _.mkString, doc, out)
+      val ast = parser.parse(in)
+
+      //    pprintln(ast)
+      ////    println(s"page width = ${doc.pageWidth}")
+      //    println(s"page height = ${doc.pageHeight}")
+      renderer.render(ast)
+    end if
+
     doc.output()
     doc.destroy()
   end process

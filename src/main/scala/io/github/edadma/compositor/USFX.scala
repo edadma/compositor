@@ -43,6 +43,7 @@ object USFX:
             comp.start()
             processBody()
             comp.paragraph()
+          case ("p", _) =>
           case ("w", _) => processBody()
           case ("v", _) => verse = Some(attrs.find({ case (k, _) => k == "id" }).get._2)
           case _        => sys.error(s"don't know what to do with element <$label> with attributes $attrs")

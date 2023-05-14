@@ -10,6 +10,7 @@ case class Config(
     resolution: String = "hd",
     size: Double = 14,
     multi: Boolean = false,
+    usfx: Boolean = false,
 )
 
 @main
@@ -20,12 +21,12 @@ def run(args: String*): Unit =
     import builder._
     OParser.sequence(
       programName("compositor"),
-      head("Compositor", "0.x"),
-      help("help").text("prints this usage text"),
+      head("Compositor", "v0.0.1"),
       arg[File]("<input file>")
         .optional()
         .action((x, c) => c.copy(input = Some(x)))
         .text("input file (defaults to standard input)"),
+      help("help").text("prints this usage text"),
       opt[Unit]('m', "multi")
         .action((_, c) => c.copy(multi = true))
         .text("multi"),
@@ -65,15 +66,19 @@ def run(args: String*): Unit =
           case _             => failure("only 'png' or 'pdf' are allowed as output file types")
         })
         .text("output file type (defaults to pdf, or png for multi mode)"),
+      opt[Unit]('u', "usfx")
+        .action((_, c) => c.copy(usfx = true))
+        .text("USFX"),
+      version("version").text("prints the current version"),
     )
   }
 
   def config: PartialFunction[Config, Unit] = {
-    case c @ Config(None, null, _, _, _, _, _)       => config(c.copy(output = "out"))
-    case c @ Config(Some(file), null, _, _, _, _, _) => config(c.copy(output = file.toString))
-    case c @ Config(_, _, null, _, _, _, false)      => config(c.copy(typ = "pdf"))
-    case c @ Config(_, _, null, _, _, _, true)       => config(c.copy(typ = "png"))
-    case c                                           => app(c)
+    case c @ Config(None, null, _, _, _, _, _, _)       => config(c.copy(output = "out"))
+    case c @ Config(Some(file), null, _, _, _, _, _, _) => config(c.copy(output = file.toString))
+    case c @ Config(_, _, null, _, _, _, false, _)      => config(c.copy(typ = "pdf"))
+    case c @ Config(_, _, null, _, _, _, true, _)       => config(c.copy(typ = "png"))
+    case c                                              => app(c)
   }
 
   OParser.parse(parser, args, Config()) match {
