@@ -324,7 +324,7 @@ abstract class Compositor private[compositor]:
 
   def hbox(): Unit = modeStack push new HBoxMode(this)
 
-  def vspace(space: Double): Unit = add(new VSpaceBox(0, space, 0))
+  def vspace(space: Double, stretchable: Double = 0): Unit = add(new VSpaceBox(0, space, stretchable))
 
   def indent(): Unit =
     indentParagraph = true

@@ -15,12 +15,15 @@ class PageMode(protected val comp: Compositor, book: Mode, val pageFactory: Page
 
   def addLine(box: Box): Unit =
     if page.pointLength + box.height > comp.pageHeight then
-      // todo: check for vertical space at the end of a page
+      page.lastOption foreach {
+        case _: VSpaceBox => page.remove(page.length - 1)
+        case _            =>
+      }
       book.add(page)
       page = newPage
-      // todo: whether vertical space is being added at the beginning of a page
-      page add box
-    else page add box
+    end if
+
+    if page.nonEmpty || !box.isInstanceOf[VSpaceBox] then page add box
 
   def result: PageBox = page
 

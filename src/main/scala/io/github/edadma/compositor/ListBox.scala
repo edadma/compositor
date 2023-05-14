@@ -9,6 +9,8 @@ abstract class ListBox extends AbstractBox with AddableBox:
 
   protected[compositor] val boxes = new ArrayBuffer[Box]
 
+  def isEmpty: Boolean = boxes.isEmpty
+
   def nonEmpty: Boolean = boxes.nonEmpty
 
   def last: Box = boxes.last
@@ -18,6 +20,8 @@ abstract class ListBox extends AbstractBox with AddableBox:
   def length: Int = boxes.length
 
   def update(index: Int, elem: Box): Unit = boxes.update(index, elem)
+
+  def remove(index: Int): Box = boxes.remove(index)
 
   protected def sum(measure: Box => Double): Double = boxes map measure sum
 

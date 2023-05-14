@@ -25,7 +25,7 @@ object USFX:
             comp.done()
             comp.nobold()
             comp.selectFont(f)
-            comp.vspace(15)
+            comp.vspace(25, 1)
           case ("toc", _) =>
           case ("c", "id" -> n) =>
             val f = comp.currentFont
@@ -36,7 +36,7 @@ object USFX:
             comp.hfil()
             comp.done()
             comp.selectFont(f)
-            comp.vspace(10)
+            comp.vspace(10, 0.1)
           case ("wj", _)            => processBody()
           case ("p", "sfm" -> "mt") =>
           case ("p", "style" -> "p") =>
