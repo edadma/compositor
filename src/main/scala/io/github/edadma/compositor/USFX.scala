@@ -25,18 +25,18 @@ object USFX:
             comp.done()
             comp.nobold()
             comp.selectFont(f)
-            comp.vspace(25, 1)
           case ("toc", _) =>
           case ("c", "id" -> n) =>
             val f = comp.currentFont
 
             comp.selectFont("noto", 16, "sans")
+            comp.vspace(15, 1)
             comp.hbox()
             comp.addText(s"Chapter $n")
             comp.hfil()
             comp.done()
             comp.selectFont(f)
-            comp.vspace(10, 0.1)
+            comp.vspace(10)
           case ("wj", _)            => processBody()
           case ("p", "sfm" -> "mt") =>
           case ("p", "style" -> "p") =>
