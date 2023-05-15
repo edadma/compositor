@@ -21,11 +21,13 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
   override def done(): Unit =
     while boxes.nonEmpty do
       val hbox = new HBox
+      println("\nhbox")
 
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
           if hbox.width + boxes.head.width <= pageMode.result.lineWidth then
+            println(boxes.head)
             hbox add boxes.remove(0)
             line()
           else
