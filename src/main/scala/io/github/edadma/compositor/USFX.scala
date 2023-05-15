@@ -48,11 +48,13 @@ object USFX:
           case ("v", _) => verse = Some(attrs.find({ case (k, _) => k == "id" }).get._2)
           case _        => sys.error(s"don't know what to do with element <$label> with attributes $attrs")
       case Text(text) =>
-        if !text.isBlank then
+        val t = text.trim
+
+        if !t.isBlank then
           if verse.isDefined then
-            comp.prefixSup(verse.get, text)
+            comp.prefixSup(verse.get, t)
             verse = None
-          else comp.addText(text.trim)
+          else comp addText t
       case _ => sys.error(s"don't know what to do with '$node' (${node.getClass})")
 
   def fromString(comp: Compositor, s: String): Unit = fromXML(comp, XML(scala.io.Source.fromString(s)))
