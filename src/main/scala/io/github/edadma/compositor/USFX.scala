@@ -3,8 +3,6 @@ package io.github.edadma.compositor
 import io.github.edadma.xml.{XML, Element, Text}
 
 object USFX:
-  var verse: Option[String] = None
-
   def fromXML(comp: Compositor, node: XML): Unit =
     node match
       case Element("id" | "ide" | "ve" | "f" | "ft" | "fr" | "x", attrs, body) =>
@@ -45,16 +43,12 @@ object USFX:
             comp.paragraph()
           case ("p", _) =>
           case ("w", _) => processBody()
-          case ("v", _) => verse = Some(attrs.find({ case (k, _) => k == "id" }).get._2)
+          case ("v", _) => comp.prefixSuperscript(attrs.find({ case (k, _) => k == "id" }).get._2)
           case _        => sys.error(s"don't know what to do with element <$label> with attributes $attrs")
       case Text(text) =>
         val t = text.trim
 
-        if !t.isBlank then
-          if verse.isDefined then
-            comp.prefixSup(verse.get, t)
-            verse = None
-          else comp addText t
+        if !t.isBlank then comp addText t
       case _ => sys.error(s"don't know what to do with '$node' (${node.getClass})")
 
   def fromString(comp: Compositor, s: String): Unit = fromXML(comp, XML(scala.io.Source.fromString(s)))

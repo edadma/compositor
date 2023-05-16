@@ -23,7 +23,7 @@ def verses(comp: Compositor, text: String): Unit =
     val word = words(i)
 
     if numberRegex.matches(word) && i < words.length - 1 then
-      comp.prefixSup(word, words(i + 1))
+      comp.prefixSuperscript(word, words(i + 1))
       i += 2
     else
       if footnoteRegex matches word then comp add word.dropRight(3)

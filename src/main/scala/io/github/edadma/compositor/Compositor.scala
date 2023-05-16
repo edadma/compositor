@@ -181,6 +181,7 @@ abstract class Compositor private[compositor]:
   var currentColor: Color = Color(0, 0, 0, 1)
   var ligatures: Boolean = true
   var representations: Boolean = false
+  var verse: Option[String] = None
 
 //  def startPage(newpage: PageBox): Unit =
 //    pageStack push State(page, firstParagraph)
@@ -256,9 +257,14 @@ abstract class Compositor private[compositor]:
     charBox(if ligatures then Ligatures(rep, currentFont.ligatures) else rep)
 
   def addText(text: String): Unit =
-    val words = text.split(' ').filterNot(_ == "")
+    val words = text.split("\\s+").filterNot(_ == "")
 
-    words foreach add
+    verse match
+      case None => words foreach add
+      case Some(v) =>
+        verse = None
+        prefixSuperscript(v, words.head)
+        words.tail foreach add
 
 //  def rule(width: Double, height: Double): Unit =
 //    add(new FrameBox(new RigidBox(width, height)) { background = currentColor })
@@ -373,7 +379,9 @@ abstract class Compositor private[compositor]:
 
   def color(c: String): Color = color(Color(c))
 
-  def prefixSup(sup: String, word: String): Unit =
+  def prefixSuperscript(sup: String): Unit = verse = Some(sup)
+
+  def prefixSuperscript(sup: String, word: String): Unit =
     val f = currentFont
     val shift = -currentFont.size * .3333
     val hbox = new HBox
@@ -382,7 +390,7 @@ abstract class Compositor private[compositor]:
     hbox += new ShiftBox(charBox(sup), shift)
     selectFont(f)
     hbox += new HSpaceBox(0, 1, 0)
-    hbox += charBox(word)
+    hbox += textBox(word)
     add(hbox)
 
   def charBox(s: String): CharBox = new CharBox(this, s)
