@@ -42,6 +42,7 @@ object USFX:
             processBody()
             comp.paragraph()
           case ("p", _) =>
+          case ("q", _) => processBody()
           case ("w", _) => processBody()
           case ("v", _) => comp.prefixSuperscript(attrs.find({ case (k, _) => k == "id" }).get._2)
           case _        => sys.error(s"don't know what to do with element <$label> with attributes $attrs")
