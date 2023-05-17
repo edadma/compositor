@@ -34,7 +34,7 @@ object USFX:
             comp.hfil()
             comp.done()
             comp.selectFont(f)
-            comp.vspace(10)
+            comp.vspace(10, 0.1)
           case ("wj", _)            => processBody()
           case ("p", "sfm" -> "mt") =>
           case ("p", "style" -> "p") =>
