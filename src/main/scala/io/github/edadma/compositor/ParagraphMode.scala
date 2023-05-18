@@ -19,6 +19,8 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
   def result: Box = ???
 
   override def done(): Unit =
+    var firstLine = true
+
     while boxes.nonEmpty do
       val hbox = new HBox
 
@@ -81,7 +83,8 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
         val baseline = if baselines.nonEmpty then baselines.sum / baselines.length else 0
         val skip = baseline - last.descent - hbox.ascent
 
-        if skip > 0 then pageMode addLine new VSpaceBox(0, skip, 0)
+        if skip > 0 then pageMode addLine new VSpaceBox(0, skip, if firstLine then 0.05 else 0)
+        if firstLine then firstLine = false
 
       pageMode addLine hbox
     end while
