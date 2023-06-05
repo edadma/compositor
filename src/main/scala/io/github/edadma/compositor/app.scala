@@ -17,9 +17,9 @@ def app(args: Config): Unit =
       case Config(Some(file), _, _, _, _, _, _, _) =>
         val path = file.toPath.normalize.toAbsolutePath
 
-        if !Files.exists(path) then problem(s"'$path' not found")
-        else if !Files.isReadable(path) then problem(s"'$path' is not readable")
-        else if !Files.isRegularFile(path) then problem(s"'$path' is not a file")
+        if !Files.exists(path) then problem(s"file '$path' not found")
+        else if !Files.isReadable(path) then problem(s"file '$path' is not readable")
+        else if !Files.isRegularFile(path) then problem(s"file '$path' is not a file")
         else new String(Files.readAllBytes(file.toPath))
 
   if args.multi then
