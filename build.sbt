@@ -4,15 +4,9 @@ version := "0.0.1"
 
 versionScheme := Some("early-semver")
 
-scalaVersion := "3.2.2"
+scalaVersion := "3.5.0"
 
 enablePlugins(ScalaNativePlugin)
-
-nativeLinkStubs := true
-
-nativeMode := "debug"
-
-nativeLinkingOptions := Seq(s"-L${baseDirectory.value}/native-lib")
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -37,19 +31,19 @@ licenses := Seq("ISC" -> url("https://opensource.org/licenses/ISC"))
 
 homepage := Some(url("https://github.com/edadma/" + name.value))
 
-libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.15" % "test"
+libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.19" % "test"
 
 libraryDependencies ++= Seq(
-  "io.github.edadma" %%% "libcairo" % "0.0.6",
-  "io.github.edadma" %%% "freetype" % "0.0.2",
-  "io.github.edadma" %%% "texish" % "0.0.8",
-  "io.github.edadma" %%% "char-reader" % "0.1.11",
-  "io.github.edadma" %%% "xml" % "0.0.6",
+  "io.github.edadma" %%% "libcairo" % "0.0.7",
+  "io.github.edadma" %%% "freetype" % "0.0.3",
+  "io.github.edadma" %%% "texish" % "0.0.9",
+  "io.github.edadma" %%% "char-reader" % "0.1.12",
+  "io.github.edadma" %%% "xml" % "0.0.7",
 )
 
 libraryDependencies ++= Seq(
   "com.github.scopt" %%% "scopt" % "4.1.0",
-  "com.lihaoyi" %%% "pprint" % "0.8.1",
+  "com.lihaoyi" %%% "pprint" % "0.9.0",
 )
 
 publishMavenStyle := true
