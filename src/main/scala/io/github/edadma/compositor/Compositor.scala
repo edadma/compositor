@@ -256,8 +256,8 @@ abstract class Compositor private[compositor]:
 
     charBox(if ligatures then Ligatures(rep, currentFont.ligatures) else rep)
 
-  def addText(text: String): Unit =
-    val words = text.split("\\s+").filterNot(_ == "")
+  infix def addText(text: String): Compositor =
+    val words = text.split("\\s+") filterNot (_ == "")
 
     verse match
       case None => words foreach add
@@ -265,6 +265,7 @@ abstract class Compositor private[compositor]:
         verse = None
         prefixSuperscript(v, words.head)
         words.tail foreach add
+    this
 
 //  def rule(width: Double, height: Double): Unit =
 //    add(new FrameBox(new RigidBox(width, height)) { background = currentColor })

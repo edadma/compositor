@@ -35,6 +35,6 @@ def runTest(): Unit =
     . /*fromString(
     doc,
     """ <p style="p"><w s="G3004">saying</w>, “<w s="G3778">This</w></p> """,
-  )*/ fromFile(doc, "tests/john1:31-.xml")
+  )*/ fromFile(doc, "tests/john.xml")
   doc.output()
   doc.destroy()
