@@ -35,7 +35,7 @@ libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.19" % "test"
 
 libraryDependencies ++= Seq(
   "io.github.edadma" %%% "libcairo" % "0.0.7",
-  "io.github.edadma" %%% "freetype" % "0.0.3",
+  "io.github.edadma" %%% "freetype" % "0.0.4",
   "io.github.edadma" %%% "texish" % "0.0.9",
   "io.github.edadma" %%% "char-reader" % "0.1.12",
   "io.github.edadma" %%% "xml" % "0.0.7",
