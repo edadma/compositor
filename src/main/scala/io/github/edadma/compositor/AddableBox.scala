@@ -1,7 +1,7 @@
 package io.github.edadma.compositor
 
 trait AddableBox extends Box:
-  def add(box: Box): AddableBox
+  infix def add(box: Box): AddableBox
   def isEmpty: Boolean
   def nonEmpty: Boolean
   def last: Box

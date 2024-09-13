@@ -242,13 +242,13 @@ abstract class Compositor private[compositor]:
       case None                                => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _, ligatures)) => typefaces(typeface) = Typeface(fonts, Some(baseline), ligatures)
 
-  def add(box: Box): Unit = modeStack.top add box
+  infix def add(box: Box): Unit = modeStack.top add box
 
   def done(): Unit =
     paragraph()
     modeStack.top.done()
 
-  def add(text: String): Unit = add(textBox(text))
+  infix def add(text: String): Unit = add(textBox(text))
 
   def textBox(text: String): CharBox =
     val rep =

@@ -33,7 +33,7 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
           else
             boxes.head match
               case b: CharBox =>
-                b.text indexOf '-' match
+                b.text.indexOf('-') match
                   case -1 =>
                     Hyphenation(b.text) match
                       case None =>
@@ -79,7 +79,7 @@ class ParagraphMode(protected val comp: Compositor, pageMode: PageMode) extends 
 
       if pageMode.result.nonEmpty && !pageMode.result.last.isSpace then
         val last = pageMode.result.last
-        val baselines = List(last.baselineHeight, hbox.baselineHeight) filterNot (_ == None) map (_.get)
+        val baselines = List(last.baselineHeight, hbox.baselineHeight) filterNot (_.isEmpty) map (_.get)
         val baseline = if baselines.nonEmpty then baselines.sum / baselines.length else 0
         val skip = baseline - last.descent - hbox.ascent
 

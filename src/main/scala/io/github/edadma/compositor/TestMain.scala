@@ -1,6 +1,6 @@
 package io.github.edadma.compositor
 
-//@main
+@main
 def runTest(): Unit =
 //  val doc = Compositor.png("tests/test.png", 1280, 720, ppi(1280, 720, 14), simplePageFactory())
   val doc = Compositor.pdf("tests/test.pdf", Paper.LETTER, .5, simplePageFactory())

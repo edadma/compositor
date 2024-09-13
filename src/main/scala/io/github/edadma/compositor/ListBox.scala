@@ -27,7 +27,7 @@ abstract class ListBox extends AbstractBox with AddableBox:
 
   protected def max(measure: Box => Double): Double = boxes map measure max
 
-  def add(box: Box): ListBox =
+  infix def add(box: Box): ListBox =
     boxes += box
     this
 

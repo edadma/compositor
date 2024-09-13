@@ -3,7 +3,7 @@ package io.github.edadma.compositor
 abstract class Mode:
   protected val comp: Compositor
 
-  def add(box: Box): Unit
+  infix def add(box: Box): Unit
 
   def result: Box
 

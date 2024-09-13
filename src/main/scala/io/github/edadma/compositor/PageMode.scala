@@ -13,7 +13,7 @@ class PageMode(protected val comp: Compositor, book: Mode, val pageFactory: Page
     if box.typ == Type.Start then start add box
     else addLine(box)
 
-  def addLine(box: Box): Unit =
+  infix def addLine(box: Box): Unit =
     if page.pointLength + box.height > comp.pageHeight then
       page.lastOption foreach { // todo: only internally generated interline spacing should be removed
         case _: VSpaceBox => page.remove(page.length - 1)

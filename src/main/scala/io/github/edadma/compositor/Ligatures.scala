@@ -11,7 +11,7 @@ object Ligatures:
       case _ :: t                                             => replace(s, t, allowed)
 
   def apply(s: String, allowed: Set[String]): String =
-    if EXCEPTIONS.exists(e => s endsWith e) then s
+    if EXCEPTIONS.exists(e => s.endsWith(e)) then s
     else replace(s, LIGATURES, allowed)
 
   private val LIGATURES = List(

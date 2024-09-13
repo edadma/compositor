@@ -11,7 +11,7 @@ abstract class HorizontalMode extends Mode:
 
   protected def update(index: Int, elem: Box): Unit
 
-  def add(box: Box): Unit =
+  infix def add(box: Box): Unit =
     if nonEmpty then
       (last, box) match
         case (_: SpaceBox, _)                 => addBox(box)
