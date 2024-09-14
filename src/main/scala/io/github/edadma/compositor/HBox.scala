@@ -14,7 +14,7 @@ class HBox extends ListBox:
   def baselineAscent: Double = max(_.baselineAscent)
 
   def baselineHeight: Option[Double] =
-    if boxes.forall(_.baselineHeight == None) then None else Some(max(_.baselineHeight getOrElse 0))
+    if boxes.forall(_.baselineHeight.isEmpty) then None else Some(max(_.baselineHeight getOrElse 0))
 
   val typ: Type = Type.Horizontal
 

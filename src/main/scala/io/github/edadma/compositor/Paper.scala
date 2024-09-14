@@ -11,6 +11,8 @@ object Paper:
   def mm(width: Double, height: Double): Paper = convert(width, height, Units.mm)
 
   val LETTER: Paper = in(8.5, 11)
+  val LETTER_HALF: Paper = in(5.5, 8.5)
+  val LETTER_HALF_THIRD: Paper = in(8.5 / 3, 5.5)
   val LEGAL: Paper = in(8.5, 14)
   val TABLOID: Paper = in(11, 17)
   val A4: Paper = mm(210, 297)
